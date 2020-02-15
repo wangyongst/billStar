@@ -1,111 +1,148 @@
 <template>
-  <el-container id="body" v-bind:class="noMenuTag">
-    <el-header class="body">
-      <template v-if="user !== null">个人信息</template>
-      <template v-else>404</template>
-    </el-header>
-    <!--    用户信息-->
-    <el-row id="user-info">
+  <el-row>
+    <el-row>
+      <el-col :span="24">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+          </div>
+          <div>
+            <el-row>
+              <el-col :span="6">
+                <div class="grid-content bg-purple">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">新生收费</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">续费</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple"></div>
+                <el-card class="box-card">
+                  <div>
+                    <el-button type="primary">其它收费</el-button>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">补退费</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+            </el-row>
 
-      <template v-if="user !== null">
-        <el-col :span="6" style="text-align: right;padding:10px">
-          <el-avatar :size="100" :src="user.avatar"></el-avatar>
-        </el-col>
-        <el-col :span="18" id="info">
-          <el-form label-width="120px">
-            <el-form-item label="姓名：">
-              <span class="textContent">{{user.name}}</span>
-            </el-form-item>
-            <el-form-item label="是否管理员：">
-              <span class="textContent">{{baseYesNoVal(user.isAppAdmin)}}</span>
-            </el-form-item>
-            <el-form-item label="是否教师：">
-              <span class="textContent">{{baseYesNoVal(user.isTeacher)}}</span>
-            </el-form-item>
-            <el-form-item label="校区：">
-              <span class="textContent">{{formatDept(user.deptSchools)}}</span>
-            </el-form-item>
-            <el-form-item label="部门：">
-              <span class="textContent">{{formatDept(user.depts)}}</span>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </template>
-      <template v-else>
-        <el-col :span="24">
-          <p>未能获取用户信息，请确认在钉钉环境，或者联系管理员</p>
-        </el-col>
-      </template>
-      <el-col>
-        <p class="lessImportant">客户端信息:{{JSON.stringify(userAgent)}}</p>
+            <el-row>
+              <el-col :span="6">
+                <div class="grid-content bg-purple">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">收费查询</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">欠费查询</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple"></div>
+                <el-card class="box-card">
+                  <div>
+                    <el-button type="primary">转班管理</el-button>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">课程表</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
-    <!--浏览器信息-->
-  </el-container>
+
+
+    <el-row>
+      <el-col :span="24">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+          </div>
+          <div>
+            <el-row>
+              <el-col :span="5">
+                <div class="grid-content bg-purple">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">今日营业额</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+              <el-col :span="5">
+                <div class="grid-content bg-purple-light">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">本月营业额</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+              <el-col :span="5">
+                <div class="grid-content bg-purple"></div>
+                <el-card class="box-card">
+                  <div>
+                    <el-button type="primary">今日新增</el-button>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <div class="grid-content bg-purple-light">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">在校生</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+              <el-col :span="5">
+                <div class="grid-content bg-purple-light">
+                  <el-card class="box-card">
+                    <div>
+                      <el-button type="primary">科次</el-button>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+  </el-row>
 </template>
-
-<script>
-  export default {
-    name: 'Home',
-    data() {
-      return {
-        user: {
-          "id": 8,
-          "userid": "manager6238",
-          "name": "曾璐",
-          "mobile": null,
-          "position": "CTO",
-          "email": "zenglu@qq.com",
-          "avatar": "https://static-legacy.dingtalk.com/media/lADPACOG820_4rnNAu7NAu4_750_750.jpg",
-          "isAdmin": true,
-          "isLeader": false,
-          "isTeacher": 1,
-          "deptSchoolId": 111515409,
-          "deptSchoolName": null,
-          "isAppAdmin": 1,
-        },
-        userAgent: null,
-        noMenuTag: ""
-      }
-    },
-    mounted() {
-      const _this = this;
-      const userString = window.localStorage.getItem("user");
-      if (_this.baseIsNotBlank(userString)) {
-        _this.user = JSON.parse(userString);
-      } else {
-        _this.user = null;
-        _this.noMenuTag = "noMenu";
-      }
-      _this.userAgent = navigator.userAgent;
-    },
-    methods: {
-    }
-  }
-</script>
-
-<style scoped>
-  #user-info {
-    padding: 20px 0 20px 0;
-    background-color: #f0f0f0;
-  }
-
-  #user-info #info {
-    border-left: 1px solid #cccccc;
-  }
-
-  #user-info .el-form-item {
-    margin-bottom: 0px !important;
-  }
-
-  .textContent {
-    float: left;
-    font-family: "微软雅黑";
-  }
-
-  .lessImportant {
-    margin-top: 80px;
-    font-size: 0.8em;
-  }
-
-</style>
