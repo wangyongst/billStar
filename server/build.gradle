@@ -1,26 +1,52 @@
-plugins {
-    id 'org.springframework.boot' version '1.5.2.RELEASE'
-    id 'java'
+group = 'com.spring.boot'
+version = '1.0'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+repositories {
+    mavenLocal()
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    mavenCentral()
 }
 
-jar {
-    baseName = 'bill-star-server'
-    version = '1.0'
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE'
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE')
+    }
 }
 
-def profileName = project.hasProperty("profile") ? project.property("profile") : "test"
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:Cairo-RELEASE'
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = "utf-8"
+
+def profileName = project.hasProperty("profile") ? project.property("profile") : "dev"
 processResources {
     filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [profileName: profileName]
 }
 
-repositories {
-    //使用淘宝的maven镜像
-    maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
-}
-
 dependencies {
+    
     compile project(':web')//server模块依赖web模块
-//
+    
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-devtools")
 //swagger
@@ -47,7 +73,4 @@ dependencies {
     compile("org.apache.commons:commons-lang3:3.8.1")
     compile("commons-beanutils:commons-beanutils:1.9.3")
     compile("com.alibaba:fastjson:1.2.57")
-//testCompile
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-
 }

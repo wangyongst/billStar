@@ -14,8 +14,8 @@ module.exports = {
     proxyTable: {// <-----7.change
       '/bill/**':
         {
-          // target: 'http://47.106.130.224:8886',//代理前台/api开头的请求，代理到8080端口，spring boot的访问端口
-          target: 'http://127.0.0.1:8886',//代理前台/api开头的请求，代理到8080端口，spring boot的访问端口
+          target: 'http://152.136.196.204:8886',//代理前台/api开头的请求，代理到8080端口，spring boot的访问端口
+          //target: 'http://127.0.0.1:8886',//代理前台/api开头的请求，代理到8080端口，spring boot的访问端口
           changeOrigin: true,
         }
     },

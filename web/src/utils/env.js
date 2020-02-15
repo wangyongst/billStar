@@ -6,8 +6,8 @@ exports.install = function (Vue, options) {
    * @returns {boolean} true or false
    */
   Vue.prototype.appEnv = function () {
-    // return 'dev';
-    return 'prod';
+     return 'dev';
+    // return 'prod';
   };
 
 };
