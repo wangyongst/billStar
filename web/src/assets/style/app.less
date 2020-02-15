@@ -1,0 +1,514 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0 !important;
+}
+
+#app {
+  height: 100%;
+}
+
+#body {
+  height: fit-content;
+}
+
+.el-container {
+  //height: 100%;
+}
+
+.menuEL {
+  background-color: #303542;
+  //padding-left: 2px ;
+  //padding-right: 2px ;
+  height: 100%;
+}
+
+.el-menu-item.is-active {
+  background-color: #d6d6d6;
+}
+
+
+.common-page {
+  margin-top: 30px;
+}
+
+.el-header.body {
+  line-height: 60px;
+  color: #333;
+}
+
+.bill-table {
+  width: 100%;
+
+  td, th {
+    padding: 6px 0;
+  }
+}
+
+.bill-dialog {
+  .el-dialog {
+    width: 500px;
+
+    .el-form-item {
+      text-align: left;
+    }
+  }
+}
+
+@media print {
+  .bill-item {
+    .el-dialog {
+      width: 800px;
+      //height: 300px;
+    }
+
+    .bill-title {
+      font-size: 1.4em;
+      font-weight: bold;
+    }
+
+    .el-dialog__body {
+      padding-top: 5px;
+    }
+
+    .el-row {
+      .el-col {
+        //font-size: 0.6em;
+        height: 40px;
+
+        .label {
+          height: 40px;
+          line-height: 40px;
+        }
+      }
+    }
+
+    #printZone {
+      .el-row:first-child {
+        .bt;
+      }
+
+      .el-row {
+        .bb;
+
+        .el-col {
+          .br;
+        }
+
+        .el-col:last-child {
+          border-right: none !important;
+        }
+      }
+    }
+
+    .br {
+      border-right: 1px solid rgba(80, 80, 80, 0.63);
+    }
+
+    .bb {
+      border-bottom: 1px solid rgba(80, 80, 80, 0.63);
+    }
+
+    .bl {
+      border-left: 1px solid rgba(80, 80, 80, 0.63);
+    }
+
+    .bt {
+      border-top: 1px solid rgba(80, 80, 80, 0.63);
+    }
+
+    .pure-text {
+      height: 40px;
+      line-height: 40px;
+      padding-left: 3px;
+    }
+  }
+}
+
+@billHeight: 30px;
+@media print {
+  .bill-item;
+  #printZone {
+    .bill-title {
+      text-align: center;
+    }
+
+    .el-row {
+      .el-col {
+        .label {
+          padding-left: 3px;
+        }
+      }
+    }
+  }
+}
+
+.br {
+  border-right: 1px solid rgba(80, 80, 80, 0.63);
+}
+
+.bb {
+  border-bottom: 1px solid rgba(80, 80, 80, 0.63);
+}
+
+.bl {
+  border-left: 1px solid rgba(80, 80, 80, 0.63);
+}
+
+.bt {
+  border-top: 1px solid rgba(80, 80, 80, 0.63);
+}
+
+
+.pure-text {
+  height: @billHeight;
+  line-height: @billHeight;
+  padding-left: 10px;
+}
+
+.bill-item {
+  .el-dialog {
+    width: 800px;
+    //height: 300px;
+  }
+
+  .bill-title {
+    margin: 8px 0 8px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  .el-dialog__body {
+    padding-top: 5px;
+  }
+
+  .el-row {
+    .el-col {
+      font-size: 0.8em;
+      height: auto;
+
+      .label {
+        text-align: left;
+        padding-left: 10px;
+        height: @billHeight;
+        line-height: @billHeight;
+      }
+    }
+  }
+
+  #printZone {
+    .el-row:first-child {
+      .bt;
+    }
+
+    .el-row {
+      .bb;
+
+      .el-col {
+        .br;
+      }
+
+      .el-col:last-child {
+        border-right: none !important;
+      }
+    }
+  }
+}
+
+.bill-cmd-dialog {
+
+  .el-dialog__header {
+    padding: 10px 10px 0px;
+  }
+
+  .el-divider {
+    margin: 18px 0;
+  }
+
+  .lessTop {
+    margin-top: 0;
+  }
+
+  .el-dialog {
+    margin-top: 1vh !important;
+    width: 1000px;
+  }
+
+  .el-input {
+    width: auto
+  }
+
+  .el-select input {
+    width: 160px;
+  }
+
+  .el-date-editor input {
+    width: 160px;
+  }
+
+  .bill-cmd-input {
+    width: 160px;
+  }
+
+  .el-date-editor.datetime input {
+    width: 180px;
+  }
+
+  .el-dialog__body {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .el-form {
+    text-align: left;
+
+    .el-form-item {
+      margin-bottom: 5px;
+    }
+  }
+
+  .bill-operate-btn {
+    display: block;
+  }
+
+  .address-item input {
+    width: 740px;
+  }
+
+}
+
+.checkAll {
+  float: left;
+  margin-right: 20px !important;
+  font-weight: bold;
+  color: #0062cc;
+}
+
+.search-form {
+  text-align: left;
+  background-color: #f0f0f0;
+  padding-bottom: 10px;
+
+  .el-form-item {
+    margin-bottom: 0;
+  }
+
+  .btn-search {
+    float: right;
+    margin-right: 60px;
+  }
+}
+
+
+.txt001 {
+  text-align: right;
+}
+
+.txt010 {
+  text-align: center;
+}
+
+.report-detail .el-dialog {
+  width: 1200px;
+  margin-top: 8vh !important;
+
+  .el-dialog__body {
+    padding-top: 5px;
+  }
+}
+
+.inlineFormItem {
+  display: inline-block;
+}
+
+.txt100 {
+  text-align: left;
+}
+
+
+/** 打印的样式处理 **/
+@border: 1px solid black;
+@media print {
+
+  #tablePrintZone;
+  #tablePrintZone {
+    td {
+      font-size: 0.9em;
+    }
+  }
+}
+
+#tablePrintZone {
+  border-collapse: collapse;
+  border-spacing: 0;
+  //border: @border;
+  td {
+    text-align: left;
+    border: @border;
+    padding: 6px 5px 6px 5px;
+  }
+
+  td.title {
+    text-align: center;
+    padding: 8px 0 8px 0;
+    font-weight: bold;
+  }
+
+  .label1 {
+    width: 6%;
+  }
+
+  .value1 {
+    width: 10%;
+  }
+
+  .label2 {
+    width: 12%;
+  }
+
+  .value2 {
+    width: 24%;
+  }
+
+  .label3 {
+    width: 12%;
+  }
+
+  .value3 {
+    width: 12%;
+  }
+
+  .label4 {
+    width: 12%;
+  }
+
+  .value4 {
+    width: 12%;
+  }
+}
+
+span.courseLabel {
+  width: 420px;
+  display: block;
+  float: right;
+}
+
+.el-header.body {
+  border-bottom: 1px solid #f0f0f0;
+  background-color: rgba(207, 217, 219, 0.1);
+}
+
+
+.prod.normal {
+  .normalHide {
+    display: none;
+  }
+}
+
+.prod.admin {
+  .adminHide {
+    display: none;
+  }
+}
+
+.prod.noMenu {
+  .menuEL {
+    display: none;
+  }
+}
+
+.marginTop0 {
+  margin-top: 0 !important;
+}
+
+.bill-list-search {
+  min-width: 100px;
+}
+
+.collapse-menu {
+  padding-top: 60px;
+  background-color: #303542;
+  color: white;
+  border-right: none;
+
+  .el-menu-item, .el-submenu {
+    background-color: white;
+  }
+
+}
+
+:not(.el-menu--collapse) {
+  .el-submenu {
+    .el-menu-item {
+      min-width: 180px;
+    }
+  }
+}
+
+.collapse-menu > .el-menu-item {
+  width: 180px;
+}
+
+.el-menu--collapse > .el-menu-item {
+  width: 64px;
+}
+
+.main-header {
+  padding-left: 0;
+  position: relative;
+
+  .collapse-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: none;
+    font-size: 1.5em;
+    height: 60px;
+    border-radius: 0;
+    border-right: 1px solid #f0f0f0;
+
+    &:hover, &:focus {
+      background-color: #f0f0f0;
+      color: #606266;
+    }
+  }
+
+  .school-tabs {
+    margin-left: 65px;
+    display: inline-block;
+    float: left;
+    height: 60px;
+    border: none;
+    box-shadow: none;
+
+    .el-tabs__item {
+      padding: 0 5px 0 5px;
+      height: 60px;
+      line-height: 60px;
+    }
+  }
+}
+
+.search-form {
+  padding-top: 10px;
+}
+
+
+a {
+  text-decoration: none
+}
+
+.header-btn {
+  margin-top: 11px;
+}
+
+.bill-header {
+  height: 50px !important;
+}
+
+.cmdCourseMain {
+  padding: 0;
+}

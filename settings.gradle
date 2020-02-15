@@ -1,0 +1,4 @@
+rootProject.name = 'billStar'
+include 'server'
+include 'web'
+

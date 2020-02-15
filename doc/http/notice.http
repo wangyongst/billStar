@@ -1,0 +1,7 @@
+### bill notice
+GET http://localhost:8886/bill/billNotice/triggerNotice
+Accept: application/json;charset=UTF-8
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-cache
+
+###

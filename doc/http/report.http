@@ -1,0 +1,15 @@
+### semester list
+POST http://localhost:8886/bill/report/subjectStudentReport
+Accept: application/json;charset=UTF-8
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-cache
+USER_ID:-1
+
+{
+  "deptSchoolIds": [
+    111459538,111515409,111553423
+  ],
+  "semesterId": 13
+}
+
+###

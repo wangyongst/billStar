@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuofan.biz.bill_manage.dao.BillDao">
+
+    <select id="yearReport" resultType="com.tuofan.biz.bill_manage.vo.YearSaleDto">
+        SELECT SUM(amount)                    AS amount,
+               DATE_FORMAT(bill_time, '%Y%m') as yearMonth,
+               dept_school_id                 as deptSchoolId
+        FROM t_bill
+        WHERE 1 = 1
+          AND bill_time > #{arg0}
+          AND #{arg1} > bill_time
+          AND dept_school_id IN ${arg2}
+        GROUP BY deptSchoolId, yearMonth
+    </select>
+
+    <select id="payTypeReport" resultType="com.tuofan.biz.bill_manage.vo.PayTypeSaleDTO">
+        SELECT SUM(amount)    AS amount,
+               pay_type_id    as payTypeId,
+               dept_school_id as deptSchoolId
+        FROM t_bill
+        WHERE 1 = 1
+          AND bill_time > #{arg0}
+          AND #{arg1} > bill_time
+          AND dept_school_id IN ${arg2}
+        GROUP BY deptSchoolId, pay_type_id
+    </select>
+
+    <select id="saleReport"
+            parameterType="com.tuofan.biz.bill_manage.vo.SaleTimeQuery"
+            resultType="com.tuofan.biz.bill_manage.vo.SaleDTO">
+        SELECT t.*, d.name as deptSchoolName
+        FROM (
+             SELECT dept_school_id as deptSchoolId,
+                    SUM(amount)    AS amount
+             FROM t_bill
+             WHERE 1 = 1
+                 AND bill_time > #{beginDate}
+                 AND #{endDate} > bill_time
+             GROUP BY dept_school_id
+        ) t  LEFT JOIN ding_dept d ON t.deptSchoolId = d.id
+        <if test="orderBy!=null and orderBy!=''">
+            ORDER BY ${orderBy}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuofan.biz.bill_manage.dao.StudentCourseDao">
+
+    <select id="subjectStudentReport"
+            parameterType="com.tuofan.biz.bill_manage.vo.SubjectStudentQuery"
+            resultType="com.tuofan.biz.bill_manage.vo.SubjectStudentDTO">
+        select t.*, subject_.name as subjectName , school_.name as deptSchoolName
+        from (
+                 select sc.dept_school_id                         as deptSchoolId,
+                        d.parent_id                               as subjectId,
+                        sum(if(sc.expire_time > sysdate(), 1, 0)) as inDateCnt,
+                        sum(if(sc.expire_time > sysdate(), 0, 1)) as outDateCnt
+                        -- 	sc.expire_time
+                 from t_student_course sc
+                          left join t_course c on sc.course_id = c.id
+                          left join sys_dict d on c.dict_course_id = d.id
+                 where 1 = 1 and sc.is_active = 1
+                <if test="courseIds!=null and courseIds.size!=0">
+                    and c.id in
+                    <foreach collection="courseIds" item="courseId"
+                             index="index" open="(" close=")" separator=",">
+                        #{courseId}
+                    </foreach>
+                </if>
+                <if test="deptSchoolIds!=null and deptSchoolIds.size!=0">
+                    and sc.dept_school_id in
+                    <foreach collection="deptSchoolIds" item="deptSchoolId"
+                             index="index" open="(" close=")" separator=",">
+                        #{deptSchoolId}
+                    </foreach>
+                </if>
+                 group by d.parent_id, sc.dept_school_id
+             ) t
+        left join sys_dict subject_ on t.subjectId = subject_.id
+        LEFT JOIN ding_dept school_ on t.deptSchoolId = school_.id;
+    </select>
+
+</mapper>
