@@ -1,105 +1,124 @@
 <template>
-  <el-row>
-    <el-col :span="24">
-      <el-form label-width="100px" class="search-form" size="mini">
-        <el-form-item label="学生姓名：" class="inlineFormItem marginTop5" size="mini">
-          <el-input style="width: 120px" placeholder="学生姓名"></el-input>
-        </el-form-item>
+  <div>
 
-        <el-form-item label="电话：" class="inlineFormItem marginTop5" size="mini">
-          <el-input style="width: 120px" placeholder="电话"></el-input>
-        </el-form-item>
+    <BackToWork></BackToWork>
 
-        <el-form-item label="续费金额：" class="inlineFormItem marginTop5" size="mini">
-          <el-input style="width: 120px" placeholder="续费金额"></el-input>
-        </el-form-item>
+    <el-row>
+      <el-col :span="24">
+        <el-form label-width="100px" class="search-form" size="mini">
+          <el-row>
+            <el-form-item label="学生姓名：" class="inlineFormItem marginTop5" size="mini">
+              <el-input style="width: 120px" placeholder="学生姓名"></el-input>
+            </el-form-item>
 
-        <el-form-item label="科目：" class="inlineFormItem" size="mini">
-          <el-select
-            placeholder="请选择"
-            clearable
-            style="width:120px">
-            <el-option> 1</el-option>
-            <el-option> 2</el-option>
-            <el-option> 3</el-option>
-          </el-select>
-        </el-form-item>
+            <el-form-item label="电话：" class="inlineFormItem marginTop5" size="mini">
+              <el-input style="width: 120px" placeholder="电话"></el-input>
+            </el-form-item>
 
-        <el-form-item label="班级：" class="inlineFormItem" size="mini">
-          <el-select
-            placeholder="请选择"
-            clearable
-            style="width:120px">
-            <el-option> 1</el-option>
-            <el-option> 2</el-option>
-            <el-option> 3</el-option>
-          </el-select>
-        </el-form-item>
+            <el-form-item label="续费金额：" class="inlineFormItem marginTop5" size="mini">
+              <el-input style="width: 120px" placeholder="续费金额"></el-input>
+            </el-form-item>
 
-        <el-form-item label="班别：" class="inlineFormItem" size="mini">
-          <el-select
-            placeholder="请选择"
-            clearable
-            style="width:120px">
-            <el-option> 1</el-option>
-            <el-option> 2</el-option>
-            <el-option> 3</el-option>
-          </el-select>
-        </el-form-item>
+            <el-form-item label="" class="inlineFormItem marginTop5" size="mini">
+              <div style="width: 200px"></div>
+            </el-form-item>
 
-        <el-form-item label="到期时间：" class="inlineFormItem" size="mini">
-          <el-date-picker
-            type="date"
-            placeholder="到期时间早于该日期"
-            style="width: 200px">
-          </el-date-picker>
-        </el-form-item>
+            <el-form-item class="inlineFormItem  " size="mini" align="right">
+              <el-button size="mini" type="primary" plain icon="el-icon-success" round>保存</el-button>
+              <el-button size="mini" type="primary" plain icon="el-icon-tickets" round>打印</el-button>
+            </el-form-item>
 
-        <el-form-item class="inlineFormItem  " size="mini">
-          <el-button  size="mini" class="bill-list-search" type="primary" plain icon="el-icon-search" round>保存
-          </el-button>
-          <el-button  size="mini" class="bill-list-search" type="primary" plain icon="el-icon-search" round>打印
-          </el-button>
-          <el-button  type="success" size="mini" plain round class="btn-create">增加</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
-    <!--    数据表格-->
-    <el-col :span="24">
-      <el-table v-loading="loading" :data="page.list" class="bill-table" size="" style="width: 100%">
-        <el-table-column label="" type="index" width="40" align="center">
-        </el-table-column>
-        <el-table-column label="在学课程" width="150" align="center">
-        </el-table-column>
-        <el-table-column label="在学课程" width="" align="center">
-        </el-table-column>
-        <el-table-column label="教师" width="60" align="center">
-        </el-table-column>
-        <el-table-column label="到期时间" width="500" align="center">
-        </el-table-column>
-      </el-table>
-    </el-col>
+          </el-row>
 
-    <el-col :span="24">
-      <el-pagination
-        class="common-page"
-        background
-        layout="total,prev, pager, next"
-        :total="page.total"
-        :page-size="query.pageSize"
-        :current-page="query.pageNo"
-        @current-change="currentPage"
-        @prev-click="prevPage"
-        @next-click="nextPage"
-      ></el-pagination>
-    </el-col>
-  </el-row>
+          <el-row>
+            <el-form-item label="科目：" class="inlineFormItem" size="mini">
+              <el-select
+                placeholder="请选择"
+                clearable
+                style="width:120px">
+                <el-option> 1</el-option>
+                <el-option> 2</el-option>
+                <el-option> 3</el-option>
+              </el-select>
+            </el-form-item>
 
+            <el-form-item label="班级：" class="inlineFormItem" size="mini">
+              <el-select
+                placeholder="请选择"
+                clearable
+                style="width:120px">
+                <el-option> 1</el-option>
+                <el-option> 2</el-option>
+                <el-option> 3</el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="班别：" class="inlineFormItem" size="mini">
+              <el-select
+                placeholder="请选择"
+                clearable
+                style="width:120px">
+                <el-option> 1</el-option>
+                <el-option> 2</el-option>
+                <el-option> 3</el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="到期时间：" class="inlineFormItem" size="mini">
+              <el-date-picker
+                type="date"
+                placeholder="到期时间早于该日期"
+                style="width: 200px">
+              </el-date-picker>
+            </el-form-item>
+
+            <el-form-item class="inlineFormItem  " size="mini" align="right">
+              <el-button size="mini" type="success" plain icon="el-icon-circle-plus" round>增加</el-button>
+            </el-form-item>
+
+          </el-row>
+        </el-form>
+      </el-col>
+      <!--    数据表格-->
+      <el-col :span="24">
+        <el-table v-loading="loading" :data="page.list" class="bill-table" size="" style="width: 100%">
+          <el-table-column label="" type="index" width="40" align="center">
+          </el-table-column>
+          <el-table-column label="在学课程" width="150" align="center">
+          </el-table-column>
+          <el-table-column label="在学课程" width="" align="center">
+          </el-table-column>
+          <el-table-column label="教师" width="60" align="center">
+          </el-table-column>
+          <el-table-column label="到期时间" width="500" align="center">
+          </el-table-column>
+        </el-table>
+      </el-col>
+
+      <el-col :span="24">
+        <el-pagination
+          class="common-page"
+          background
+          layout="total,prev, pager, next"
+          :total="page.total"
+          :page-size="query.pageSize"
+          :current-page="query.pageNo"
+          @current-change="currentPage"
+          @prev-click="prevPage"
+          @next-click="nextPage"
+        ></el-pagination>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
+
+  import BackToWork from "./back/BackToWork";
+
   export default {
     name: 'RenewalsStudent',
+    components: {BackToWork},
     data() {
       return {
         page: {
@@ -124,7 +143,6 @@
           courses: []
         },
       }
-
     },
 
     mounted: function () {
@@ -135,20 +153,6 @@
     },
 
     methods: {
-      searchFunc(queryIn) {
-        console.log("response searchFunc");
-        this.query = this.deepCopy(queryIn);
-        this.listBills();
-      },
-      deptSchoolIdChange(val) {
-        this.query.data.deptSchoolIds = val;
-      },
-      showBillInfo(item) {
-        const _this = this;
-        _this.bill = item;
-        _this.detailDialogVisible = true;
-      }
-      ,
       listBills() {
         const _this = this;
         _this.loading = true;
@@ -158,72 +162,6 @@
           _this.page.total = res.data.total;
         }, _this.operateFail);
       },
-      formatterYesNo(row, column, v) {
-        return parseInt(v) === 1 ? "是" : "否";
-      },
-
-      // 新增
-      create() {
-        this.billOperate.createStudent();
-      },
-      // 续费-弹框
-      renewals(row) {
-        this.billOperate.renewals(row.id);
-      },
-      // 补费-弹框
-      supplement(row) {
-        this.billOperate.supplement(row.id);
-      },
-      // 退费-弹框
-      refund(row) {
-        this.billOperate.refund(row.id);
-      },
-      // 转班-弹框
-      transferClass(row) {
-        this.billOperate.transferClass(row.id);
-      },
-      transferSemester(row) {
-        this.billOperate.transferSemester(row.id);
-      },
-      // 转校-弹框
-      transferSchool(row) {
-        this.billOperate.transferSchool(row.id);
-      },
-      // 修改-弹框
-      updateInfo(row) {
-        this.billOperate.modifyInfo(row.id);
-      },
-
-      studentSuspend(row) {
-        const _this = this;
-        const studentId = row.student.id;
-        const msg = '确定需要对学生 ' + row.student.name + ' 执行休学操作？';
-        _this.baseConfirmDelete(msg, function () {
-          _this.studentSuspendPost(studentId);
-        });
-      }
-      ,
-      studentSuspendPost(studentId) {
-        const _this = this;
-        _this.httpUtils.appPost('/student/suspend?id=' + studentId).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-          } else {
-            _this.baseErrorNotify(res.msg);
-
-          }
-        }, _this.operateFail);
-      },
-      detailDialogClose() {
-        const _this = this;
-        _this.detailDialogVisible = false;
-      },
-      operateSuccess() {
-        const _this = this;
-        // _this.detailDialogVisible = false;
-        _this.listBills();
-      },
-
       // 尝试分页
       currentPage(page) {
         const _this = this;
@@ -248,39 +186,6 @@
         _this.baseErrorNotify(JSON.stringify(r));
         _this.loading = false;
       },
-      showArrearsUpdateBtn(bill) {
-        console.log(bill.initialArrears);
-        const _this = this;
-        if (parseInt(bill.type) === _this.$appConfig.billTypes.renewals || parseInt(bill.type) === _this.$appConfig.billTypes.newBill) {
-          console.log(parseFloat(bill.initialArrears));
-          if (parseFloat(bill.initialArrears) === 0) {
-            return true;
-          }
-        }
-        return false;
-      },
-      updateArrears(id) {
-        const _this = this;
-        this.$prompt('请输入欠费金额', '欠费金额请写正数', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        }).then(({value}) => _this.updateArrearsPost(id, value))
-          .catch(() => {
-          });
-      },
-      updateArrearsPost(id, value) {
-        const _this = this;
-        const data = {modelId: id, arrears: value};
-        _this.httpUtils.appPost('/bill/updateArrears', data).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.listBills();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
-      }
-
     }
   }
 </script>

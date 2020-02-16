@@ -49,7 +49,6 @@
         </keep-alive>
       </el-container>
     </template>
-<!--    <GlobalBillCmd></GlobalBillCmd>-->
   </el-container>
 </template>
 
