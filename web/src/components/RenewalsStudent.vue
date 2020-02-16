@@ -1,91 +1,81 @@
 <template>
   <el-row>
-
-    <!--查询表单-->
     <el-col :span="24">
-      <BillSearchForm @searchFunction="searchFunc" @createClick="create"/>
+      <el-form label-width="100px" class="search-form" size="mini">
+        <el-form-item label="学生姓名：" class="inlineFormItem marginTop5" size="mini">
+          <el-input style="width: 120px" placeholder="学生姓名"></el-input>
+        </el-form-item>
+
+        <el-form-item label="电话：" class="inlineFormItem marginTop5" size="mini">
+          <el-input style="width: 120px" placeholder="电话"></el-input>
+        </el-form-item>
+
+        <el-form-item label="续费金额：" class="inlineFormItem marginTop5" size="mini">
+          <el-input style="width: 120px" placeholder="续费金额"></el-input>
+        </el-form-item>
+
+        <el-form-item label="科目：" class="inlineFormItem" size="mini">
+          <el-select
+            placeholder="请选择"
+            clearable
+            style="width:120px">
+            <el-option> 1</el-option>
+            <el-option> 2</el-option>
+            <el-option> 3</el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="班级：" class="inlineFormItem" size="mini">
+          <el-select
+            placeholder="请选择"
+            clearable
+            style="width:120px">
+            <el-option> 1</el-option>
+            <el-option> 2</el-option>
+            <el-option> 3</el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="班别：" class="inlineFormItem" size="mini">
+          <el-select
+            placeholder="请选择"
+            clearable
+            style="width:120px">
+            <el-option> 1</el-option>
+            <el-option> 2</el-option>
+            <el-option> 3</el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="到期时间：" class="inlineFormItem" size="mini">
+          <el-date-picker
+            type="date"
+            placeholder="到期时间早于该日期"
+            style="width: 200px">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item class="inlineFormItem  " size="mini">
+          <el-button  size="mini" class="bill-list-search" type="primary" plain icon="el-icon-search" round>保存
+          </el-button>
+          <el-button  size="mini" class="bill-list-search" type="primary" plain icon="el-icon-search" round>打印
+          </el-button>
+          <el-button  type="success" size="mini" plain round class="btn-create">增加</el-button>
+        </el-form-item>
+      </el-form>
     </el-col>
     <!--    数据表格-->
     <el-col :span="24">
       <el-table v-loading="loading" :data="page.list" class="bill-table" size="" style="width: 100%">
         <el-table-column label="" type="index" width="40" align="center">
         </el-table-column>
-        <el-table-column prop="deptSchoolName" label="校区" width="150" align="left">
-          <template slot-scope="scope">
-            {{scope.row.deptSchoolName}} / {{commonUtils.appBillType(scope.row.type)}}<br>
-            <span style="font-size:0.8em">{{scope.row.billNo}}</span>
-          </template>
+        <el-table-column label="在学课程" width="150" align="center">
         </el-table-column>
-        <!--        <el-table-column prop="type" label="类型" :formatter="commonUtils.appTableBillType" width="50"></el-table-column>-->
-        <!--        <el-table-column prop="payTypeName" label="支付方式" width=""></el-table-column>-->
-        <el-table-column label="金额信息" width="" align="center">
-          <template slot-scope="scope">
-            {{scope.row.payTypeName}}<br>
-            <el-button @click="showBillInfo(scope.row)"
-                       type="text"
-                       size="mini" class="">{{scope.row.amount}}
-            </el-button>
-          </template>
+        <el-table-column label="在学课程" width="" align="center">
         </el-table-column>
-        <el-table-column prop="" label="欠费" width="60">
-          <template slot-scope="scope">
-            <template v-if="showArrearsUpdateBtn(scope.row)">
-              <el-button @click="updateArrears(scope.row.id)"
-                         type="text"
-                         size="mini">补录
-              </el-button>
-            </template>
-            <template v-else>{{scope.row.currentArrears}}</template>
-          </template>
-
-
+        <el-table-column label="教师" width="60" align="center">
         </el-table-column>
-        <!--        <el-table-column prop="student.name" label="学生" width=""></el-table-column>-->
-        <el-table-column label="学生" width="120">
-          <template slot-scope="scope">
-            {{scope.row.student.name}}<br>
-            {{scope.row.student.mobile}}
-          </template>
-        </el-table-column>
-        <!--课程信息-->
-        <el-table-column label="课程/教师/开始/升班/过期时间" width="500">
-          <template slot-scope="scope">
-            {{formatTableClass1(scope.row)}}
-            / {{scope.row.courses[0].teacherName}}
-            / {{baseFormatDate(scope.row.courses[0].beginTime)}}
-            / {{baseFormatDate(scope.row.courses[0].riseClassTime)}}
-            / {{baseFormatDate(scope.row.courses[0].expireTime)}}
-            <template v-if="scope.row.courses.length > 1">
-              <br>{{formatTableClass2(scope.row)}}
-              / {{scope.row.courses[1].teacherName}}
-              / {{baseFormatDate(scope.row.courses[1].beginTime)}}
-              / {{baseFormatDate(scope.row.courses[1].riseClassTime)}}
-              / {{baseFormatDate(scope.row.courses[1].expireTime)}}
-            </template>
-          </template>
-        </el-table-column>
-        <!-- 开票人-->
-        <el-table-column prop="billCreatorName" label="开票人" width=""></el-table-column>
-        <el-table-column prop="billTime" label="开票时间" :formatter="baseTableFormatTime"
-                         width="100" align="center"></el-table-column>
-        <el-table-column fixed="right" label="操作" align="left" width="180">
-          <template slot-scope="scope">
-            <template v-if="scope.row.type !== 3">
-              <el-button @click="renewals(scope.row)" type="text" size="mini" class="">续费</el-button>
-              <template v-if="scope.row.currentArrears > 0">
-                <el-button @click="supplement(scope.row)" type="text" size="mini" class="">补费</el-button>
-              </template>
-              <el-button @click="refund(scope.row)" type="text" size="mini" class="">退费</el-button>
-              <el-button @click="updateInfo(scope.row)" type="text" size="mini" class="">修改</el-button>
-              <br>
-              <el-button @click="transferClass(scope.row)" type="text" size="mini" class="">转班</el-button>
-              <el-button @click="transferSemester(scope.row)" type="text" size="mini" class="">转期</el-button>
-              <template v-if="scope.row.currentArrears <= 0">
-                <el-button @click="transferSchool(scope.row)" type="text" size="mini" class="">转校</el-button>
-              </template>
-              <el-button @click="studentSuspend(scope.row)" type="text" size="mini" class="">休学</el-button>
-            </template>
-          </template>
+        <el-table-column label="到期时间" width="500" align="center">
         </el-table-column>
       </el-table>
     </el-col>
@@ -103,24 +93,15 @@
         @next-click="nextPage"
       ></el-pagination>
     </el-col>
-    <BillInfoDialogTable :dialogVisible="detailDialogVisible"
-                         @dialogClose="detailDialogClose"
-                         :bill="bill"/>
   </el-row>
 
 </template>
 
 <script>
-  import BillInfoDialogTable from "./billDialog/BillInfoDialogTable";
-  import BillSearchForm from "./BillSearchForm";
-
   export default {
-    name: 'Bills',
-    components: {BillSearchForm, BillInfoDialogTable},
+    name: 'RenewalsStudent',
     data() {
       return {
-        createDialogVisible: false,
-        detailDialogVisible: false,
         page: {
           total: 0,
           list: [],

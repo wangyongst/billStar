@@ -17,6 +17,7 @@ import Semesters from "../components/Semesters";
 import Subjects from "../components/Subjects";
 import CourseStudents from "../components/CourseStudents";
 import SubjectStudentReport from "../components/SubjectStudentReport";
+import RenewalsStudent from "../components/RenewalsStudent";
 
 Vue.use(Router);
 
@@ -24,10 +25,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: '我的信息',
+      name: '工作台',
       component: Home,
       meta: {
-        title: '我的信息'
+        title: '工作台'
+      }
+    },
+    {
+      path: '/renewalsStudent',
+      name: '续费',
+      component: RenewalsStudent,
+      meta: {
+        title: '续费'
       }
     },
     {
@@ -48,10 +57,10 @@ export default new Router({
     },
     {
       path: '/home',
-      name: '我的信息',
+      name: '工作台',
       component: Home,
       meta: {
-        title: '我的信息'
+        title: '工作台'
       }
     },
     {

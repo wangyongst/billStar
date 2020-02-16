@@ -226,7 +226,7 @@
   import billCmdUtils from "../../utils/BillCmdUtils";
 
   export default {
-    name: 'BillCmd',
+    name: 'BillCmd2',
     props: {
       dialogVisible: {
         required: false,
@@ -301,7 +301,6 @@
           }
           // 续费
           if (_this.bill.type === _this.$appConfig.billTypes.renewals) {
-            _this.listCourseForSelect(_this.bill.deptSchoolId);
             _this.bill.remark = _this.defaultRemark;
           }
           // 补费

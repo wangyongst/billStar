@@ -235,7 +235,7 @@
   import billCmdUtils from "../../utils/BillCmdUtils";
 
   export default {
-    name: 'GlobalBillCmd',
+    name: 'GlobalBillCmd2',
     // 传入dialogVisible/操作类型operateType/关联单refBillId，进行下一步操作
     props: {},
     created() {
@@ -306,16 +306,15 @@
       _this.getDefaultRemark();
 
       // 新增
-      eventBus.$on('createBill', function () {
+      eventBus.$on('createStudent', function () {
         console.log(this);
         _this.dialogVisible = true;
         _this.operateType = _this.$appConfig.billTypes.newBill;
       });
       // 续费
-      eventBus.$on('renewals', function (refBillId) {
+      eventBus.$on('renewals', function () {
         console.log(this);
         _this.dialogVisible = true;
-        _this.refBillId = refBillId;
         _this.operateType = _this.$appConfig.billTypes.renewals;
       });
       // 补费

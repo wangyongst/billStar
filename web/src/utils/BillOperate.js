@@ -6,13 +6,13 @@ export default class BillOperate {
   }
 
   // 新增
-  static createBill() {
-    eventBus.$emit("createBill");
+  static createStudent() {
+    eventBus.$emit("createStudent");
   };
 
   // 续费
   static renewals(id) {
-    eventBus.$emit("renewals", id);
+    eventBus.$emit("renewals");
   };
 
   // 补费

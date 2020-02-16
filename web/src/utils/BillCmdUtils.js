@@ -68,7 +68,7 @@ const BillCmdUtils = {
   getBillCmdUrl(type) {
     // 新增
     if (type === appConfig.billTypes.newBill) {
-      return "/billOperate/createBill";
+      return "/billOperate/createStudent";
     }
     // 续费
     if (type === appConfig.billTypes.renewals) {

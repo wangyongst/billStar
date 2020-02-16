@@ -103,29 +103,6 @@
         <span slot="title">班级设置</span>
       </el-menu-item>
     </el-submenu>
-
-    <!--    -->
-<!--    <el-menu-item index="courses" @click="toPage('courses')">-->
-<!--      <i class="el-icon-s-grid"></i>-->
-<!--      <span slot="title">所有课程</span>-->
-<!--    </el-menu-item>-->
-<!--    <el-menu-item index="students" @click="toPage('students')">-->
-<!--      <i class="el-icon-s-custom"></i>-->
-<!--      <span slot="title">所有学生</span>-->
-<!--    </el-menu-item>-->
-<!--    <el-menu-item index="bills" @click="toPage('bills')">-->
-<!--      <i class="el-icon-notebook-2"></i>-->
-<!--      <span slot="title">所有收费</span>-->
-<!--    </el-menu-item>-->
-<!--    <el-menu-item index="studentCourses" @click="toPage('studentCourses')">-->
-<!--      <i class="el-icon-menu"></i>-->
-<!--      <span slot="title">学生课程</span>-->
-<!--    </el-menu-item>-->
-<!--    <el-menu-item index="subjectStudentReport" @click="toPage('subjectStudentReport')">-->
-<!--      <i class="el-icon-data-line"></i>-->
-<!--      <span slot="title">科目学生</span>-->
-<!--    </el-menu-item>-->
-    <!--    -->
   </el-menu>
 </template>
 

@@ -49,17 +49,15 @@
         </keep-alive>
       </el-container>
     </template>
-    <GlobalBillCmd></GlobalBillCmd>
+<!--    <GlobalBillCmd></GlobalBillCmd>-->
   </el-container>
 </template>
 
 <script>
   import AppMenu from './components/AppMenu';
-  import GlobalBillCmd from './components/billDialog/GlobalBillCmd';
-
   export default {
     name: 'App',
-    components: {AppMenu, GlobalBillCmd},
+    components: {AppMenu},
     data() {
       return {
         menuCollapse: true,
