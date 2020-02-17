@@ -7,7 +7,6 @@ import ClassTypes from "../components/ClassTypes";
 import ChargeTypes from "../components/ChargeTypes";
 import Courses from "../components/Courses";
 import Students from "../components/Students";
-import Bills from "../components/Bills";
 import YearReport from "../components/YearReport";
 import PayTypeReport from "../components/PayTypeReport";
 import Configs from "../components/Configs";
@@ -18,6 +17,8 @@ import Subjects from "../components/Subjects";
 import CourseStudents from "../components/CourseStudents";
 import SubjectStudentReport from "../components/SubjectStudentReport";
 import RenewalsStudent from "../components/RenewalsStudent";
+import Details from "../components/Details";
+import Arrears from "../components/Arrears";
 
 Vue.use(Router);
 
@@ -37,6 +38,14 @@ export default new Router({
       component: RenewalsStudent,
       meta: {
         title: '续费'
+      }
+    },
+    {
+      path: '/arrears',
+      name: '欠费查询',
+      component: Arrears,
+      meta: {
+        title: '欠费查询'
       }
     },
     {
@@ -112,11 +121,11 @@ export default new Router({
       }
     },
     {
-      path: '/bills',
-      name: '票据信息',
-      component: Bills,
+      path: '/details',
+      name: '收费查询',
+      component: Details,
       meta: {
-        title: '票据信息'
+        title: '收费查询'
       }
     },
     {

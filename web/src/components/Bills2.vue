@@ -115,7 +115,7 @@
   import BillSearchForm from "./BillSearchForm";
 
   export default {
-    name: 'Bills',
+    name: 'Bills2',
     components: {BillSearchForm, BillInfoDialogTable},
     data() {
       return {

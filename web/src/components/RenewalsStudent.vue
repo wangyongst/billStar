@@ -117,7 +117,7 @@
   import BackToWork from "./back/BackToWork";
 
   export default {
-    name: 'RenewalsStudent',
+    name: 'RenewalsStudent2',
     components: {BackToWork},
     data() {
       return {

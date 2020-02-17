@@ -13,7 +13,7 @@
           </div>
           <div>
             <el-row>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-card class="box-card">
                     <div>
@@ -22,28 +22,20 @@
                   </el-card>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="toPage('renewalsStudent')">续费</el-button>
+                      <el-button type="primary" @click="renewals()">续费</el-button>
                     </div>
                   </el-card>
                 </div>
               </el-col>
-              <el-col :span="6">
-                <div class="grid-content bg-purple"></div>
-                <el-card class="box-card">
-                  <div>
-                    <el-button type="primary" @click="create()">其它收费</el-button>
-                  </div>
-                </el-card>
-              </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="create()">补退费</el-button>
+                      <el-button type="primary" @click="toPage('courses')">课程表</el-button>
                     </div>
                   </el-card>
                 </div>
@@ -51,40 +43,31 @@
             </el-row>
 
             <el-row>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="create()">收费查询</el-button>
+                      <el-button type="primary" @click="toPage('details')">收费查询</el-button>
                     </div>
                   </el-card>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="create()">欠费查询</el-button>
+                      <el-button type="primary" @click="toPage('arrears')">欠费查询</el-button>
                     </div>
                   </el-card>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple"></div>
                 <el-card class="box-card">
                   <div>
-                    <el-button type="primary" @click="create()">转班管理</el-button>
+                    <el-button type="primary" @click="change()">转班管理</el-button>
                   </div>
                 </el-card>
-              </el-col>
-              <el-col :span="6">
-                <div class="grid-content bg-purple-light">
-                  <el-card class="box-card">
-                    <div>
-                      <el-button type="primary" @click="create()">课程表</el-button>
-                    </div>
-                  </el-card>
-                </div>
               </el-col>
             </el-row>
           </div>
@@ -148,6 +131,7 @@
       </el-col>
     </el-row>
     <NewStudent></NewStudent>
+    <RenewalsStudent></RenewalsStudent>
   </div>
 </template>
 
@@ -156,16 +140,25 @@
 
   import NewStudent from './dialog/NewStudent';
 
+  import RenewalsStudent from './dialog/RenewalsStudent';
+
   export default {
     name: 'Home',
-    components: {NewStudent},
+    components: {NewStudent,RenewalsStudent},
     data() {
       return {}
     },
     methods: {
-      // 新增
       create() {
         eventBus.$emit("createStudent");
+      },
+
+      renewals() {
+        eventBus.$emit("renewalsStudent");
+      },
+
+      change() {
+        eventBus.$emit("changeStudent");
       },
 
       toPage(url) {
