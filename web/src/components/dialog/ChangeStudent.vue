@@ -23,92 +23,42 @@
         <el-button size="mini" type="primary" plain icon="el-icon-check" round>确定</el-button>
       </el-form-item>
 
-      <el-divider content-position="left">续费</el-divider>
-
-      <el-form-item label="续费金额">
-        <el-input class="bill-cmd-input"
-                  placeholder="续费金额"></el-input>
-      </el-form-item>
+      <el-divider content-position="left">原班信息</el-divider>
 
       <el-form-item class="inlineFormItem  " size="mini" align="right">
-        <el-button size="mini" type="primary" plain icon="el-icon-success" round>保存</el-button>
-        <el-button size="mini" type="primary" plain icon="el-icon-tickets" round>打印</el-button>
-      </el-form-item>
-
-      <el-divider content-position="left">课程</el-divider>
-
-      <el-form-item label="科目：" class="inlineFormItem" size="mini">
-        <el-select v-model="bill.semesterId"
-                   placeholder="请选择"
-                   clearable
-                   v-bind:disabled="fieldDisabled.semester"
-                   @change="semesterChange">
-          <el-option v-for="item in semesterForSelect"
-                     :key="item.id"
-                     :label="item.name"
-                     :value="item.id"></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="班级：" class="inlineFormItem" size="mini">
-        <el-select v-model="bill.semesterId"
-                   placeholder="请选择"
-                   clearable
-                   v-bind:disabled="fieldDisabled.semester"
-                   @change="semesterChange">
-          <el-option v-for="item in semesterForSelect"
-                     :key="item.id"
-                     :label="item.name"
-                     :value="item.id"></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="班别：" class="inlineFormItem" size="mini">
-        <el-select v-model="bill.semesterId"
-                   placeholder="请选择"
-                   clearable
-                   v-bind:disabled="fieldDisabled.semester"
-                   @change="semesterChange">
-          <el-option v-for="item in semesterForSelect"
-                     :key="item.id"
-                     :label="item.name"
-                     :value="item.id"></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="到期时间" class="">
-        <el-date-picker
-          class="datetime"
-          v-model="bill.billTime"
-          type="datetime"
-          style="width: 180px"
-          placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-
-
-      <el-form-item class="inlineFormItem  " size="mini" align="right">
-        <el-button size="mini" type="success" plain icon="el-icon-circle-plus" round>增加</el-button>
-      </el-form-item>
-
-      <el-divider content-position="left">课程信息</el-divider>
-
-      <el-form-item class="inlineFormItem  " size="mini" align="right">
-        <!--    数据表格-->
         <el-col :span="24">
           <el-table>
             <el-table-column label="" type="index" width="40" align="center">
             </el-table-column>
-            <el-table-column label="在学课程" width="150" align="center">
+            <el-table-column label="班别" width="150" align="center">
             </el-table-column>
-            <el-table-column label="在学课程" width="" align="center">
+            <el-table-column label="时间" width="" align="center">
             </el-table-column>
             <el-table-column label="教师" width="60" align="center">
             </el-table-column>
-            <el-table-column label="到期时间" width="500" align="center">
+          </el-table>
+        </el-col>
+      </el-form-item>
+
+      <el-divider content-position="left">转班信息</el-divider>
+
+      <el-form-item class="inlineFormItem  " size="mini" align="right">
+        <el-col :span="24">
+          <el-table>
+            <el-table-column label="" type="index" width="40" align="center">
+            </el-table-column>
+            <el-table-column label="班别" width="150" align="center">
+            </el-table-column>
+            <el-table-column label="时间" width="" align="center">
+            </el-table-column>
+            <el-table-column label="教师" width="60" align="center">
             </el-table-column>
           </el-table>
         </el-col>
+      </el-form-item>
+
+      <el-form-item style="text-align: center" class="not-inline width100p">
+        <el-button type="primary" @click="doPost" class="width150" icon="el-icon-upload">确定转班</el-button>
       </el-form-item>
 
     </el-form>
@@ -124,7 +74,7 @@
   // import billCmdUtils from "../../utils/BillCmdUtils";
 
   export default {
-    name: 'RenewalsStudent',
+    name: 'ChangeStudent',
     // 传入dialogVisible/操作类型operateType/关联单refBillId，进行下一步操作
     props: {},
     created() {
@@ -170,7 +120,7 @@
       dialogVisible(val) {
         const _this = this;
         if (val === true) {
-          _this.dialogTitle = "续费";
+          _this.dialogTitle = "转班管理";
           _this.loadRefBill(_this.refBillId, function () {
             // 处理某些表单项的显示
             _this.processFields();
@@ -186,7 +136,7 @@
       _this.listSemesterForSelect();
       _this.getDefaultRemark();
       // 新增
-      eventBus.$on('renewalsStudent', function () {
+      eventBus.$on('changeStudent', function () {
         console.log(this);
         _this.dialogVisible = true;
         // _this.operateType = _this.$appConfig.billTypes.newBill;

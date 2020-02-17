@@ -132,6 +132,7 @@
     </el-row>
     <NewStudent></NewStudent>
     <RenewalsStudent></RenewalsStudent>
+    <ChangeStudent></ChangeStudent>
   </div>
 </template>
 
@@ -142,9 +143,11 @@
 
   import RenewalsStudent from './dialog/RenewalsStudent';
 
+  import ChangeStudent from './dialog/ChangeStudent';
+
   export default {
     name: 'Home',
-    components: {NewStudent,RenewalsStudent},
+    components: {NewStudent,RenewalsStudent,ChangeStudent},
     data() {
       return {}
     },
