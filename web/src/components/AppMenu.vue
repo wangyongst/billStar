@@ -43,10 +43,10 @@
       <el-menu-item class="normalHide" index="student-xiuxue" @click="toPage('xiuxue')">
         <span slot="title">休学办理</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="student-fuxue" @click="toPage('fuxue')">
+      <el-menu-item class="normalHide" index="student-fuxue" @click="toPage('student/resumption')">
         <span slot="title">复学办理</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="student-zhuanqi" @click="toPage('zhuanqi')">
+      <el-menu-item class="normalHide" index="student-zhuanqi" @click="toPage('student/transfer')">
         <span slot="title">转期</span>
       </el-menu-item>
     </el-submenu>
