@@ -24,6 +24,8 @@ import SearchExpire from "../components/search/SearchExpire";
 import SearchOvertime from "../components/search/SearchOvertime";
 import StudentResumption from "../components/student/StudentResumption";
 import StudentTransfer from "../components/student/StudentTransfer";
+import StudentChange from "../components/student/StudentChange";
+import StudentAbsence from "../components/student/StudentAbsence";
 
 Vue.use(Router);
 
@@ -91,6 +93,22 @@ export default new Router({
       component: SearchArrears,
       meta: {
         title: '欠费'
+      }
+    },
+    {
+      path: '/student/change',
+      name: '转班',
+      component: StudentChange,
+      meta: {
+        title: '转班'
+      }
+    },
+    {
+      path: '/student/absence',
+      name: '休学',
+      component: StudentAbsence,
+      meta: {
+        title: '休学'
       }
     },
     {

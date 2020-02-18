@@ -65,7 +65,7 @@
                 <div class="grid-content bg-purple"></div>
                 <el-card class="box-card">
                   <div>
-                    <el-button type="primary" @click="change()">转班管理</el-button>
+                    <el-button type="primary" @click="toPage('student/change')">转班管理</el-button>
                   </div>
                 </el-card>
               </el-col>
@@ -132,7 +132,6 @@
     </el-row>
     <NewStudent></NewStudent>
     <RenewalsStudent></RenewalsStudent>
-    <ChangeStudent></ChangeStudent>
   </div>
 </template>
 
@@ -143,11 +142,9 @@
 
   import RenewalsStudent from './dialog/RenewalsStudent';
 
-  import ChangeStudent from './dialog/ChangeStudent';
-
   export default {
     name: 'Home',
-    components: {NewStudent,RenewalsStudent,ChangeStudent},
+    components: {NewStudent,RenewalsStudent},
     data() {
       return {}
     },

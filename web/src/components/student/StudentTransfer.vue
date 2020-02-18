@@ -3,8 +3,6 @@
     <BackToWork></BackToWork>
 
     <el-row>
-
-      <!--查询表单-->
       <el-col :span="24">
         <el-form label-width="100px" class="search-form" size="mini">
 
@@ -72,9 +70,6 @@
           @next-click="nextPage"
         ></el-pagination>
       </el-col>
-      <BillInfoDialogTable :dialogVisible="detailDialogVisible"
-                           @dialogClose="detailDialogClose"
-                           :bill="bill"/>
     </el-row>
   </div>
 </template>

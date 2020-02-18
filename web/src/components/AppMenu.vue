@@ -34,19 +34,16 @@
         <i class="el-icon-menu"></i>
         <span>学生管理</span>
       </template>
-      <el-menu-item class="normalHide" index="student-zhuanban" @click="toPage('zhuanban')">
+      <el-menu-item class="normalHide" @click="toPage('student/change')">
         <span slot="title">转班</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="student-zhuanxiao" @click="toPage('zhuanxiao')">
-        <span slot="title">转校</span>
-      </el-menu-item>
-      <el-menu-item class="normalHide" index="student-xiuxue" @click="toPage('xiuxue')">
+      <el-menu-item class="normalHide" @click="toPage('student/absence')">
         <span slot="title">休学办理</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="student-fuxue" @click="toPage('student/resumption')">
+      <el-menu-item class="normalHide" @click="toPage('student/resumption')">
         <span slot="title">复学办理</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="student-zhuanqi" @click="toPage('student/transfer')">
+      <el-menu-item class="normalHide" @click="toPage('student/transfer')">
         <span slot="title">转期</span>
       </el-menu-item>
     </el-submenu>
