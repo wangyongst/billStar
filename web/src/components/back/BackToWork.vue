@@ -23,7 +23,7 @@
     methods: {
       backToWork() {
         const _this = this;
-        _this.$router.push({path: "home"});
+        _this.$router.push({path: "/home"});
       }
     }
   }

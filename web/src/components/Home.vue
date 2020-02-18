@@ -47,7 +47,7 @@
                 <div class="grid-content bg-purple">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="toPage('details')">收费查询</el-button>
+                      <el-button type="primary" @click="toPage('work/details')">收费查询</el-button>
                     </div>
                   </el-card>
                 </div>
@@ -56,7 +56,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="toPage('arrears')">欠费查询</el-button>
+                      <el-button type="primary" @click="toPage('work/arrears')">欠费查询</el-button>
                     </div>
                   </el-card>
                 </div>

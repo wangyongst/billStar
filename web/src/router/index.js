@@ -16,9 +16,12 @@ import Semesters from "../components/Semesters";
 import Subjects from "../components/Subjects";
 import CourseStudents from "../components/CourseStudents";
 import SubjectStudentReport from "../components/SubjectStudentReport";
-import RenewalsStudent from "../components/RenewalsStudent";
-import Details from "../components/Details";
-import Arrears from "../components/Arrears";
+import WorkDetails from "../components/work/WorkDetails";
+import SearchArrears from "../components/search/SearchArrears";
+import SearchLose from "../components/search/SearchLose";
+import WorkArrears from "../components/work/WorkArrears";
+import SearchExpire from "../components/search/SearchExpire";
+import SearchOvertime from "../components/search/SearchOvertime";
 
 Vue.use(Router);
 
@@ -33,21 +36,62 @@ export default new Router({
       }
     },
     {
-      path: '/renewalsStudent',
-      name: '续费',
-      component: RenewalsStudent,
+      path: '/home',
+      name: '工作台',
+      component: Home,
       meta: {
-        title: '续费'
+        title: '工作台'
       }
     },
     {
-      path: '/arrears',
+      path: '/work/details',
+      name: '收费查询',
+      component: WorkDetails,
+      meta: {
+        title: '收费查询'
+      }
+    },
+    {
+      path: '/work/arrears',
       name: '欠费查询',
-      component: Arrears,
+      component: WorkArrears,
       meta: {
         title: '欠费查询'
       }
     },
+    {
+      path: '/search/expire',
+      name: '到期',
+      component: SearchExpire,
+      meta: {
+        title: '到期'
+      }
+    },
+    {
+      path: '/search/overtime',
+      name: '超期',
+      component: SearchOvertime,
+      meta: {
+        title: '超期'
+      }
+    },
+    {
+      path: '/search/lose',
+      name: '流失',
+      component: SearchLose,
+      meta: {
+        title: '流失'
+      }
+    },
+    {
+      path: '/search/arrears',
+      name: '欠费',
+      component: SearchArrears,
+      meta: {
+        title: '超期'
+      }
+    },
+
     {
       path: '/semesters',
       name: '学期信息',
@@ -62,14 +106,6 @@ export default new Router({
       component: Subjects,
       meta: {
         title: '科目信息'
-      }
-    },
-    {
-      path: '/home',
-      name: '工作台',
-      component: Home,
-      meta: {
-        title: '工作台'
       }
     },
     {
@@ -120,14 +156,7 @@ export default new Router({
         title: '学生信息'
       }
     },
-    {
-      path: '/details',
-      name: '收费查询',
-      component: Details,
-      meta: {
-        title: '收费查询'
-      }
-    },
+
     {
       path: '/yearReport',
       name: '月度报表',

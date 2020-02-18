@@ -30,6 +30,11 @@
                   placeholder="续费金额"></el-input>
       </el-form-item>
 
+      <el-form-item label="欠费金额">
+        <el-input class="bill-cmd-input"
+                  placeholder="欠费金额"></el-input>
+      </el-form-item>
+
       <el-form-item class="inlineFormItem  " size="mini" align="right">
         <el-button size="mini" type="primary" plain icon="el-icon-success" round>保存</el-button>
         <el-button size="mini" type="primary" plain icon="el-icon-tickets" round>打印</el-button>

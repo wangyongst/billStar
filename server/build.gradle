@@ -38,7 +38,7 @@ targetCompatibility = 1.8
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = "utf-8"
 
-def profileName = project.hasProperty("profile") ? project.property("profile") : "dev"
+def profileName = project.hasProperty("profile") ? project.property("profile") : "prd"
 processResources {
     filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [profileName: profileName]
 }

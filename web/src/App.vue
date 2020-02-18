@@ -41,8 +41,6 @@
               :name="item.route">
             </el-tab-pane>
           </el-tabs>
-
-
         </el-header>
         <keep-alive>
           <router-view></router-view>
@@ -54,6 +52,7 @@
 
 <script>
   import AppMenu from './components/AppMenu';
+
   export default {
     name: 'App',
     components: {AppMenu},
@@ -91,10 +90,6 @@
         this.$router.push({path: path});
       },
       tabRemove(targetName) {
-        // 首页不可删除
-        // if(targetName == '/') {
-        //   return;
-        // }
         console.log(targetName);
         this.$store.commit('delete_tabs', targetName);
         if (this.activeIndex === targetName) {
@@ -107,7 +102,6 @@
           }
         }
       },
-
       initApp() {
         const _this = this;
         _this.httpUtils.appGet('/dingParam/getCorpInfo').then(function (res) {
@@ -133,8 +127,6 @@
         }).catch(function (e) {
           // 不在钉钉环境的处理
           _this.loginByCodePost("appTestCode");
-          // _this.baseErrorNotify("loginByCode-catch=" + JSON.stringify(e));
-          // _this.loginError();
         })
       },
 
@@ -174,10 +166,6 @@
         let flag = false;
         console.log("route-to", to);
         let optionName = to.name;
-        if (to.name === "课程学生") {
-          // optionName = to.name + to.params.courseId;
-          optionName = to.name;
-        }
         for (let option of this.options) {
           if (option.name === optionName) {
             if (option.route !== this.processPath(to.path)) {
@@ -210,7 +198,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    /*margin-top: 60px;*/
   }
 
 

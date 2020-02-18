@@ -65,11 +65,6 @@
 
           <el-table-column label="课程" width="150" align="left">
           </el-table-column>
-
-
-          <el-table-column fixed="right" label="操作" align="left" width="180">
-            <el-button type="text" size="mini" class="">修改</el-button>
-          </el-table-column>
         </el-table>
       </el-col>
 
@@ -94,13 +89,13 @@
 </template>
 
 <script>
-  import ClassSelect from "./forSelect/ClassSelect";
-  import SchoolSelect from "./forSelect/SchoolSelect";
-  import SubjectSelect from "./forSelect/SubjectSelect";
-  import BackToWork from "./back/BackToWork";
+  import ClassSelect from "../select/ClassSelect";
+  import SchoolSelect from "../select/SchoolSelect";
+  import SubjectSelect from "../select/SubjectSelect";
+  import BackToWork from "../back/BackToWork";
 
   export default {
-    name: 'Details',
+    name: 'WorkDetails',
     components: {BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {

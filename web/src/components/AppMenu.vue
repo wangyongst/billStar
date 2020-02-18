@@ -10,19 +10,19 @@
     <!--    查询 组-->
     <el-submenu index="search">
       <template slot="title">
-        <i class="el-icon-setting"></i>
+        <i class="el-icon-search"></i>
         <span>查询</span>
       </template>
-      <el-menu-item class="normalHide" index="search-daoqi" @click="toPage('daoqi')">
+      <el-menu-item class="normalHide" index="search-daoqi" @click="toPage('search/expire')">
         <span slot="title">到期</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="search-chaoqi" @click="toPage('chaoqi')">
+      <el-menu-item class="normalHide" index="search-chaoqi" @click="toPage('search/overtime')">
         <span slot="title">超期</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="search-liushi" @click="toPage('liushi')">
+      <el-menu-item class="normalHide" index="search-liushi" @click="toPage('search/lose')">
         <span slot="title">流失</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="search-tuifei" @click="toPage('tuifei')">
+      <el-menu-item class="normalHide" index="search-tuifei" @click="toPage('search/arrears')">
         <span slot="title">退费</span>
       </el-menu-item>
     </el-submenu>
@@ -31,7 +31,7 @@
     <!--    学生管理 组-->
     <el-submenu index="student">
       <template slot="title">
-        <i class="el-icon-setting"></i>
+        <i class="el-icon-menu"></i>
         <span>学生管理</span>
       </template>
       <el-menu-item class="normalHide" index="student-zhuanban" @click="toPage('zhuanban')">

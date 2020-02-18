@@ -11,30 +11,20 @@
           <SchoolSelect></SchoolSelect>
           <SubjectSelect></SubjectSelect>
           <ClassSelect></ClassSelect>
-          <TeacherSelect></TeacherSelect>
 
-          <el-form-item label="开票区间：" size="mini">
+          <el-form-item label="退费时间：" size="mini">
             <el-radio-group>
-              <el-radio size="mini" label="今天"></el-radio>
-              <el-radio size="mini" label="本周"></el-radio>
-              <el-radio size="mini" label="本月"></el-radio>
-              <el-radio size="mini" label="上周"></el-radio>
-              <el-radio size="mini" label="上月"></el-radio>
-              <el-radio size="mini" label="区间"></el-radio>
+              <el-radio size="mini">
+                最近&nbsp;&nbsp;
+                <el-input size="mini" placeholder="月数" style="width: 20px"></el-input>
+                &nbsp;&nbsp;&nbsp;&nbsp;月
+              </el-radio>
             </el-radio-group>
           </el-form-item>
 
+          <TeacherSelect></TeacherSelect>
 
-          <el-form-item label="选择类型：" size="mini">
-            <el-checkbox-group>
-              <el-checkbox size="mini" disabled>全选</el-checkbox>
-              <el-checkbox size="mini" disabled>补费</el-checkbox>
-              <el-checkbox size="mini" disabled>新生</el-checkbox>
-              <el-checkbox size="mini" disabled>续费</el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
         </el-form>
-
 
       </el-col>
       <!--    数据表格-->
@@ -43,13 +33,13 @@
           <el-table-column label="" type="index" width="40" align="center">
           </el-table-column>
 
-          <el-table-column label="类型" width="150" align="left">
-          </el-table-column>
-
-          <el-table-column label="收费方式" width="150" align="left">
-          </el-table-column>
-
           <el-table-column label="校区" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="原因" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="最后课程" width="150" align="left">
           </el-table-column>
 
           <el-table-column label="姓名" width="150" align="left">
@@ -58,19 +48,16 @@
           <el-table-column label="金额" width="150" align="left">
           </el-table-column>
 
-          <el-table-column label="开票人" width="150" align="left">
+          <el-table-column label="教师" width="150" align="left">
           </el-table-column>
 
-          <el-table-column label="时间" width="150" align="left">
+          <el-table-column label="退费时间" width="150" align="left">
           </el-table-column>
 
-          <el-table-column label="课程" width="150" align="left">
+          <el-table-column label="备注" width="150" align="left">
           </el-table-column>
 
 
-          <el-table-column fixed="right" label="操作" align="left" width="180">
-            <el-button type="text" size="mini" class="">修改</el-button>
-          </el-table-column>
         </el-table>
       </el-col>
 
@@ -95,15 +82,15 @@
 </template>
 
 <script>
-  import ClassSelect from "./forSelect/ClassSelect";
-  import SchoolSelect from "./forSelect/SchoolSelect";
-  import SubjectSelect from "./forSelect/SubjectSelect";
-  import TeacherSelect from "./forSelect/TeacherSelect";
-  import BackToWork from "./back/BackToWork";
+  import ClassSelect from "../select/ClassSelect";
+  import SchoolSelect from "../select/SchoolSelect";
+  import SubjectSelect from "../select/SubjectSelect";
+  import BackToWork from "../back/BackToWork";
+  import TeacherSelect from "../select/TeacherSelect";
 
   export default {
-    name: 'Arrears',
-    components: {BackToWork, ClassSelect, SchoolSelect, SubjectSelect, TeacherSelect},
+    name: 'SearchExpire',
+    components: {TeacherSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {
         createDialogVisible: false,
