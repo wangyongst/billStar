@@ -2,13 +2,12 @@
   <el-container id="body">
 
     <el-header class="body">
-      月度报表
+      年月报表
     </el-header>
 
     <el-form label-width="100px" class="search-form">
 
-      <DeptSchoolSelect :deptSchoolForSelect="deptSchoolForSelect"
-                        @dataChange="deptSchoolIdChange"></DeptSchoolSelect>
+      <SchoolSelect></SchoolSelect>
 
       <el-form-item label="开始月份：">
         <el-date-picker
@@ -45,11 +44,11 @@
 </template>
 
 <script>
-  import DeptSchoolSelect from "./forSelect/DeptSchoolSelect";
+  import SchoolSelect from "../select/SchoolSelect";
 
   export default {
-    components: {DeptSchoolSelect},
-    name: 'YearReport',
+    components: {SchoolSelect},
+    name: 'ReportYear',
     data() {
       return {
         list: [],
@@ -132,7 +131,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

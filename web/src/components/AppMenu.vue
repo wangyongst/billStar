@@ -55,19 +55,19 @@
         <i class="el-icon-s-marketing"></i>
         <span>报表中心</span>
       </template>
-      <el-menu-item index="report-yearReport" @click="toPage('yearReport')">
+      <el-menu-item @click="toPage('report/year')">
         <span slot="title">年月报表</span>
       </el-menu-item>
-      <el-menu-item index="report-payTypeReport" @click="toPage('payTypeReport')">
+      <el-menu-item @click="toPage('report/charge')">
         <span slot="title">支付类型</span>
       </el-menu-item>
-      <el-menu-item index="report-studentReport" @click="toPage('studentReport')">
+      <el-menu-item @click="toPage('studentReport')">
         <span slot="title">在校生</span>
       </el-menu-item>
     </el-submenu>
 
     <!--课程表 -->
-    <el-menu-item class="" index="course" @click="toPage('course')">
+    <el-menu-item class="" index="course" @click="toPage('course/table')">
       <i class="el-icon-user"></i>
       <span slot="title">课程表</span>
     </el-menu-item>
@@ -78,25 +78,25 @@
         <i class="el-icon-setting"></i>
         <span>基础设置</span>
       </template>
-      <el-menu-item class="normalHide" index="basic-schoolZones" @click="toPage('schoolZones')">
+      <el-menu-item class="normalHide" @click="toPage('setting/school')">
         <span slot="title">校区管理</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="basic-teachers" @click="toPage('teachers')">
+      <el-menu-item class="normalHide" @click="toPage('setting/teacher')">
         <span slot="title">员工管理</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="basic-chargeTypes" @click="toPage('chargeTypes')">
+      <el-menu-item class="normalHide" @click="toPage('setting/charge')">
         <span slot="title">收费类型</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="basic-configs" @click="toPage('configs')">
+      <el-menu-item class="normalHide" @click="toPage('setting/config')">
         <span slot="title">功能设置</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="basic-subjects" @click="toPage('subjects')">
-        <span slot="title">科目信息</span>
+      <el-menu-item class="normalHide" @click="toPage('setting/subject')">
+        <span slot="title">科目设置</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="basic-semesters" @click="toPage('semesters')">
-        <span slot="title">学期信息</span>
+      <el-menu-item class="normalHide" @click="toPage('setting/semester')">
+        <span slot="title">学期设置</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="basic-classTypes" @click="toPage('classTypes')">
+      <el-menu-item class="normalHide" @click="toPage('setting/class')">
         <span slot="title">班级设置</span>
       </el-menu-item>
     </el-submenu>

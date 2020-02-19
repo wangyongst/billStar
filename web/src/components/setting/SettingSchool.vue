@@ -65,7 +65,7 @@
 
 <script>
   export default {
-    name: 'SchoolZones',
+    name: 'SettingSchool',
     data() {
       return {
         list: [],

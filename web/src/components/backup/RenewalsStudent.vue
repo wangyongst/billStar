@@ -114,7 +114,7 @@
 
 <script>
 
-  import BackToWork from "./back/BackToWork";
+  import BackToWork from "../back/BackToWork";
 
   export default {
     name: 'RenewalsStudent2',

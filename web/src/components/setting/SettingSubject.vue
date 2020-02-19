@@ -28,7 +28,7 @@
 
 <script>
   export default {
-    name: 'Subjects',
+    name: 'SettingSubject',
     data() {
       return {
         list: [],

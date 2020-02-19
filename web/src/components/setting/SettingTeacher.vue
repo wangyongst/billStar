@@ -12,10 +12,7 @@
 
 
     <el-form label-width="100px" class="search-form">
-      <DeptSchoolSelect @dataChange="deptSchoolIdChange"
-                        @deptSchoolIdInitFinish="deptSchoolIdInitFinish"
-                        dept-query-url="/schoolZone/listAllDeptEntity"
-      ></DeptSchoolSelect>
+      <SchoolSelect></SchoolSelect>
       <el-form-item label="姓名：">
         <el-input size="mini" style="width: 120px" v-model="query.data.nameLike" placeholder="教师姓名"></el-input>
         <el-button class="btn-search" @click="searchFunc" size="mini">查询</el-button>
@@ -51,7 +48,8 @@
             <br>
             <template v-if="scope.row.isAppAdmin === 1">
               <el-button @click="setAsNotAppAdmin(scope.row.id)" type="text" size="mini"
-                         class="width100">设为非管理员</el-button>
+                         class="width100">设为非管理员
+              </el-button>
             </template>
             <template v-if="scope.row.isAppAdmin !== 1">
               <el-button @click="setAsAppAdmin(scope.row.id)" type="text" size="mini"
@@ -80,11 +78,12 @@
 </template>
 
 <script>
-  import DeptSchoolSelect from "./forSelect/DeptSchoolSelect";
+
+  import SchoolSelect from "../select/SchoolSelect";
 
   export default {
-    name: 'Teachers',
-    components: {DeptSchoolSelect},
+    name: 'SettingTearcher',
+    components: {SchoolSelect},
     data() {
       return {
         page: {

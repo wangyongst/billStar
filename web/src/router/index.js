@@ -1,21 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/Home'
-import Teachers from '../components/Teachers'
-import SchoolZones from "../components/SchoolZones";
-import ClassTypes from "../components/ClassTypes";
-import ChargeTypes from "../components/ChargeTypes";
-import Courses from "../components/Courses";
-import Students from "../components/Students";
-import YearReport from "../components/YearReport";
-import PayTypeReport from "../components/PayTypeReport";
-import Configs from "../components/Configs";
-import StudentCourses from "../components/StudentCourses"
-import StudentCourseBills from "../components/StudentCourseBills";
-import Semesters from "../components/Semesters";
-import Subjects from "../components/Subjects";
-import CourseStudents from "../components/CourseStudents";
-import SubjectStudentReport from "../components/SubjectStudentReport";
 import WorkDetails from "../components/work/WorkDetails";
 import SearchArrears from "../components/search/SearchArrears";
 import SearchLose from "../components/search/SearchLose";
@@ -26,6 +11,15 @@ import StudentResumption from "../components/student/StudentResumption";
 import StudentTransfer from "../components/student/StudentTransfer";
 import StudentChange from "../components/student/StudentChange";
 import StudentAbsence from "../components/student/StudentAbsence";
+import ReportYear from "../components/report/ReportYear";
+import SettingSchool from "../components/setting/SettingSchool";
+import SettingTeacher from "../components/setting/SettingTeacher";
+import SettingCharge from "../components/setting/SettingCharge";
+import SettingConfig from "../components/setting/SettingConfig";
+import SettingSubject from "../components/setting/SettingSubject";
+import SettingSemester from "../components/setting/SettingSemester";
+import SettingClass from "../components/setting/SettingClass";
+import ReportCharge from "../components/report/ReportCharge";
 
 Vue.use(Router);
 
@@ -127,128 +121,78 @@ export default new Router({
         title: '转期'
       }
     },
+    {
+      path: '/report/year',
+      name: '年月报表',
+      component: ReportYear,
+      meta: {
+        title: '年月报表'
+      }
+    },
+    {
+      path: '/report/charge',
+      name: '支付类型报表',
+      component: ReportCharge,
+      meta: {
+        title: '支付类型报表'
+      }
+    },
 
     {
-      path: '/semesters',
-      name: '学期信息',
-      component: Semesters,
+      path: '/setting/school',
+      name: '校区管理',
+      component: SettingSchool,
       meta: {
-        title: '学期信息'
+        title: '校区管理'
       }
     },
     {
-      path: '/subjects',
-      name: '科目信息',
-      component: Subjects,
+      path: '/setting/teacher',
+      name: '员工管理',
+      component: SettingTeacher,
       meta: {
-        title: '科目信息'
+        title: '员工管理'
       }
     },
     {
-      path: '/teachers',
-      name: '所有教师',
-      component: Teachers,
-      meta: {
-        title: '所有教师'
-      }
-    },
-    {
-      path: '/schoolZones',
-      name: '所有校区',
-      component: SchoolZones,
-      meta: {
-        title: '所有校区'
-      }
-    },
-    {
-      path: '/classTypes',
-      name: '所有班级',
-      component: ClassTypes,
-      meta: {
-        title: '所有班级'
-      }
-    },
-    {
-      path: '/chargeTypes',
+      path: '/setting/charge',
       name: '收费类型',
-      component: ChargeTypes,
+      component: SettingCharge,
       meta: {
         title: '收费类型'
       }
     },
     {
-      path: '/courses',
-      name: '所有课程',
-      component: Courses,
+      path: '/setting/config',
+      name: '功能设置',
+      component: SettingConfig,
       meta: {
-        title: '所有课程'
+        title: '功能设置'
       }
     },
     {
-      path: '/students',
-      name: '学生信息',
-      component: Students,
+      path: '/setting/subject',
+      name: '科目设置',
+      component: SettingSubject,
       meta: {
-        title: '学生信息'
-      }
-    },
-
-    {
-      path: '/yearReport',
-      name: '月度报表',
-      component: YearReport,
-      meta: {
-        title: '月度报表'
+        title: '科目设置'
       }
     },
     {
-      path: '/payTypeReport',
-      name: '支付类型报表',
-      component: PayTypeReport,
+      path: '/setting/semester',
+      name: '学期设置',
+      component: SettingSemester,
       meta: {
-        title: '支付类型报表'
+        title: '学期设置'
       }
     },
     {
-      path: '/configs',
-      name: '基础配置',
-      component: Configs,
+      path: '/setting/class',
+      name: '班级设置',
+      component: SettingClass,
       meta: {
-        title: '基础配置'
-      }
-    },
-    {
-      path: '/studentCourses',
-      name: '学生课程',
-      component: StudentCourses,
-      meta: {
-        title: '学生课程'
-      }
-    },
-    {
-      path: '/courseStudents/:courseId',
-      name: '课程学生',
-      component: CourseStudents,
-      meta: {
-        title: '课程学生'
-      }
-    },
-    {
-      path: '/studentCourseBills',
-      name: '学生课程开票记录',
-      component: StudentCourseBills,
-      meta: {
-        title: '学生课程开票记录'
-      }
-    },
-    {
-      path: '/subjectStudentReport',
-      name: '科目学生统计',
-      component: SubjectStudentReport,
-      meta: {
-        title: '科目学生统计'
+        title: '班级设置'
       }
     }
-
   ]
 })

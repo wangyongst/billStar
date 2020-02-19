@@ -31,8 +31,11 @@
 </template>
 
 <script>
+  import SchoolSelect from "../select/SchoolSelect";
+
   export default {
-    name: 'ChargeTypes',
+    name: 'SettingCharge',
+    components: {SchoolSelect},
     data() {
       return {
         list: [],
