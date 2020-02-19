@@ -67,9 +67,14 @@
     </el-submenu>
 
     <!--课程表 -->
-    <el-menu-item class="" index="course" @click="toPage('course/table')">
-      <i class="el-icon-user"></i>
-      <span slot="title">课程表</span>
+    <el-menu-item index="course">
+      <template slot="title">
+        <i class="el-icon-setting"></i>
+        <span>课程表</span>
+      </template>
+      <el-menu-item class="normalHide" @click="toPage('course/table')">
+        <span slot="title">课程表</span>
+      </el-menu-item>
     </el-menu-item>
 
     <!--    基础设置 组-->
