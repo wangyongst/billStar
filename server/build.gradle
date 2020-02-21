@@ -45,7 +45,7 @@ processResources {
 
 dependencies {
 
-    compile project(':web')//server模块依赖web模块
+//    compile project(':web')//server模块依赖web模块
 
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-devtools")
