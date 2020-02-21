@@ -1,5 +1,5 @@
 <template>
-  <el-menu class="collapse-menu" :collapse="isCollapse">
+  <el-menu class="collapse-menu">
 
     <el-menu-item class="" index="home" @click="toPage('home')">
       <i class="el-icon-monitor"></i>
@@ -13,16 +13,16 @@
         <i class="el-icon-search"></i>
         <span>查询</span>
       </template>
-      <el-menu-item class="normalHide" index="search-daoqi" @click="toPage('search/expire')">
+      <el-menu-item class="normalHide" @click="toPage('search/expire')">
         <span slot="title">到期</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="search-chaoqi" @click="toPage('search/overtime')">
+      <el-menu-item class="normalHide" @click="toPage('search/overtime')">
         <span slot="title">超期</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="search-liushi" @click="toPage('search/lose')">
+      <el-menu-item class="normalHide" @click="toPage('search/lose')">
         <span slot="title">流失</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" index="search-tuifei" @click="toPage('search/arrears')">
+      <el-menu-item class="normalHide" @click="toPage('search/arrears')">
         <span slot="title">退费</span>
       </el-menu-item>
     </el-submenu>
@@ -55,19 +55,19 @@
         <i class="el-icon-s-marketing"></i>
         <span>报表中心</span>
       </template>
-      <el-menu-item @click="toPage('report/year')">
+      <el-menu-item class="normalHide" @click="toPage('report/year')">
         <span slot="title">年月报表</span>
       </el-menu-item>
-      <el-menu-item @click="toPage('report/charge')">
+      <el-menu-item class="normalHide" @click="toPage('report/charge')">
         <span slot="title">支付类型</span>
       </el-menu-item>
-      <el-menu-item @click="toPage('studentReport')">
+      <el-menu-item class="normalHide" @click="toPage('report/student')">
         <span slot="title">在校生</span>
       </el-menu-item>
     </el-submenu>
 
     <!--课程表 -->
-    <el-menu-item index="course">
+    <el-submenu index="course">
       <template slot="title">
         <i class="el-icon-setting"></i>
         <span>课程表</span>
@@ -75,7 +75,10 @@
       <el-menu-item class="normalHide" @click="toPage('course/table')">
         <span slot="title">课程表</span>
       </el-menu-item>
-    </el-menu-item>
+      <el-menu-item class="normalHide" @click="toPage('course/manager')">
+        <span slot="title">课程管理</span>
+      </el-menu-item>
+    </el-submenu>
 
     <!--    基础设置 组-->
     <el-submenu index="basic">
@@ -111,12 +114,6 @@
 <script>
   export default {
     name: 'AppMenu',
-    props: {
-      isCollapse: {
-        required: true,
-        default: false,
-      }
-    },
     data() {
       return {}
     },

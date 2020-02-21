@@ -20,6 +20,9 @@ import SettingSubject from "../components/setting/SettingSubject";
 import SettingSemester from "../components/setting/SettingSemester";
 import SettingClass from "../components/setting/SettingClass";
 import ReportCharge from "../components/report/ReportCharge";
+import CourseTable from "../components/course/CourseTable";
+import ReportStudents from "../components/report/ReportStudents";
+import CourseManager from "../components/course/CourseManager";
 
 Vue.use(Router);
 
@@ -122,6 +125,22 @@ export default new Router({
       }
     },
     {
+      path: '/course/table',
+      name: '课程表',
+      component: CourseTable,
+      meta: {
+        title: '课程表'
+      }
+    },
+    {
+      path: '/course/manager',
+      name: '课程管理',
+      component: CourseManager,
+      meta: {
+        title: '课程管理'
+      }
+    },
+    {
       path: '/report/year',
       name: '年月报表',
       component: ReportYear,
@@ -137,7 +156,14 @@ export default new Router({
         title: '支付类型报表'
       }
     },
-
+    {
+      path: '/report/student',
+      name: '支付类型报表',
+      component: ReportStudents,
+      meta: {
+        title: '支付类型报表'
+      }
+    },
     {
       path: '/setting/school',
       name: '校区管理',

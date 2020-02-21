@@ -7,105 +7,76 @@
       <!--查询表单-->
       <el-col :span="24">
         <el-form label-width="100px" class="search-form" size="mini">
+
           <SchoolSelect></SchoolSelect>
           <SubjectSelect></SubjectSelect>
-          <ClassSelect></ClassSelect>
-          <TeacherSelect></TeacherSelect>
           <SemesterSelect></SemesterSelect>
+
         </el-form>
-      </el-col>
-    </el-row>
 
-    <el-row>
+
+      </el-col>
+      <!--    数据表格-->
       <el-col :span="24">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-          </div>
-          <div>
-            <el-row>
-              <el-col :span="4">
-                <div class="grid-content bg-purple">
-                  <el-card class="box-card">
-                    <div>
-                      <el-button type="primary"><p>121212</p>总人数</el-button>
-                    </div>
-                  </el-card>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="grid-content bg-purple-light">
-                  <el-card class="box-card">
-                    <div>
-                      <el-button type="primary"><p>121212</p>总科目</el-button>
-                    </div>
-                  </el-card>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="grid-content bg-purple"></div>
-                <el-card class="box-card">
-                  <div>
-                    <el-button type="primary"><p>121212</p>美术</el-button>
-                  </div>
-                </el-card>
-              </el-col>
-              <el-col :span="4">
-                <div class="grid-content bg-purple-light">
-                  <el-card class="box-card">
-                    <div>
-                      <el-button type="primary"><p>121212</p>书法</el-button>
-                    </div>
-                  </el-card>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="grid-content bg-purple-light">
-                  <el-card class="box-card">
-                    <div>
-                      <el-button type="primary"><p>121212</p>满科次</el-button>
-                    </div>
-                  </el-card>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="grid-content bg-purple-light">
-                  <el-card class="box-card">
-                    <div>
-                      <el-button type="primary"><p>121212</p>满班率</el-button>
-                    </div>
-                  </el-card>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-        </el-card>
+        <el-table v-loading="loading" :data="page.list" class="bill-table" size="" style="width: 100%">
+          <el-table-column label="" type="index" width="40" align="center">
+          </el-table-column>
+
+          <el-table-column label="校区" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="教室号" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="科目" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="班级" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="班别" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="班额" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="教师" width="150" align="left">
+          </el-table-column>
+
+          <el-table-column label="上课时间" width="150" align="left">
+          </el-table-column>
+        </el-table>
       </el-col>
-    </el-row>
 
-    <el-row>
-      <el-table v-loading="loading" :data="page.list" class="bill-table">
-        <el-table-column prop="deptSchoolName" label="教室"></el-table-column>
-        <el-table-column prop="name" label="时间段"></el-table-column>
-        <el-table-column prop="mobile" label="周五"></el-table-column>
-        <el-table-column prop="currentArrears" label="周六"></el-table-column>
-        <el-table-column prop="gender" label="周日"></el-table-column>
-      </el-table>
+      <el-col :span="24">
+        <el-pagination
+          class="common-page"
+          background
+          layout="total,prev, pager, next"
+          :total="page.total"
+          :page-size="query.pageSize"
+          :current-page="query.pageNo"
+          @current-change="currentPage"
+          @prev-click="prevPage"
+          @next-click="nextPage"
+        ></el-pagination>
+      </el-col>
+      <BillInfoDialogTable :dialogVisible="detailDialogVisible"
+                           @dialogClose="detailDialogClose"
+                           :bill="bill"/>
     </el-row>
-
   </div>
 </template>
 
 <script>
-  import ClassSelect from "../select/ClassSelect";
   import SchoolSelect from "../select/SchoolSelect";
   import SubjectSelect from "../select/SubjectSelect";
   import BackToWork from "../back/BackToWork";
-  import TeacherSelect from "../select/TeacherSelect";
   import SemesterSelect from "../select/SemesterSelect";
 
   export default {
-    name: 'CourseTable',
-    components: {SemesterSelect, TeacherSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
+    name: 'CourseManager',
+    components: {SemesterSelect, BackToWork, SchoolSelect, SubjectSelect},
     data() {
       return {
         createDialogVisible: false,
