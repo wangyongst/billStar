@@ -1,6 +1,6 @@
 const AppConfig = {};
 
-AppConfig.urlPrefix = "bill";
+AppConfig.urlPrefix = "ding";
 
 AppConfig.billTypes = {
   newBill: 1,

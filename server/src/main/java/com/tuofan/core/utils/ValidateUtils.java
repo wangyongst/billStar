@@ -1,6 +1,6 @@
 package com.tuofan.core.utils;
 
-import com.tuofan.core.exception.BizException;
+import com.tuofan.core.BizException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Array;

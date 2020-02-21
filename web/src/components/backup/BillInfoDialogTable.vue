@@ -126,7 +126,7 @@
       },
       saveToPDF() {
         const _this = this;
-        _this.getPdf(_this.bill.student.name + "_" + _this.bill.student.mobile, "#tablePrintZone");
+        _this.getPdf(_this.ding.student.name + "_" + _this.ding.student.mobile, "#tablePrintZone");
       }
     }
 

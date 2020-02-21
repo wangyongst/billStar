@@ -1,7 +1,7 @@
 package com.tuofan.core.utils;
 
 import com.google.common.collect.Maps;
-import com.tuofan.core.exception.BizException;
+import com.tuofan.core.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.NestedNullException;

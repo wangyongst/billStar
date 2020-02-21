@@ -350,8 +350,8 @@
           for (const index in _this.semesterForSelect) {
             const item = _this.semesterForSelect[index];
             if (item.isDefault && parseInt(item.isDefault) === 1) {
-              if (_this.bill.semesterId == null) {
-                _this.bill.semesterId = item.id;
+              if (_this.ding.semesterId == null) {
+                _this.ding.semesterId = item.id;
               }
               break;
             }
@@ -416,7 +416,7 @@
           _this.baseErrorNotify("系统错误，请联系管理员");
         }
         _this.loading = true;
-        _this.httpUtils.appPost(url, _this.bill).then(function (res) {
+        _this.httpUtils.appPost(url, _this.ding).then(function (res) {
           _this.loading = false;
           if (parseInt(res.code) === 0) {
             _this.baseSuccessNotify(res.msg);
@@ -441,25 +441,25 @@
 
       courseSelectChange(selectIndex) {
         const _this = this;
-        const val = _this.bill.billCourseList[selectIndex].courseId;
-        console.log(JSON.stringify(_this.bill.billCourseList));
-        if (_this.bill.billCourseList[0].courseId != null &&
-          _this.bill.billCourseList[0].courseId === _this.bill.billCourseList[1].courseId) {
+        const val = _this.ding.billCourseList[selectIndex].courseId;
+        console.log(JSON.stringify(_this.ding.billCourseList));
+        if (_this.ding.billCourseList[0].courseId != null &&
+          _this.ding.billCourseList[0].courseId === _this.ding.billCourseList[1].courseId) {
           _this.baseErrorNotify("两门课程选择重复，请重新选择");
-          _this.bill.billCourseList[selectIndex].courseId = null;
-          _this.bill.billCourseList[selectIndex].courseLabel = _this.defaultCourseLabel();
+          _this.ding.billCourseList[selectIndex].courseId = null;
+          _this.ding.billCourseList[selectIndex].courseLabel = _this.defaultCourseLabel();
           return;
         }
         _this.coursesSelect.forEach(function (item) {
           if (item.id === val) {
-            _this.bill.billCourseList[selectIndex].courseLabel = item.courseLabel;
+            _this.ding.billCourseList[selectIndex].courseLabel = item.courseLabel;
           }
         });
       },
 
       deptSchoolChange() {
         const _this = this;
-        _this.bill.billCourseList = [
+        _this.ding.billCourseList = [
           _this.initNullCourse(),
           _this.initNullCourse()
         ];
@@ -469,7 +469,7 @@
 
       semesterChange() {
         const _this = this;
-        _this.bill.billCourseList = [
+        _this.ding.billCourseList = [
           _this.initNullCourse(),
           _this.initNullCourse()
         ];
