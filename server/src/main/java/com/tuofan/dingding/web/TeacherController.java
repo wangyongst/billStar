@@ -1,9 +1,9 @@
-package com.tuofan.basic.web;
+package com.tuofan.dingding.web;
 
 
-import com.tuofan.basic.entity.DingUser;
-import com.tuofan.basic.service.IDingDeptService;
-import com.tuofan.basic.service.IDingUserService;
+import com.tuofan.dingding.entity.DingUser;
+import com.tuofan.dingding.service.IDingDeptService;
+import com.tuofan.dingding.service.IDingUserService;
 import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.core.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/teacher")
+@RequestMapping("/bill/teacher")
 public class TeacherController {
 
 

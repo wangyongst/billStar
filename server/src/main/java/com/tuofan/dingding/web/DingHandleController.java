@@ -1,15 +1,15 @@
-package com.tuofan.basic.web;
+package com.tuofan.dingding.web;
 
 import com.tuofan.core.Result;
-import com.tuofan.basic.application.DingDeptSynService;
-import com.tuofan.basic.application.DingUserSynService;
+import com.tuofan.dingding.application.DingDeptSynService;
+import com.tuofan.dingding.application.DingUserSynService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/ding")
+@RequestMapping("/bill/ding")
 public class DingHandleController {
 
     @Autowired

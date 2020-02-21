@@ -1,7 +1,7 @@
 package com.tuofan.ding.response;
 
 
-import com.tuofan.basic.entity.DingDept;
+import com.tuofan.dingding.entity.DingDept;
 import com.tuofan.ding.response.base.BaseResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

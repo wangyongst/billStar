@@ -1,11 +1,11 @@
-package com.tuofan.basic.application;
+package com.tuofan.dingding.application;
 
 import com.google.common.collect.Lists;
 import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.core.Result;
 import com.tuofan.ding.request.DeptRequest;
-import com.tuofan.basic.entity.DingDept;
-import com.tuofan.basic.service.IDingDeptService;
+import com.tuofan.dingding.entity.DingDept;
+import com.tuofan.dingding.service.IDingDeptService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

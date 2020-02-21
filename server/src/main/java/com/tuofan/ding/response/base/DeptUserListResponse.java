@@ -1,6 +1,6 @@
 package com.tuofan.ding.response.base;
 
-import com.tuofan.basic.entity.DingUser;
+import com.tuofan.dingding.entity.DingUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

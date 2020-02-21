@@ -1,4 +1,4 @@
-package com.tuofan.basic.entity;
+package com.tuofan.dingding.entity;
 
 import java.io.Serializable;
 

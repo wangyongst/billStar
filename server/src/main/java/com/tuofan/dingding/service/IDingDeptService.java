@@ -1,7 +1,7 @@
-package com.tuofan.basic.service;
+package com.tuofan.dingding.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.tuofan.basic.entity.DingUser;
+import com.tuofan.dingding.entity.DingDept;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.tuofan.basic.entity.DingUser;
  * @author wangyong
  * @since 2020-02-21
  */
-public interface IDingUserService extends IService<DingUser> {
+public interface IDingDeptService extends IService<DingDept> {
 
 }

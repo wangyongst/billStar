@@ -1,7 +1,7 @@
-package com.tuofan.basic.mapper;
+package com.tuofan.dingding.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tuofan.basic.entity.DingDeptUser;
+import com.tuofan.dingding.entity.DingDeptUser;
 
 /**
  * <p>

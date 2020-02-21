@@ -1,4 +1,4 @@
-package com.tuofan.basic.web;
+package com.tuofan.dingding.web;
 
 
 import com.tuofan.configs.constants.ConfigNameConstants;
@@ -20,7 +20,7 @@ import java.util.Formatter;
 
 @Slf4j
 @RestController
-@RequestMapping("/dingParam")
+@RequestMapping("/bill/dingParam")
 public class DingParamController {
 
     @Autowired

@@ -1,6 +1,6 @@
 package com.tuofan.ding.request;
 
-import com.tuofan.basic.entity.DingDept;
+import com.tuofan.dingding.entity.DingDept;
 import com.tuofan.ding.request.utils.RequestUtils;
 import com.tuofan.ding.response.DeptListResponse;
 import com.tuofan.ding.service.TokenService;

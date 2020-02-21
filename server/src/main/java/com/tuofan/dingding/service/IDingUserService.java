@@ -1,0 +1,18 @@
+package com.tuofan.dingding.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.tuofan.dingding.entity.DingUser;
+
+/**
+ * <p>
+ * 服务类
+ * </p>
+ *
+ * @author wangyong
+ * @since 2020-02-21
+ */
+public interface IDingUserService extends IService<DingUser> {
+
+    DingUser getByUserId(String userId);
+
+}

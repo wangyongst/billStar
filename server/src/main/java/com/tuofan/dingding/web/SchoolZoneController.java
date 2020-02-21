@@ -1,8 +1,8 @@
-package com.tuofan.basic.web;
+package com.tuofan.dingding.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tuofan.basic.entity.DingDept;
-import com.tuofan.basic.service.IDingDeptService;
+import com.tuofan.dingding.entity.DingDept;
+import com.tuofan.dingding.service.IDingDeptService;
 import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.core.Result;
 import com.tuofan.ding.request.RobotMessageSendRequest;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/schoolZone")
+@RequestMapping("/bill/schoolZone")
 public class SchoolZoneController {
 
 
