@@ -1,7 +1,7 @@
-package com.tuofan.dingding.service;
+package com.tuofan.orgination.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.tuofan.dingding.entity.DingDept;
+import com.tuofan.orgination.entity.DingDept;
 
 /**
  * <p>

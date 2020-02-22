@@ -245,10 +245,10 @@
         _this.query.pageNo = page;
         _this.listStudent();
       },
-      //
+
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(r.msg);
+        _this.baseErrorNotify(r);
         _this.loading = false;
       },
     }

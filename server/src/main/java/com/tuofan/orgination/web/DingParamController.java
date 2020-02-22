@@ -1,9 +1,10 @@
-package com.tuofan.dingding.web;
+package com.tuofan.orgination.web;
 
 
 import com.tuofan.configs.constants.ConfigNameConstants;
 import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.core.BizException;
+import com.tuofan.core.Result;
 import com.tuofan.ding.response.ApiConfig;
 import com.tuofan.ding.service.JsApiTicketService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,20 +31,20 @@ public class DingParamController {
     JsApiTicketService jsApiTicketService;
 
     @GetMapping("get")
-    public ApiConfig getSignApiConfig(String url) throws UnsupportedEncodingException {
+    public Result getSignApiConfig(String url) throws UnsupportedEncodingException {
         String urlDecoded = URLDecoder.decode(url, "UTF-8");
         log.info("URL:{},URL decoded:{}", url, urlDecoded);
         String ticket = jsApiTicketService.getTicket();
-        return this.getApiConfig(ticket, urlDecoded);
+        return Result.ok(getApiConfig(ticket, urlDecoded));
     }
 
     @GetMapping("getCorpInfo")
-    public ApiConfig getCorpInfo() {
+    public Result getCorpInfo() {
         ApiConfig apiConfig = new ApiConfig();
         apiConfig.setAgentId(configCachedUtils.getValue(ConfigNameConstants.agentId));
         apiConfig.setCorpId(configCachedUtils.getValue(ConfigNameConstants.corpId));
         apiConfig.setAppEnv(configCachedUtils.getValue(ConfigNameConstants.appEnv));
-        return apiConfig;
+        return Result.ok(apiConfig);
     }
 
     private ApiConfig getApiConfig(String ticket, String url) {
@@ -53,7 +54,7 @@ public class DingParamController {
         apiConfig.setUrl(url);
         apiConfig.setTimeStamp(System.currentTimeMillis());
         apiConfig.setNonceStr("app");
-        apiConfig.setSignature(this.sign(ticket, apiConfig));
+        apiConfig.setSignature(sign(ticket, apiConfig));
         log.info("apiConfig:{}", apiConfig);
         return apiConfig;
     }

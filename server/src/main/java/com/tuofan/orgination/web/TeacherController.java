@@ -1,9 +1,9 @@
-package com.tuofan.dingding.web;
+package com.tuofan.orgination.web;
 
 
-import com.tuofan.dingding.entity.DingUser;
-import com.tuofan.dingding.service.IDingDeptService;
-import com.tuofan.dingding.service.IDingUserService;
+import com.tuofan.orgination.entity.DingUser;
+import com.tuofan.orgination.service.IDingDeptService;
+import com.tuofan.orgination.service.IDingUserService;
 import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.core.Result;
 import lombok.extern.slf4j.Slf4j;

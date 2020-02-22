@@ -1,7 +1,7 @@
-package com.tuofan.dingding.vo;
+package com.tuofan.orgination.vo;
 
 import com.google.common.collect.Lists;
-import com.tuofan.dingding.entity.DingDept;
+import com.tuofan.orgination.entity.DingDept;
 import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 

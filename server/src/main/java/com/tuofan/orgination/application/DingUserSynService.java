@@ -1,4 +1,4 @@
-package com.tuofan.dingding.application;
+package com.tuofan.orgination.application;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
@@ -8,12 +8,12 @@ import com.tuofan.core.Result;
 import com.tuofan.ding.request.DeptUserRequest;
 import com.tuofan.ding.response.base.DeptMemberResponse;
 import com.tuofan.ding.response.base.DeptUserListResponse;
-import com.tuofan.dingding.entity.DingDept;
-import com.tuofan.dingding.entity.DingDeptUser;
-import com.tuofan.dingding.entity.DingUser;
-import com.tuofan.dingding.service.IDingDeptService;
-import com.tuofan.dingding.service.IDingDeptUserService;
-import com.tuofan.dingding.service.IDingUserService;
+import com.tuofan.orgination.entity.DingDept;
+import com.tuofan.orgination.entity.DingDeptUser;
+import com.tuofan.orgination.entity.DingUser;
+import com.tuofan.orgination.service.IDingDeptService;
+import com.tuofan.orgination.service.IDingDeptUserService;
+import com.tuofan.orgination.service.IDingUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

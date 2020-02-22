@@ -158,10 +158,10 @@ export default new Router({
     },
     {
       path: '/report/student',
-      name: '支付类型报表',
+      name: '在校生',
       component: ReportStudents,
       meta: {
-        title: '支付类型报表'
+        title: '在校生'
       }
     },
     {

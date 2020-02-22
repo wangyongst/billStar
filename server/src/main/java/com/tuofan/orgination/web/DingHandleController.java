@@ -1,8 +1,8 @@
-package com.tuofan.dingding.web;
+package com.tuofan.orgination.web;
 
 import com.tuofan.core.Result;
-import com.tuofan.dingding.application.DingDeptSynService;
-import com.tuofan.dingding.application.DingUserSynService;
+import com.tuofan.orgination.application.DingDeptSynService;
+import com.tuofan.orgination.application.DingUserSynService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -19,8 +19,8 @@ export default class CommonUtils {
   }
 
   static isResponseOK(response) {
-    const success = response.data.success;
-    return success === true;
+    const success = response.data.code;
+    return success === 1;
   }
 
   static handleAjaxResponse(response) {
@@ -60,72 +60,11 @@ export default class CommonUtils {
   }
 
   static setTitle(title) {
-    // if (dd) {
-    //   dd.biz.navigation.setTitle({
-    //     title: title,
-    //     onSuccess: function (result) {
-    //       console.log(result);
-    //     },
-    //     onFail: function (err) {
-    //     }
-    //   });
-    // }
+
   }
 
   static setToHome() {
-    // if (!dd) {
-    //   return;
-    // }
-    // // alert(router.currentRoute.path);
-    // if (router.currentRoute.path === "/") {
-    //   dd.biz.navigation.setMenu(
-    //     {
-    //       items:
-    //         [
-    //           {
-    //             "id": "1",//字符串
-    //             // "iconId": "file",//字符串，图标命名
-    //             "text": "退出"
-    //           },
-    //         ],
-    //       onSuccess: function (data) {
-    //         if (data.id === "1") {
-    //           dd.biz.navigation.close({
-    //             onSuccess: function (result) {
-    //               /*result结构
-    //               {}
-    //               */
-    //             },
-    //             onFail: function (err) {
-    //             }
-    //           })
-    //         }
-    //       },
-    //       onFail: function (data) {
-    //         alert(JSON.stringify(data));
-    //       }
-    //     });
-    // } else {
-    //   dd.biz.navigation.setMenu(
-    //     {
-    //       items:
-    //         [
-    //           {
-    //             "id": "1",//字符串
-    //             // "iconId": "file",//字符串，图标命名
-    //             "text": "首页"
-    //           },
-    //         ],
-    //       onSuccess: function (data) {
-    //         if (data.id === "1") {
-    //           router.push({path: "/"});
-    //         }
-    //       },
-    //       onFail: function (data) {
-    //         alert(JSON.stringify(data));
-    //       }
-    //     });
-    // }
+
   }
 
   static improveImgUrl(imgUrl) {

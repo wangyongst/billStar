@@ -1,10 +1,10 @@
-package com.tuofan.dingding.service.impl;
+package com.tuofan.orgination.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tuofan.dingding.entity.DingUser;
-import com.tuofan.dingding.mapper.DingUserMapper;
-import com.tuofan.dingding.service.IDingUserService;
+import com.tuofan.orgination.entity.DingUser;
+import com.tuofan.orgination.mapper.DingUserMapper;
+import com.tuofan.orgination.service.IDingUserService;
 import org.springframework.stereotype.Service;
 
 /**

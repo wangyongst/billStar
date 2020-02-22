@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 
-var path = require('path');
+var path = require('path')
 
-var assetsRoot = path.resolve(__dirname, '../build/resources/main/static');// <-----1.add
+var assetsRoot = path.resolve(__dirname, '../build/resources/main/static')// <-----1.add
 module.exports = {
   dev: {
     // Paths
@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {// <-----7.change
       '/bill/**':
         {
-          // target: 'http://152.136.196.204:8886',//代理前台/api开头的请求，代理到8080端口，spring boot的访问端口
+          // target: 'http://47.106.130.224:8886',//代理前台/api开头的请求，代理到8080端口，spring boot的访问端口
           target: 'http://127.0.0.1:8886',//代理前台/api开头的请求，代理到8080端口，spring boot的访问端口
           changeOrigin: true,
         }
@@ -73,4 +73,4 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
   }
-};
+}

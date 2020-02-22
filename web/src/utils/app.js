@@ -6,31 +6,7 @@ exports.install = function (Vue, options) {
   Vue.prototype.initNullCourse = function () {
     return {courseId: null, expireTime: null, courseLabel: "*课程信息*", beginTime: null, riseClassTime: null};
   };
-  /**
-   *
-   * @param item
-    {
-      "id":5,
-      "createDate":1567239365000,
-      "updateDate":1567240809000,
-      "createBy":-1,
-      "updateBy":-1,
-      "deptSchoolId":111459538,
-      "teacherId":-1,
-      "dictCourseId":3,
-      "courseIndex":3,
-      "regularTime":"每周三、周五10点到11点",
-      "classroomNo":"008",
-      "dictCourseName":"色彩",
-      "teacherName":"测试员工",
-      "deptSchoolName":"市场部",
-      "courseIndexName":"三",
-      "createByName":"测试员工",
-      "updateByName":"测试员工"
-  }
-   *
-   * @returns {*}
-   */
+
   Vue.prototype.appBillCourseName = function (item) {
     return item.dictCourseName + item.courseIndexName + " + " + item.teacherName;
   };

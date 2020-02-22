@@ -18,10 +18,11 @@ export default class HttpUtils {
     return new Promise(function (resolve, reject) {
       config = HttpUtils.improveConfig(config);
       axios.get(AppConfig.urlPrefix + url, config).then(response => {
+        console.log("GET:URL=" + url)
         if (CommonUtils.isResponseOK(response)) {
-          resolve(response.data);
+          resolve(response.data.message);
         } else {
-          reject(response.data);
+          reject(response.data.message);
         }
       }).catch(e => {
         HttpUtils.handleException(url, e);
@@ -64,7 +65,7 @@ export default class HttpUtils {
   }
 
   static finallyLog(url, obj) {
-    // console.log("数据请求URL:" + url );
+    console.log("数据请求URL:" + url );
   }
 
   static getUserId() {

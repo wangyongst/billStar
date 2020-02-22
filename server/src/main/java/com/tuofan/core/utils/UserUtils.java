@@ -2,7 +2,7 @@ package com.tuofan.core.utils;
 
 import com.tuofan.core.BizException;
 import com.tuofan.core.LoginConstants;
-import com.tuofan.dingding.vo.UserVO;
+import com.tuofan.orgination.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

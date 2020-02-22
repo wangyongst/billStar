@@ -33,7 +33,6 @@ import userUtils from './utils/UserUtils';
 import htmlPdf from './utils/HtmlPdf';
 import obj from './utils/obj';
 import store from './store/index';
-import billOperate from './utils/BillOperate'
 
 
 Vue.config.productionTip = false;
@@ -42,14 +41,13 @@ Vue.prototype.$appConfig = AppConfig;
 Vue.prototype.dd = dd;
 Vue.prototype.commonUtils = commonUtils;
 Vue.prototype.httpUtils = httpUtils;
-Vue.prototype.billOperate = billOperate;
 
 Vue.use(ElementUI);
 Vue.use(base);
 Vue.use(app);
-Vue.use(Print);  //
-Vue.use(env);
 Vue.use(userUtils);
+Vue.use(Print);
+Vue.use(env);
 Vue.use(obj);
 Vue.use(htmlPdf);
 

@@ -1,4 +1,4 @@
-package com.tuofan.dingding.entity;
+package com.tuofan.orgination.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

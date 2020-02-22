@@ -1,16 +1,17 @@
-package com.tuofan.dingding.web;
+package com.tuofan.orgination.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tuofan.dingding.entity.DingDept;
-import com.tuofan.dingding.service.IDingDeptService;
+import com.tuofan.core.BizException;
+import com.tuofan.ding.request.param.robot.messsage.MarkDownMessageDTO;
+import com.tuofan.ding.response.base.BaseResponse;
+import com.tuofan.orgination.entity.DingDept;
+import com.tuofan.orgination.service.IDingDeptService;
 import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.core.Result;
 import com.tuofan.ding.request.RobotMessageSendRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/bill/schoolZone")
@@ -39,26 +40,28 @@ public class SchoolZoneController {
     }
 
     @PostMapping("update")
-    public Result update(DingDept dingDept) {
+    public Result update(@RequestBody DingDept dingDept) {
         DingDept saved = iDingDeptService.getById(dingDept.getId());
         if (dingDept != null) {
             if (dingDept.getIsSchoolZone() != null) saved.setIsSchoolZone(dingDept.getIsSchoolZone());
             if (dingDept.getPhone() != null) saved.setPhone(dingDept.getPhone());
             if (dingDept.getGroupWebHook() != null) saved.setGroupWebHook(dingDept.getGroupWebHook());
         }
+        iDingDeptService.saveOrUpdate(saved);
         return Result.ok();
     }
 
-//    @PostMapping("sendTestMessage")
-//    public BaseResponse sendTestMessage(@RequestParam Integer deptId) {
-//        DingDept dingDept = dingDeptRepository.get(deptId);
-//        if (dingDept == null) {
-//            throw new BizException("100", "无法根据部门ID找到部门数据");
-//        }
-//        if (StringUtils.isEmpty(dingDept.getGroupWebHook())) {
-//            throw new BizException("101", "校区:" + dingDept.getName() + " 没有配置群机器人地址，请先配置地址");
-//        }
-//        MarkDownMessageDTO markDownMessageDTO = MarkDownMessageDTO.of("云校管", "测试消息@" + System.currentTimeMillis());
-//        return robotMessageSendRequest.sendMessage(dingDept.getGroupWebHook(), markDownMessageDTO);
-//    }
+    @PostMapping("sendTestMessage")
+    public Result sendTestMessage(@RequestParam Integer deptId) {
+        DingDept dingDept = iDingDeptService.getById(deptId);
+        if (dingDept == null) {
+            return Result.error("无法根据部门ID找到部门数据");
+        }
+        if (StringUtils.isEmpty(dingDept.getGroupWebHook())) {
+            return Result.error(" 没有配置群机器人地址，请先配置地址");
+        }
+        MarkDownMessageDTO markDownMessageDTO = MarkDownMessageDTO.of("云校管", "测试消息@" + System.currentTimeMillis());
+        robotMessageSendRequest.sendMessage(dingDept.getGroupWebHook(), markDownMessageDTO);
+        return Result.ok();
+    }
 }

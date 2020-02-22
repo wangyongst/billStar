@@ -32,10 +32,6 @@ public class SysConfigs implements Serializable {
 
     private String value;
 
-    private Integer createBy;
-
-    private LocalDateTime createDate;
-
     private Integer updateBy;
 
     private Date updateDate;

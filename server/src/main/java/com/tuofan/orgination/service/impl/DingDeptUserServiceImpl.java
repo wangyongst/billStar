@@ -1,10 +1,10 @@
-package com.tuofan.dingding.service.impl;
+package com.tuofan.orgination.service.impl;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tuofan.dingding.entity.DingDeptUser;
-import com.tuofan.dingding.mapper.DingDeptUserMapper;
-import com.tuofan.dingding.service.IDingDeptUserService;
+import com.tuofan.orgination.entity.DingDeptUser;
+import com.tuofan.orgination.mapper.DingDeptUserMapper;
+import com.tuofan.orgination.service.IDingDeptUserService;
 import org.springframework.stereotype.Service;
 
 /**

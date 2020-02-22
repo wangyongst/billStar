@@ -105,10 +105,10 @@
       initApp() {
         const _this = this;
         _this.httpUtils.appGet('/dingParam/getCorpInfo').then(function (res) {
-          _this.appConfig = res.data;
+          _this.appConfig = res;
           _this.loginByCode(_this.appConfig.corpId);
         }, function (r) {
-          _this.baseErrorNotify(r.msg);
+          _this.baseErrorNotify(r);
         });
       },
       loginByCode(corpId) {
@@ -134,7 +134,7 @@
         const _this = this;
         console.log("requestAuthCode:" + code);
         _this.httpUtils.appGet('/login/loginByCode?code=' + code).then(function (res) {
-          const user = res.data;
+          const user = res;
           _this.loginResult = 2;
           if (user.isAppAdmin === 1) {
             _this.userAuthClass = 'admin'
@@ -143,7 +143,7 @@
           }
           window.localStorage.setItem("user", JSON.stringify(user));
         }, function (r) {
-          _this.baseErrorNotify(r.msg);
+          _this.baseErrorNotify(r);
           _this.loginError();
         }).catch(function (e) {
           _this.baseErrorNotify("loginByCode-requestAuthCode-onSuccess-catch=" + JSON.stringify(e));
@@ -185,7 +185,6 @@
     },
     mounted() {
       this.initApp();
-
     }
   }
 
