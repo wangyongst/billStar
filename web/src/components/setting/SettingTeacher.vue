@@ -12,22 +12,23 @@
 
 
     <el-form label-width="100px" class="search-form">
-      <SchoolSelect></SchoolSelect>
+      <SchoolSelect @dataChange="schoolChange"
+                    @initFinish="schoolInitFinish"></SchoolSelect>
       <el-form-item label="姓名：">
-        <el-input size="mini" style="width: 120px" v-model="query.data.nameLike" placeholder="教师姓名"></el-input>
+        <el-input size="mini" style="width: 120px" v-model="query.nameLike" placeholder="教师姓名"></el-input>
         <el-button class="btn-search" @click="searchFunc" size="mini">查询</el-button>
       </el-form-item>
 
     </el-form>
     <el-container style="width: 100%">
-      <el-table v-loading="loading" :data="page.list" class="bill-table" style="width: 100%">
+      <el-table v-loading="loading" :data="page.records" class="bill-table" style="width: 100%">
         <el-table-column label="序号" type="index" width="80" align="center"></el-table-column>
         <el-table-column prop="name" label="姓名" width="120"></el-table-column>
         <el-table-column label="部门" width="300">
-          <template slot-scope="scope">{{formatDept(scope.row.depts)}}</template>
+          <template slot-scope="scope">{{formatDept(scope.row.schoolList)}}</template>
         </el-table-column>
         <el-table-column label="校区" width="">
-          <template slot-scope="scope">{{formatDept(scope.row.deptSchools)}}</template>
+          <template slot-scope="scope">{{formatDept(scope.row.schoolList)}}</template>
         </el-table-column>
         <el-table-column label="是否教师" prop="isTeacher" width="100" :formatter="baseYesNo" align="center">
         </el-table-column>
@@ -35,23 +36,23 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" align="center" width="120">
           <template slot-scope="scope">
-            <template v-if="scope.row.isTeacher === 1">
+            <template v-if="scope.row.isTeacher === true">
               <el-button @click="setAsNotTeacher(scope.row.id)" type="text" size="mini"
                          class="width100">设为非教师
               </el-button>
             </template>
-            <template v-if="scope.row.isTeacher !== 1">
+            <template v-if="scope.row.isTeacher == false">
               <el-button @click="setAsTeacher(scope.row.id)" type="text" size="mini"
                          class="width100">设为教师
               </el-button>
             </template>
             <br>
-            <template v-if="scope.row.isAppAdmin === 1">
+            <template v-if="scope.row.isAppAdmin === true">
               <el-button @click="setAsNotAppAdmin(scope.row.id)" type="text" size="mini"
                          class="width100">设为非管理员
               </el-button>
             </template>
-            <template v-if="scope.row.isAppAdmin !== 1">
+            <template v-if="scope.row.isAppAdmin == false">
               <el-button @click="setAsAppAdmin(scope.row.id)" type="text" size="mini"
                          class="width100">设为管理员
               </el-button>
@@ -66,8 +67,8 @@
       background
       layout="total,prev, pager, next"
       :total="page.total"
-      :page-size="query.pageSize"
-      :current-page="query.pageNo"
+      :page-size="query.size"
+      :current-page="query.current"
       @current-change="currentPage"
       @prev-click="prevPage"
       @next-click="nextPage"
@@ -88,40 +89,32 @@
       return {
         page: {
           total: 0,
-          list: [],
+          records: [],
         },
         query: {
-          pageNo: 1,
-          pageSize: 10,
-          orderBy: 'create_date DESC',
-          data: {
-            deptIds: [],
-            nameLike: null,
-          }
-
+          current: 1,
+          size: 10,
+          deptIds: [],
+          nameLike: null,
         },
         loading: true,
       }
     },
-    mounted: function () {
-      const _this = this;
-    },
     methods: {
-      deptSchoolIdInitFinish() {
+      schoolInitFinish() {
         this.listTeacher();
       },
       searchFunc() {
         const _this = this;
         _this.listTeacher();
       },
-      deptSchoolIdChange(val) {
-        this.query.data.deptIds = val;
+      schoolChange(val) {
+        this.query.deptIds = val;
       },
-      //
       synTeachers() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appGet('/ding/synOrganization').then(function (res) {
+        _this.httpUtils.appGet('/ding/synUser').then(function (res) {
           _this.loading = false;
           _this.baseSuccessNotify("操作成功，即将刷新教师列表");
           _this.listTeacher();
@@ -130,84 +123,60 @@
       listTeacher() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appPost('/teacher/listUser', _this.query).then(function (res) {
+        _this.httpUtils.appPost('/teacher/page', _this.query).then(function (res) {
           _this.loading = false;
-          _this.page.list = res.data.list;
-          _this.page.total = res.data.total;
+          _this.page.records = res.records;
+          _this.page.total = res.total;
         }, _this.operateFail);
       },
-      formatterYesNo(row, column, v) {
-        return parseInt(v) === 1 ? "是" : "否";
+      updateTeacher(cmd) {
+        const _this = this;
+        _this.httpUtils.appPost('/teacher/update', cmd).then(function (res) {
+          _this.listTeacher();
+        }, _this.operateFail);
       },
+
       // 置为教师
       setAsTeacher(tid) {
-        const _this = this;
-        _this.httpUtils.appPost('/teacher/setAsTeacher?id=' + tid).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.listTeacher();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
+        const cmd = {id: tid, isTeacher: true};
+        this.updateTeacher(cmd);
       },
       // 置为非教师
       setAsNotTeacher(tid) {
-        const _this = this;
-        _this.httpUtils.appPost('/teacher/setAsNotTeacher?id=' + tid).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.listTeacher();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
+        const cmd = {id: tid, isTeacher: false};
+        this.updateTeacher(cmd);
       },
 
       // 置为管理员
       setAsAppAdmin(tid) {
-        const _this = this;
-        _this.httpUtils.appPost('/teacher/setAsAppAdmin?id=' + tid).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.listTeacher();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
+        const cmd = {id: tid, isAppAdmin: true};
+        this.updateTeacher(cmd);
       },
       // 置为非教师
       setAsNotAppAdmin(tid) {
-        const _this = this;
-        _this.httpUtils.appPost('/teacher/setAsNotAppAdmin?id=' + tid).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.listTeacher();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
+        const cmd = {id: tid, isAppAdmin: false};
+        this.updateTeacher(cmd);
       },
 
       // 尝试分页
       currentPage(page) {
         const _this = this;
-        _this.query.pageNo = page;
+        _this.query.current = page;
         _this.listTeacher();
       },
       prevPage(page) {
         const _this = this;
-        _this.query.pageNo = page;
+        _this.query.current = page;
         _this.listTeacher();
       },
       nextPage(page) {
         const _this = this;
-        _this.query.pageNo = page;
+        _this.query.current = page;
         _this.listTeacher();
       },
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(JSON.stringify(r));
+        _this.baseErrorNotify(r);
         _this.loading = false;
       },
     }

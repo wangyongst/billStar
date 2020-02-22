@@ -3,7 +3,7 @@ package com.tuofan.orgination.application;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.tuofan.configs.service.ConfigCachedUtils;
+import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.core.Result;
 import com.tuofan.ding.request.DeptUserRequest;
 import com.tuofan.ding.response.base.DeptMemberResponse;
@@ -35,13 +35,15 @@ public class DingUserSynService {
     private IDingDeptService iDingDeptService;
 
     @Autowired
-    IDingUserService iDingUserService;
+    private IDingUserService iDingUserService;
 
     @Autowired
-    IDingDeptUserService iDingDeptUserService;
+    private IDingDeptUserService iDingDeptUserService;
 
     @Autowired
-    ConfigCachedUtils configCachedUtils;
+    private ISysConfigsService iSysConfigsService;
+
+    private List<Integer> ignoreExceptions = Lists.newArrayList(40009, 60003);
 
     public Result syn() {
         List<DingDept> deptList = iDingDeptService.list();
@@ -71,8 +73,8 @@ public class DingUserSynService {
         Set<String> dingUserIds = Sets.newHashSet();
         // todo 这里需要处理 isLeader ，用户在A部门是leader，在B部门不是，然后会有重复
         List<DingUser> uniqueUsers = list.stream().filter(ele -> {
-                    boolean contain = dingUserIds.contains(ele.getUserId());
-                    dingUserIds.add(ele.getUserId());
+                    boolean contain = dingUserIds.contains(ele.getUserid());
+                    dingUserIds.add(ele.getUserid());
                     return !contain;
                 }
         ).collect(Collectors.toList());
@@ -85,16 +87,17 @@ public class DingUserSynService {
         List<DingUser> existUsers = iDingUserService.list();
         if (CollectionUtils.isEmpty(existUsers)) {
             iDingUserService.saveBatch(users);
+            return;
         }
         List<DingUser> insertList = Lists.newArrayList();
         List<DingUser> updateList = Lists.newArrayList();
-        Map<String, DingUser> existUserMap = existUsers.stream().collect(Collectors.toMap(DingUser::getUserId, x -> x));
+        Map<String, DingUser> existUserMap = existUsers.stream().collect(Collectors.toMap(DingUser::getUserid, x -> x));
         for (DingUser user : users) {
-            if (!existUserMap.containsKey(user.getUserId())) {
+            if (!existUserMap.containsKey(user.getUserid())) {
                 insertList.add(user);
                 continue;
             }
-            DingUser existEle = existUserMap.get(user.getUserId());
+            DingUser existEle = existUserMap.get(user.getUserid());
             updateList.add(makeUser(user, existEle));
         }
         if (!CollectionUtils.isEmpty(insertList)) {
@@ -106,6 +109,7 @@ public class DingUserSynService {
     }
 
     public DingUser makeUser(DingUser o, DingUser t) {
+        o.setId(t.getId());
         o.setIsAppAdmin(t.getIsAppAdmin());
         o.setIsTeacher(t.getIsTeacher());
         return o;
@@ -119,10 +123,11 @@ public class DingUserSynService {
         List<DingDeptUser> dduList = Lists.newArrayList();
         for (DingDept dd : deptList) {
             DeptMemberResponse dmr = deptUserRequest.listAllMember(dd.getId());
+            if (ignoreExceptions.contains(dmr.getErrcode()) || CollectionUtils.isEmpty(dmr.getUserIds())) continue;
             for (String userid : dmr.getUserIds()) {
                 DingDeptUser ddu = new DingDeptUser();
                 ddu.setDeptId(dd.getId());
-                ddu.setUserId(userid);
+                ddu.setUserid(userid);
                 dduList.add(ddu);
             }
         }

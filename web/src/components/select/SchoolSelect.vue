@@ -22,7 +22,7 @@
     props: {
       deptQueryUrl: {
         required: false,
-        default: '/schoolZone/listSchoolZoneICanSee'
+        default: '/schoolZone/listSchoolZone'
       }
     },
     data() {
@@ -41,13 +41,12 @@
       }
     },
 
-    mounted() {
+    created() {
       const _this = this;
       _this.listDeptSchoolForSelect();
     },
 
     methods: {
-
       handleCheckAllChange() {
         const _this = this;
         _this.checkAll = !_this.checkAll;
@@ -70,15 +69,10 @@
 
       listDeptSchoolForSelect() {
         const _this = this;
-        _this.httpUtils.appPost(_this.deptQueryUrl).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.deptSchoolForSelect = res.data;
-            _this.processCheckAll();
-            _this.$emit("deptSchoolIdInitFinish")
-          } else {
-            _this.baseErrorNotify(res.msg);
-
-          }
+        _this.httpUtils.appGet(_this.deptQueryUrl).then(function (res) {
+          _this.deptSchoolForSelect = res;
+          _this.processCheckAll();
+          _this.$emit("initFinish")
         }, _this.operateFail);
       },
       operateFail(r) {

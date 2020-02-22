@@ -23,7 +23,7 @@ public class DingDept implements Serializable {
 
     private Integer id;
 
-    private Integer parentId;
+    private Integer parentid;
 
     private String name;
 

@@ -13,9 +13,8 @@
       <el-table v-loading="loading" :data="list" class="bill-table">
         <el-table-column label="序号" type="index" width="80" align="center"></el-table-column>
         <el-table-column prop="name" label="科目-班级" :formatter="showFullName" width=""></el-table-column>
-        <el-table-column prop="createByName" label="创建人" width="" align="center"></el-table-column>
-        <el-table-column prop="createDate" label="创建时间" :formatter="baseTableFormatTime" width=""
-                         align="center"></el-table-column>
+        <el-table-column prop="createName" label="创建人" width="" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" :formatter="baseTableFormatTime" width="" align="center"></el-table-column>
         <el-table-column fixed="right" label="操作" align="center" width="220">
           <template slot-scope="scope">
             <el-button class="normalHide" @click="updateItem(scope.row)" round type="text"
@@ -33,7 +32,7 @@
                :visible.sync="createDialogVisible">
       <el-form :model="classType">
         <el-form-item label="科目">
-          <el-select v-model="classType.parentId" placeholder="请选择科目">
+          <el-select v-model="classType.subjectId" placeholder="请选择科目">
             <el-option v-for="item in subjects" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
@@ -47,7 +46,6 @@
         <el-button type="primary" @click="dialogPost">确 定</el-button>
       </div>
     </el-dialog>
-
   </el-row>
 
 </template>
@@ -58,12 +56,10 @@
     data() {
       return {
         list: [],
-        query: {
-          orderBy: 'create_date DESC'
-        },
         loading: false,
         classType: {
-          parentId: null,
+          type: null,
+          subjectId: null,
           name: null,
         },
         subjects: [],
@@ -79,31 +75,24 @@
       listSubjectForSelect() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appGet('/subject/list').then(function (res) {
+        _this.httpUtils.appGet('/sys/subject/list').then(function (res) {
           _this.loading = false;
-          _this.subjects = res.data;
+          _this.subjects = res;
         }, _this.operateFail);
       },
       listClassType() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appGet('/classType/list').then(function (res) {
+        _this.httpUtils.appGet('/sys/classType/list').then(function (res) {
           _this.loading = false;
-          _this.list = res.data;
+          _this.list = res;
         }, _this.operateFail);
       },
-      //
       deleteClassType(id) {
         const _this = this;
-        _this.httpUtils.appPost('/classType/delete?id=' + id).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-
-            });
-            _this.listClassType();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
+        _this.httpUtils.appPost('/sys/classType/delete?id=' + id).then(function (res) {
+          _this.listClassType();
+          _this.baseSuccessNotify(res);
         }, _this.operateFail);
       },
       //
@@ -113,16 +102,10 @@
       },
       updatePost() {
         const _this = this;
-        _this.httpUtils.appPost('/classType/update', _this.classType).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-
-            });
-            _this.listClassType();
-            _this.createDialogVisible = false;
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
+        _this.httpUtils.appPost('/sys/classType/update', _this.classType).then(function (res) {
+          _this.listClassType();
+          _this.createDialogVisible = false;
+          _this.baseSuccessNotify(res);
         }, _this.operateFail);
       },
       //
@@ -143,25 +126,21 @@
       },
       createPost() {
         const _this = this;
-        _this.httpUtils.appPost('/classType/create', _this.classType).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-              _this.listClassType();
-              _this.createDialogVisible = false;
-            });
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
+        _this.httpUtils.appPost('/sys/classType/save', _this.classType).then(function (res) {
+          _this.listClassType();
+          _this.createDialogVisible = false;
+          _this.baseSuccessNotify(res);
         }, _this.operateFail);
       },
       //
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(r.msg);
+        _this.baseErrorNotify(r);
         _this.loading = false;
-      },
+      }
+      ,
       showFullName(row, col, val) {
-        return row.parentName + "-" + row.name;
+        return row.subjectName + "-" + row.name;
       }
     }
   }

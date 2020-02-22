@@ -10,6 +10,7 @@ public class Result<T> {
     public static Result ok() {
         Result res = new Result();
         res.setCode(1);
+        res.setMessage("操作成功");
         return res;
     }
 

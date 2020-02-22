@@ -13,4 +13,6 @@ import com.tuofan.configs.entity.SysConfigs;
  */
 public interface ISysConfigsService extends IService<SysConfigs> {
 
+    SysConfigs findByName(String name);
+
 }

@@ -7,6 +7,8 @@ import com.tuofan.orgination.mapper.DingDeptMapper;
 import com.tuofan.orgination.service.IDingDeptService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -18,4 +20,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class DingDeptServiceImpl extends ServiceImpl<DingDeptMapper, DingDept> implements IDingDeptService {
 
+    @Override
+    public List findByUserid(String userid) {
+        return baseMapper.listByUserid(userid);
+    }
 }

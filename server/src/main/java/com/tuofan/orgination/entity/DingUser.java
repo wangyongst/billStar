@@ -25,7 +25,7 @@ public class DingUser implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String userId;
+    private String userid;
 
     private String name;
 
@@ -55,7 +55,7 @@ public class DingUser implements Serializable {
     /**
      * 系统管理员
      */
-    private Integer isAppAdmin;
+    private Boolean isAppAdmin;
 
 
 }

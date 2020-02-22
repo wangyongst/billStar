@@ -3,7 +3,7 @@ package com.tuofan.ding.request;
 import com.google.common.collect.Maps;
 
 import com.tuofan.configs.constants.ConfigNameConstants;
-import com.tuofan.configs.service.ConfigCachedUtils;
+import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.ding.request.utils.RequestUtils;
 import com.tuofan.ding.response.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class TokenRequest {
 
     @Autowired
-    ConfigCachedUtils configCachedUtils;
+    private ISysConfigsService iSysConfigsService;
 
     private String accessTokenUrl = "https://oapi.dingtalk.com/gettoken?appkey={appkey}&appsecret={appsecret}";
 
@@ -29,8 +29,8 @@ public class TokenRequest {
 
     private Map<String, String> getAppConfigMap() {
         Map<String, String> param = Maps.newHashMap();
-        param.put("appkey", configCachedUtils.getValue(ConfigNameConstants.appKey));
-        param.put("appsecret", configCachedUtils.getValue(ConfigNameConstants.appSecret));
+        param.put("appkey", iSysConfigsService.findByName(ConfigNameConstants.appKey).getValue());
+        param.put("appsecret", iSysConfigsService.findByName(ConfigNameConstants.appSecret).getValue());
         return param;
     }
 

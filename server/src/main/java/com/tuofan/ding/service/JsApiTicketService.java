@@ -1,10 +1,10 @@
 package com.tuofan.ding.service;
 
 
+import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.core.BizException;
 import com.tuofan.configs.constants.ConfigNameConstants;
 import com.tuofan.configs.entity.SysConfigs;
-import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.ding.request.TicketRequest;
 import com.tuofan.ding.response.TicketResponse;
 import com.tuofan.ding.response.base.BaseResponse;
@@ -22,7 +22,7 @@ public class JsApiTicketService {
     private TicketRequest ticketRequest;
 
     @Autowired
-    ConfigCachedUtils configCachedUtils;
+    ISysConfigsService iSysConfigsService;
 
     private boolean isTicketExpired(SysConfigs config) {
         if (config == null) {
@@ -36,19 +36,20 @@ public class JsApiTicketService {
     }
 
     public String getTicket() {
-        SysConfigs config = configCachedUtils.getItem(ConfigNameConstants.jsApiTicket);
+        SysConfigs config = iSysConfigsService.findByName(ConfigNameConstants.jsApiTicket);
         if (config == null) {
             String token = obtainTicketFromRemote();
             config = new SysConfigs();
             config.setName(ConfigNameConstants.jsApiTicket);
             config.setValue(token);
             config.setUpdateDate(new Date());
-            configCachedUtils.saveOrUpdate(config);
+            iSysConfigsService.saveOrUpdate(config);
         }
         if (this.isTicketExpired(config)) {
             String token = obtainTicketFromRemote();
             config.setValue(token);
-            configCachedUtils.saveOrUpdate(config);
+            config.setUpdateDate(new Date());
+            iSysConfigsService.saveOrUpdate(config);
             log.info("DingDing ticket refreshed");
         }
         return config.getValue();

@@ -1,14 +1,11 @@
-package com.tuofan.orgination.web;
+package com.tuofan.orgination.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tuofan.core.BizException;
-import com.tuofan.ding.request.param.robot.messsage.MarkDownMessageDTO;
-import com.tuofan.ding.response.base.BaseResponse;
-import com.tuofan.orgination.entity.DingDept;
-import com.tuofan.orgination.service.IDingDeptService;
-import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.core.Result;
 import com.tuofan.ding.request.RobotMessageSendRequest;
+import com.tuofan.ding.request.param.robot.messsage.MarkDownMessageDTO;
+import com.tuofan.orgination.entity.DingDept;
+import com.tuofan.orgination.service.IDingDeptService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +17,6 @@ public class SchoolZoneController {
 
     @Autowired
     public IDingDeptService iDingDeptService;
-
-    @Autowired
-    public ConfigCachedUtils configCachedUtils;
 
     @Autowired
     private RobotMessageSendRequest robotMessageSendRequest;
@@ -46,8 +40,8 @@ public class SchoolZoneController {
             if (dingDept.getIsSchoolZone() != null) saved.setIsSchoolZone(dingDept.getIsSchoolZone());
             if (dingDept.getPhone() != null) saved.setPhone(dingDept.getPhone());
             if (dingDept.getGroupWebHook() != null) saved.setGroupWebHook(dingDept.getGroupWebHook());
+            iDingDeptService.saveOrUpdate(saved);
         }
-        iDingDeptService.saveOrUpdate(saved);
         return Result.ok();
     }
 

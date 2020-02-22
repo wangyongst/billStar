@@ -12,10 +12,9 @@
       <el-table v-loading="loading" :data="list" Charge="bill-table">
         <el-table-column label="序号" type="index" width="80" align="center"></el-table-column>
         <el-table-column prop="name" label="类型" width=""></el-table-column>
-        <el-table-column prop="createByName" label="创建人" width="" align="center"></el-table-column>
-        <el-table-column prop="createDate" label="创建时间" :formatter="baseTableFormatTime" width=""
-                         align="center"></el-table-column>
-        <el-table-column fixed="right" label="操作" align="center" width="220" >
+        <el-table-column prop="createName" label="创建人" width="" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" :formatter="baseTableFormatTime" width="" align="center"></el-table-column>
+        <el-table-column fixed="right" label="操作" align="center" width="220">
           <template slot-scope="scope">
             <el-button class="normalHide" @click="updateName(scope.row.id)" round type="text" size="small">修改
             </el-button>
@@ -25,27 +24,20 @@
         </el-table-column>
       </el-table>
     </el-container>
-
   </el-container>
-
 </template>
 
 <script>
-  import SchoolSelect from "../select/SchoolSelect";
 
   export default {
     name: 'SettingCharge',
-    components: {SchoolSelect},
     data() {
       return {
         list: [],
-        query: {
-          orderBy: 'create_date DESC'
-        },
         loading: false,
       }
     },
-    mounted: function () {
+    created: function () {
       const _this = this;
       _this.listChargeType();
     },
@@ -53,25 +45,27 @@
       listChargeType() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appGet('/chargeType/list').then(function (res) {
+        _this.httpUtils.appGet('/sys/chargeType/list').then(function (res) {
           _this.loading = false;
-          _this.list = res.data;
+          _this.list = res;
+        }, _this.operateFail);
+      },
+      saveOrUpdateChargeType(cmd) {
+        const _this = this;
+        _this.httpUtils.appPost('/sys/chargeType/saveOrUpdate', cmd).then(function (res) {
+          _this.listChargeType();
+          _this.baseSuccessNotify(res);
         }, _this.operateFail);
       },
       //
       deleteChargeType(id) {
         const _this = this;
-        _this.httpUtils.appPost('/chargeType/delete?id=' + id).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-
-            });
-            _this.listChargeType();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
+        _this.httpUtils.appPost('/sys/chargeType/delete?id=' + id).then(function (res) {
+          _this.listChargeType();
+          _this.baseSuccessNotify(res);
         }, _this.operateFail);
-      },
+      }
+      ,
       //
       updateName(id) {
         const _this = this;
@@ -81,21 +75,14 @@
         }).then(({value}) => _this.updateNamePost(id, value))
           .catch(() => {
           });
-      },
+      }
+      ,
       updateNamePost(sid, name) {
         const _this = this;
         const cmd = {id: sid, name: name};
-        _this.httpUtils.appPost('/chargeType/update', cmd).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-
-            });
-            _this.listChargeType();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
-      },
+        _this.saveOrUpdateChargeType(cmd);
+      }
+      ,
       //
       create() {
         const _this = this;
@@ -105,25 +92,21 @@
         }).then(({value}) => _this.createPost(value))
           .catch(() => {
           });
-      },
+      }
+      ,
       createPost(name) {
         const _this = this;
-        _this.httpUtils.appPost('/chargeType/create?name=' + name).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-              _this.listChargeType();
-            });
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
-      },
+        const cmd = {name: name};
+        _this.saveOrUpdateChargeType(cmd);
+      }
+      ,
       //
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(r.msg);
+        _this.baseErrorNotify(r);
         _this.loading = false;
-      },
+      }
+      ,
     }
   }
 </script>

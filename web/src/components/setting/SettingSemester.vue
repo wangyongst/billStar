@@ -13,24 +13,22 @@
         <el-table-column label="学期名" width="">
           <template slot-scope="scope">
             {{scope.row.name}}
-            <template v-if="scope.row.isDefault && parseInt(scope.row.isDefault) ===1">
+            <template v-if="scope.row.isDefault">
               <el-tag size="mini">当前</el-tag>
             </template>
           </template>
         </el-table-column>
-        <el-table-column prop="createByName" label="创建人" width="" align="center"></el-table-column>
-        <el-table-column prop="createDate" label="创建时间" :formatter="baseTableFormatTime" width=""
-                         align="center"></el-table-column>
-        <el-table-column fixed="right" label="--" align="left" >
+        <el-table-column prop="createName" label="创建人" width="" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" :formatter="baseTableFormatTime" width="" align="center"></el-table-column>
+        <el-table-column fixed="right" label="--" align="left">
           <template slot-scope="scope">
-
-            <el-button class="normalHide" @click="updateName(scope.row.id)" round type="text"
-                       size="small">修改</el-button>
-            <el-button class="normalHide" @click="deleteSemester(scope.row.id)" round type="text"
-                       size="small">删除</el-button>
-            <template v-if="!scope.row.isDefault || parseInt(scope.row.isDefault) ===0">
-              <el-button class="normalHide" @click="setAsDefault(scope.row.id)" round
-                         type="text" size="small">设为当前</el-button>
+            <el-button class="normalHide" @click="updateName(scope.row.id)" round type="text" size="small">修改
+            </el-button>
+            <el-button class="normalHide" @click="deleteSemester(scope.row.id)" round type="text" size="small">删除
+            </el-button>
+            <template v-if="!scope.row.isDefault">
+              <el-button class="normalHide" @click="setAsDefault(scope.row.id)" round type="text" size="small">设为当前
+              </el-button>
             </template>
           </template>
         </el-table-column>
@@ -47,9 +45,6 @@
     data() {
       return {
         list: [],
-        query: {
-          orderBy: 'create_date DESC'
-        },
         loading: false,
       }
     },
@@ -61,24 +56,25 @@
       listSemester() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appGet('/semester/list').then(function (res) {
+        _this.httpUtils.appGet('/sys/semester/list').then(function (res) {
           _this.loading = false;
-          _this.list = res.data;
+          _this.list = res;
         }, _this.operateFail);
       },
-      //
+      saveOrUpdateSemester(cmd) {
+        const _this = this;
+        _this.httpUtils.appPost('/sys/semester/saveOrUpdate', cmd).then(function (res) {
+          _this.listSemester();
+          _this.baseSuccessNotify(res);
+        }, _this.operateFail);
+      },
       deleteSemester(id) {
         const _this = this;
-        _this.httpUtils.appPost('/semester/delete?id=' + id).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-
-            });
-            _this.listClassType();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
+        _this.httpUtils.appPost('/sys/semester/delete?id=' + id).then(function (res) {
+            _this.listSemester();
+            _this.baseSuccessNotify(res);
+          }, _this.operateFail
+        )
       },
       //
       updateName(id) {
@@ -89,33 +85,23 @@
         }).then(({value}) => _this.updateNamePost(id, value))
           .catch(() => {
           });
-      },
+      }
+      ,
       updateNamePost(sid, name) {
         const _this = this;
         const cmd = {id: sid, name: name};
-        _this.httpUtils.appPost('/semester/update', cmd).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-
-            });
-            _this.listSemester();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
-      },
+        _this.saveOrUpdateSemester(cmd);
+      }
+      ,
       setAsDefault(id) {
         const _this = this;
-        _this.httpUtils.appPost('/semester/setAsDefault?id=' + id).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.listSemester();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
+        const cmd = {id: id};
+        _this.httpUtils.appPost('/sys/semester/setDefault', cmd).then(function (res) {
+          _this.listSemester();
+          _this.baseSuccessNotify(res);
         }, _this.operateFail);
-      },
-      //
+      }
+      ,
       create() {
         const _this = this;
         this.$prompt('请输入新名称', '新增学期', {
@@ -124,25 +110,20 @@
         }).then(({value}) => _this.createPost(value))
           .catch(() => {
           });
-      },
+      }
+      ,
       createPost(name) {
         const _this = this;
-        _this.httpUtils.appPost('/semester/create?name=' + name).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-              _this.listSemester();
-            });
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
-      },
-      //
+        const cmd = {name: name};
+        _this.saveOrUpdateSemester(cmd);
+      }
+      ,
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(r.msg);
+        _this.baseErrorNotify(r);
         _this.loading = false;
-      },
+      }
+      ,
     }
   }
 </script>

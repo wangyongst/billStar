@@ -1,9 +1,9 @@
 package com.tuofan.ding.service;
 
 import com.google.common.collect.Maps;
+import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.core.BizException;
 import com.tuofan.configs.entity.SysConfigs;
-import com.tuofan.configs.service.ConfigCachedUtils;
 import com.tuofan.ding.request.TokenRequest;
 import com.tuofan.ding.response.AccessToken;
 import com.tuofan.ding.response.base.BaseResponse;
@@ -22,7 +22,7 @@ public class TokenService {
     private TokenRequest tokenRequest;
 
     @Autowired
-    private ConfigCachedUtils configCachedUtils;
+    private ISysConfigsService iSysConfigsService;
 
     public static String ConfigNameDingToken = "dingToken";
 
@@ -37,19 +37,20 @@ public class TokenService {
     }
 
     public String getToken() {
-        SysConfigs config = configCachedUtils.getItem(ConfigNameDingToken);
+        SysConfigs config = iSysConfigsService.findByName(ConfigNameDingToken);
         if (config == null) {
             String token = obtainTokenFromRemote();
             config = new SysConfigs();
             config.setName(ConfigNameDingToken);
             config.setValue(token);
             config.setUpdateDate(new Date());
-            configCachedUtils.saveOrUpdate(config);
+            iSysConfigsService.saveOrUpdate(config);
         }
         if (this.isTokenExpired(config)) {
             String token = obtainTokenFromRemote();
             config.setValue(token);
-            configCachedUtils.saveOrUpdate(config);
+            config.setUpdateDate(new Date());
+            iSysConfigsService.saveOrUpdate(config);
             log.info("DingDing accessToken refreshed");
         }
         return config.getValue();
@@ -63,7 +64,7 @@ public class TokenService {
 
     private String obtainTokenFromRemote() {
         AccessToken token = tokenRequest.get();
-        if (token.getErrcode()== BaseResponse.OK) {
+        if (token.getErrcode() == BaseResponse.OK) {
             return token.getAccess_token();
         }
         throw new BizException("TOKEN_ERROR", "obtain token error , Code:" + token.getErrcode() + ",Msg:" + token.getErrmsg());

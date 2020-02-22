@@ -1,8 +1,8 @@
-package com.tuofan.orgination.web;
+package com.tuofan.orgination.controller;
 
 
 import com.tuofan.configs.constants.ConfigNameConstants;
-import com.tuofan.configs.service.ConfigCachedUtils;
+import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.core.BizException;
 import com.tuofan.core.Result;
 import com.tuofan.ding.response.ApiConfig;
@@ -25,10 +25,10 @@ import java.util.Formatter;
 public class DingParamController {
 
     @Autowired
-    ConfigCachedUtils configCachedUtils;
+    private ISysConfigsService iSysConfigsService;
 
     @Autowired
-    JsApiTicketService jsApiTicketService;
+    private JsApiTicketService jsApiTicketService;
 
     @GetMapping("get")
     public Result getSignApiConfig(String url) throws UnsupportedEncodingException {
@@ -41,16 +41,16 @@ public class DingParamController {
     @GetMapping("getCorpInfo")
     public Result getCorpInfo() {
         ApiConfig apiConfig = new ApiConfig();
-        apiConfig.setAgentId(configCachedUtils.getValue(ConfigNameConstants.agentId));
-        apiConfig.setCorpId(configCachedUtils.getValue(ConfigNameConstants.corpId));
-        apiConfig.setAppEnv(configCachedUtils.getValue(ConfigNameConstants.appEnv));
+        apiConfig.setAgentId(iSysConfigsService.findByName(ConfigNameConstants.agentId).getValue());
+        apiConfig.setCorpId(iSysConfigsService.findByName(ConfigNameConstants.corpId).getValue());
+//        apiConfig.setAppEnv(iSysConfigsService.findByName(ConfigNameConstants.appEnv).getValue());
         return Result.ok(apiConfig);
     }
 
     private ApiConfig getApiConfig(String ticket, String url) {
         ApiConfig apiConfig = new ApiConfig();
-        apiConfig.setAgentId(configCachedUtils.getValue(ConfigNameConstants.agentId));
-        apiConfig.setCorpId(configCachedUtils.getValue(ConfigNameConstants.corpId));
+        apiConfig.setAgentId(iSysConfigsService.findByName(ConfigNameConstants.agentId).getValue());
+        apiConfig.setCorpId(iSysConfigsService.findByName(ConfigNameConstants.corpId).getValue());
         apiConfig.setUrl(url);
         apiConfig.setTimeStamp(System.currentTimeMillis());
         apiConfig.setNonceStr("app");

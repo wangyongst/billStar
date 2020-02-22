@@ -34,11 +34,8 @@
             </template>
           </template>
         </el-table-column>
-        <el-table-column label="是否校区" width="100" align="center">
-          <template slot-scope="scope">
-            <template v-if="scope.row.isSchoolZone === true">是</template>
-            <template v-if="scope.row.isSchoolZone === false">否</template>
-          </template>
+
+        <el-table-column label="是否校区" width="100" align="center" prop="isSchoolZone" :formatter="baseYesNo">
         </el-table-column>
         <el-table-column fixed="right" label="操作" align="center" width="220" class="normalHide">
           <template slot-scope="scope">
@@ -103,13 +100,11 @@
       },
       // 置为校区
       setAsSchoolZone(sid) {
-        const _this = this;
         const cmd = {id: sid, isSchoolZone: 1};
         this.updateSchoolZone(cmd);
       },
       // 置为非校区
       setAsNotSchoolZone(sid) {
-        const _this = this;
         const cmd = {id: sid, isSchoolZone: 0};
         this.updateSchoolZone(cmd);
       },
@@ -155,7 +150,7 @@
         });
       }, operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(r.message);
+        _this.baseErrorNotify(r);
         _this.loading = false;
       }
     }

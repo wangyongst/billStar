@@ -18,7 +18,7 @@ exports.install = function (Vue, options) {
       title: '操作失败',
       message: msg,
       type: 'error',
-      offset:50
+      offset: 50
     });
   };
 
@@ -78,13 +78,12 @@ exports.install = function (Vue, options) {
   };
 
   Vue.prototype.baseYesNo = function (row, col, val) {
-    return parseInt(val) === 1 ? "是" : "否";
+    return val == true ? "是" : "否";
   };
 
-  Vue.prototype.baseYesNoVal = function ( val) {
+  Vue.prototype.baseYesNoInt = function (row, col, val) {
     return parseInt(val) === 1 ? "是" : "否";
   };
-
 
   Vue.prototype.baseTrueFalse = function (val) {
     return val && val === true ? "是" : "否";
@@ -94,7 +93,7 @@ exports.install = function (Vue, options) {
     return parseInt(val) === 1 ? "男" : "女";
   };
 
-  Vue.prototype.baseSexVal = function ( val) {
+  Vue.prototype.baseSexVal = function (val) {
     return parseInt(val) === 1 ? "男" : "女";
   };
 

@@ -65,7 +65,7 @@ public class RequestUtils {
         BaseResponse baseResponse = (BaseResponse) entity.getBody();
         if (baseResponse.getErrcode() != BaseResponse.OK) {
             log.error("接口请求错误，提示:{},响应整体:{}", baseResponse.toErrString(), baseResponse);
-            List<Integer> ignoreExceptions = Lists.newArrayList(50004, 40009);
+            List<Integer> ignoreExceptions = Lists.newArrayList( 40009,60003);
             if (!ignoreExceptions.contains(baseResponse.getErrcode())) {
                 throw new BizException("102", baseResponse.toErrString());
             } else {
@@ -73,6 +73,4 @@ public class RequestUtils {
             }
         }
     }
-
-
 }

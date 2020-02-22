@@ -1,4 +1,5 @@
 package com.tuofan.test;
+
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
@@ -36,7 +37,7 @@ public class CodeGenerator {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java");
+        gc.setOutputDir(projectPath + "/server/src/main/java");
         gc.setAuthor("wangyong");
         gc.setOpen(false);
 //        gc.setSwagger2(true);  //实体属性 Swagger2 注解
@@ -44,8 +45,7 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/bill_star?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC");
-        // dsc.setSchemaName("public");
+        dsc.setUrl("jdbc:mysql://localhost:3306/generator?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("root");
@@ -54,7 +54,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.njlime");
+        pc.setParent("com.tuofan");
         mpg.setPackageInfo(pc);
 
 

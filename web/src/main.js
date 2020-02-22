@@ -8,14 +8,6 @@ import AppConfig from './config/config.js'
 import * as dd from 'dingtalk-jsapi';
 import Print from 'vue-print-nb'
 
-
-//bootstrapVue
-// import bootstrapVue from 'bootstrap-vue';
-// import {Toast} from 'bootstrap-vue/es/components';
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
-//mui
-// import './assets/mui/dist/css/mui.css'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/fontawesome/css/font-awesome.min.css';

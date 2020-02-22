@@ -1,6 +1,7 @@
 package com.tuofan.orgination.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tuofan.orgination.entity.DingUser;
 import com.tuofan.orgination.mapper.DingUserMapper;
@@ -23,5 +24,10 @@ public class DingUserServiceImpl extends ServiceImpl<DingUserMapper, DingUser> i
         QueryWrapper query = new QueryWrapper();
         query.eq("user_id", userId);
         return baseMapper.selectOne(query);
+    }
+
+    @Override
+    public IPage pageTeacher(IPage page, QueryWrapper queryWrapper) {
+        return baseMapper.pageTeacher(page, queryWrapper);
     }
 }

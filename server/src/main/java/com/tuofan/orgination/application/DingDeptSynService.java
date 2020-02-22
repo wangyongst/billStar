@@ -1,7 +1,7 @@
 package com.tuofan.orgination.application;
 
 import com.google.common.collect.Lists;
-import com.tuofan.configs.service.ConfigCachedUtils;
+import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.core.Result;
 import com.tuofan.ding.request.DeptRequest;
 import com.tuofan.orgination.entity.DingDept;
@@ -27,7 +27,7 @@ public class DingDeptSynService {
     IDingDeptService iDingDeptService;
 
     @Autowired
-    ConfigCachedUtils configCachedUtils;
+    ISysConfigsService iSysConfigsService;
 
     @Transactional(rollbackFor = Exception.class)
     public Result syn() {
@@ -49,7 +49,7 @@ public class DingDeptSynService {
                 continue;
             }
             DingDept existEle = existMap.get(ele.getId());
-            updateList.add(makeDept(ele,existEle));
+            updateList.add(makeDept(ele, existEle));
         }
         if (!CollectionUtils.isEmpty(insertList)) {
             iDingDeptService.saveBatch(insertList);

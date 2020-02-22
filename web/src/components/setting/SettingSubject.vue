@@ -2,21 +2,22 @@
   <el-row id="body">
 
     <el-header class="body">
-<!--      班级管理-->
+      <!--      班级管理-->
       <el-button @click="create()" style="float: right;margin-top:13px;" type="primary" plain
-                 size="small" class="normalHide">新增</el-button>
+                 size="small" class="normalHide">新增
+      </el-button>
     </el-header>
 
     <el-container>
-      <el-table v-loading="loading" :data="list" class="bill-table"  style="overflow-y: scroll">
+      <el-table v-loading="loading" :data="list" class="bill-table" style="overflow-y: scroll">
         <el-table-column label="序号" type="index" width="80" align="center"></el-table-column>
         <el-table-column prop="name" label="科目" width=""></el-table-column>
-        <el-table-column prop="createByName" label="创建人" width="" align="center"></el-table-column>
-        <el-table-column prop="createDate" label="创建时间" :formatter="baseTableFormatTime" width="" align="center"></el-table-column>
+        <el-table-column prop="createName" label="创建人" width="" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" :formatter="baseTableFormatTime" width="" align="center"></el-table-column>
         <el-table-column fixed="right" label="操作" align="center" width="220">
           <template slot-scope="scope">
-            <el-button class="normalHide" @click="updateName(scope.row.id)" round type="text" size="small" >修改</el-button>
-            <el-button class="normalHide" @click="deleteClassType(scope.row.id)" round type="text" size="small">删除</el-button>
+            <el-button class="normalHide" @click="updateName(scope.row.id)" round type="text" size="small">修改</el-button>
+            <el-button class="normalHide" @click="deleteSubject(scope.row.id)" round type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -32,9 +33,6 @@
     data() {
       return {
         list: [],
-        query: {
-          orderBy: 'create_date DESC'
-        },
         loading: false,
       }
     },
@@ -46,23 +44,23 @@
       listSubject() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appGet('/subject/list').then(function (res) {
+        _this.httpUtils.appGet('/sys/subject/list').then(function (res) {
           _this.loading = false;
-          _this.list = res.data;
+          _this.list = res;
         }, _this.operateFail);
       },
-      //
+      saveOrUpdateSubject(cmd) {
+        const _this = this;
+        _this.httpUtils.appPost('/sys/subject/saveOrUpdate', cmd).then(function (res) {
+          _this.listSubject();
+          _this.baseSuccessNotify(res);
+        }, _this.operateFail);
+      },
       deleteSubject(id) {
         const _this = this;
-        _this.httpUtils.appPost('/subject/delete?id=' + id).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-
-            });
-            _this.listSubject();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
+        _this.httpUtils.appPost('/sys/subject/delete?id=' + id).then(function (res) {
+          _this.listSubject();
+          _this.baseSuccessNotify(res.msg);
         }, _this.operateFail);
       },
       //
@@ -78,16 +76,7 @@
       updateNamePost(sid, name) {
         const _this = this;
         const cmd = {id: sid, name: name};
-        _this.httpUtils.appPost('/subject/update', cmd).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-
-            });
-            _this.listSubject();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
+        _this.saveOrUpdateSubject(cmd);
       },
       //
       create() {
@@ -101,17 +90,9 @@
       },
       createPost(name) {
         const _this = this;
-        _this.httpUtils.appPost('/subject/create?name=' + name).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg, function () {
-              _this.listSubject();
-            });
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
+        const cmd = {name: name};
+        _this.saveOrUpdateSubject(cmd);
       },
-      //
       operateFail(r) {
         const _this = this;
         _this.baseErrorNotify(r.msg);

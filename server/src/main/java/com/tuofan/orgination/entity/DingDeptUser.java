@@ -27,7 +27,7 @@ public class DingDeptUser implements Serializable {
 
     private Integer deptId;
 
-    private String userId;
+    private String userid;
 
 
 }

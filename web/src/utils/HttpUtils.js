@@ -47,9 +47,9 @@ export default class HttpUtils {
       console.log("POST:URL=" + urlPost + "|data=" + JSON.stringify(data) + "|config=" + JSON.stringify(config))
       axios.post(urlPost, data, config).then(response => {
         if (CommonUtils.isResponseOK(response)) {
-          resolve(response.data);
+          resolve(response.data.message);
         } else {
-          reject(response.data);
+          reject(response.data.message);
         }
       }).catch(e => {
         HttpUtils.handleException(url, e);
@@ -65,7 +65,7 @@ export default class HttpUtils {
   }
 
   static finallyLog(url, obj) {
-    console.log("数据请求URL:" + url );
+    console.log("数据请求URL:" + url);
   }
 
   static getUserId() {

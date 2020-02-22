@@ -1,7 +1,7 @@
 <template>
   <el-container id="body">
     <el-header class="body bill-header" size="mini">
-      <el-button @click="refresh()"
+      <el-button @click="listConfigs()"
                  style="float: right;" type="primary" plain size="mini"
                  class="header-btn marginRight20">刷新配置信息
       </el-button>
@@ -48,25 +48,8 @@
         const _this = this;
         _this.loading = true;
         _this.httpUtils.appGet('/config/list').then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.list = res.data;
-            _this.processList();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-          _this.loading = false;
-        }, _this.operateFail);
-      },
-      refresh() {
-        const _this = this;
-        _this.loading = true;
-        _this.httpUtils.appGet('/config/refresh').then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.list = res.data;
-            _this.processList();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
+          _this.list = res;
+          _this.processList();
           _this.loading = false;
         }, _this.operateFail);
       },
@@ -74,11 +57,7 @@
         const _this = this;
         _this.loading = true;
         _this.httpUtils.appGet('/billNotice/triggerNotice').then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify("触发成功，请去对应钉钉群查看通知");
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
+          _this.baseSuccessNotify("触发成功，请去对应钉钉群查看通知");
           _this.loading = false;
         }, _this.operateFail);
       },
@@ -104,17 +83,13 @@
         const _this = this;
         _this.config.value = value;
         _this.httpUtils.appPost('/config/update', _this.config).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
+            _this.baseSuccessNotify(res);
             _this.listConfigs();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
         }, _this.operateFail);
       },
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(r.msg);
+        _this.baseErrorNotify(r);
         _this.loading = false;
       },
 

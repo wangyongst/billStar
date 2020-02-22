@@ -1,6 +1,7 @@
 package com.tuofan.configs.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tuofan.configs.entity.SysConfigs;
 import com.tuofan.configs.mapper.SysConfigsMapper;
@@ -18,4 +19,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysConfigsServiceImpl extends ServiceImpl<SysConfigsMapper, SysConfigs> implements ISysConfigsService {
 
+    @Override
+    public SysConfigs findByName(String name) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("name", name);
+        return baseMapper.selectOne(queryWrapper);
+    }
 }

@@ -1,4 +1,4 @@
-package com.tuofan.orgination.web;
+package com.tuofan.orgination.controller;
 
 import com.tuofan.core.Result;
 import com.tuofan.orgination.application.DingDeptSynService;
