@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tuofan.orgination.entity.DingUser;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -18,5 +20,7 @@ public interface IDingUserService extends IService<DingUser> {
     DingUser getByUserId(String userId);
 
     IPage pageTeacher(IPage page, QueryWrapper queryWrapper);
+
+    List listAllTeacher(QueryWrapper queryWrapper);
 
 }

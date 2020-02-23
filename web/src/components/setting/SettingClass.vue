@@ -102,7 +102,7 @@
       },
       updatePost() {
         const _this = this;
-        _this.httpUtils.appPost('/sys/class/update', _this.class).then(function (res) {
+        _this.httpUtils.appPost('/sys/class/update', _this.classType).then(function (res) {
           _this.listClassType();
           _this.createDialogVisible = false;
           _this.baseSuccessNotify(res);
@@ -110,7 +110,7 @@
       },
       //
       create() {
-        this.class = {type: 0};
+        this.classType = {type: 0};
         this.createDialogVisible = true;
       },
       dialogCancel() {
@@ -118,9 +118,9 @@
       },
       dialogPost() {
         const _this = this;
-        if (_this.class.type === 0) {
+        if (_this.classType.type === 0) {
           _this.createPost();
-        } else if (_this.class.type === 1) {
+        } else if (_this.classType.type === 1) {
           _this.updatePost();
         }
       },

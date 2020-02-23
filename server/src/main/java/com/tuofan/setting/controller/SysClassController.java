@@ -1,6 +1,7 @@
 package com.tuofan.setting.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
 import com.tuofan.setting.entity.SysClass;
@@ -28,6 +29,14 @@ public class SysClassController {
     @GetMapping("list")
     public Result list() {
         return Result.ok(iSysClassService.listV());
+    }
+
+
+    @PostMapping("listClass")
+    public Result ListClass(@RequestBody SysClass sysClass) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (sysClass.getSubjectId() != null && sysClass.getSubjectId() != 0) queryWrapper.eq("subject_id", sysClass.getSubjectId());
+        return Result.ok(iSysClassService.list(queryWrapper));
     }
 
     @PostMapping("save")

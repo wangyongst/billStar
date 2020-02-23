@@ -17,7 +17,7 @@
                 <div class="grid-content bg-purple">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="create()">新生收费</el-button>
+                      <el-button type="primary" @click="newStudent()">新生收费</el-button>
                     </div>
                   </el-card>
                 </div>
@@ -130,35 +130,33 @@
         </el-card>
       </el-col>
     </el-row>
-    <NewStudent></NewStudent>
-    <RenewalsStudent></RenewalsStudent>
+    <NewStudentDialog></NewStudentDialog>
+    <RenewalsDialog></RenewalsDialog>
   </div>
 </template>
 
 
 <script>
 
-  import NewStudent from './dialog/NewStudent';
+  import NewStudentDialog from './dialog/NewStudentDialog';
 
-  import RenewalsStudent from './dialog/RenewalsStudent';
+  import RenewalsDialog from './dialog/RenewalsDialog';
+  import NewCourseDialog from "./dialog/NewCourseDialog";
 
   export default {
     name: 'Home',
-    components: {NewStudent,RenewalsStudent},
+    components: { NewStudentDialog,RenewalsDialog},
     data() {
       return {}
     },
     methods: {
-      create() {
-        eventBus.$emit("createStudent");
+      newStudent() {
+        eventBus.$emit("newStudent");
+        // eventBus.$emit("newCourse");
       },
 
       renewals() {
-        eventBus.$emit("renewalsStudent");
-      },
-
-      change() {
-        eventBus.$emit("changeStudent");
+        eventBus.$emit("renewals");
       },
 
       toPage(url) {

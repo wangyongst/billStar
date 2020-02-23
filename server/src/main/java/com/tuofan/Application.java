@@ -16,8 +16,6 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class);
-//        ConfigCachedUtils configCachedUtils = SpringContextHolder.getBean(ConfigCachedUtils.class);
-//        configCachedUtils.refreshConfigCache();
     }
 
     @Bean

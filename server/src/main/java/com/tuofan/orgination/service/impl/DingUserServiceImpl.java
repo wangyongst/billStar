@@ -8,6 +8,8 @@ import com.tuofan.orgination.mapper.DingUserMapper;
 import com.tuofan.orgination.service.IDingUserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务实现类
@@ -29,5 +31,10 @@ public class DingUserServiceImpl extends ServiceImpl<DingUserMapper, DingUser> i
     @Override
     public IPage pageTeacher(IPage page, QueryWrapper queryWrapper) {
         return baseMapper.pageTeacher(page, queryWrapper);
+    }
+
+    @Override
+    public List listAllTeacher(QueryWrapper queryWrapper) {
+        return baseMapper.listAllTeacher(queryWrapper);
     }
 }

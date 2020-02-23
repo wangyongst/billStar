@@ -85,15 +85,11 @@ exports.install = function (Vue, options) {
     return parseInt(val) === 1 ? "是" : "否";
   };
 
-  Vue.prototype.baseTrueFalse = function (val) {
-    return val && val === true ? "是" : "否";
-  };
-
   Vue.prototype.baseSex = function (row, col, val) {
-    return parseInt(val) === 1 ? "男" : "女";
+    return val === true ? "男" : "女";
   };
 
-  Vue.prototype.baseSexVal = function (val) {
+  Vue.prototype.baseSexInt = function (val) {
     return parseInt(val) === 1 ? "男" : "女";
   };
 
@@ -127,6 +123,5 @@ exports.install = function (Vue, options) {
   Vue.prototype.baseIsNotValidFloat = function (val) {
     return !Vue.prototype.baseIsValidFloat(val);
   }
-
 
 };

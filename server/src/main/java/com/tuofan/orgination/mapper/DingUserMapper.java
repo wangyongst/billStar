@@ -25,4 +25,7 @@ public interface DingUserMapper extends BaseMapper<DingUser> {
             @Result(column = "userid", property = "schoolList", javaType = List.class, many = @Many(select = "com.tuofan.orgination.mapper.DingDeptMapper.listByUserid"))
     })
     IPage<TeacherV> pageTeacher(IPage page, @Param(Constants.WRAPPER) QueryWrapper wrapper);
+
+    @Select("select distinctrow teacher.* from ding_user teacher right join ding_dept_user mid on teacher.userid = mid.userid ${ew.customSqlSegment} ")
+    List<DingUser> listAllTeacher(@Param(Constants.WRAPPER) QueryWrapper wrapper);
 }

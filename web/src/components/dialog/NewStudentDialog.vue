@@ -157,13 +157,12 @@
 
 <script>
   export default {
-    name: 'NewStudent',
+    name: 'NewStudentDialog',
     props: {},
     data() {
       return {
         courseLoading: false,
         dialogVisible: false,
-        defaultSemesterId: null,
         loading: false,
         dialogTitle: "",
         labelWidth: '80px',
@@ -196,7 +195,7 @@
       _this.listSemesterSelect();
       _this.getDefaultRemark();
       // 新增
-      eventBus.$on('createStudent', function () {
+      eventBus.$on('newStudent', function () {
         console.log(this);
         _this.dialogVisible = true;
       });
@@ -250,7 +249,7 @@
 
       getDefaultRemark() {
         const _this = this;
-        _this.httpUtils.appGet('/sys/config/getByName?name=app.schoolCommonRemark').then(function (res) {
+        _this.httpUtils.appGet('/config/getByName?name=app.schoolCommonRemark').then(function (res) {
           _this.defaultRemark = res.value;
         }, _this.operateFail);
       },
@@ -279,17 +278,14 @@
         }
         const _this = this;
         _this.courseLoading = true;
-        _this.httpUtils.appGet('/course/listCourses?deptSchoolId='
-          + deptSchoolId
-          + "&semesterId="
-          + this.bill.semesterId).then(function (res) {
+        _this.httpUtils.appGet('/course/listCourses?deptSchoolId=' + deptSchoolId + "&semesterId=" + this.student.semesterId).then(function (res) {
           _this.courseLoading = false;
           _this.courseSelect = res;
         }, _this.operateFail);
       },
 
       doClose() {
-        this.bill = this.initNullBill();
+        this.student = _this.initStuent();
         this.$emit('dialogClose');
       },
 
@@ -300,12 +296,12 @@
           _this.baseErrorNotify("系统错误，请联系管理员");
         }
         _this.loading = true;
-        _this.httpUtils.appPost(url, _this.bill).then(function (res) {
+        _this.httpUtils.appPost(url, _this.student).then(function (res) {
           _this.loading = false;
           if (parseInt(res.code) === 0) {
             _this.baseSuccessNotify(res.msg);
             _this.dialogVisible = false;
-            _this.bill = _this.initNullBill();
+            _this.student = _this.initStuent();
             eventBus.$emit('billOperateSuccess');
           } else {
             _this.loading = false;

@@ -129,7 +129,7 @@
   // import billCmdUtils from "../../utils/BillCmdUtils";
 
   export default {
-    name: 'RenewalsStudent',
+    name: 'RenewalsDialog',
     // 传入dialogVisible/操作类型operateType/关联单refBillId，进行下一步操作
     props: {},
     created() {
@@ -191,7 +191,7 @@
       _this.listSemesterForSelect();
       _this.getDefaultRemark();
       // 新增
-      eventBus.$on('renewalsStudent', function () {
+      eventBus.$on('renewals', function () {
         console.log(this);
         _this.dialogVisible = true;
         // _this.operateType = _this.$appConfig.billTypes.newBill;

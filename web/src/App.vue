@@ -66,9 +66,6 @@
       }
     },
     created() {
-      eventBus.$on('globalFunc', function (data) {
-        alert(JSON.stringify(data));
-      })
     },
     computed: {
       options() {

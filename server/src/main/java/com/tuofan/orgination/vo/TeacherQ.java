@@ -9,4 +9,6 @@ import java.util.List;
 public class TeacherQ extends PageQ {
     private List<Integer> deptIds;
     private String nameLike;
+
+    private Integer schoolId;
 }
