@@ -1,10 +1,10 @@
 package com.tuofan.setting.vo;
 
-import com.tuofan.setting.entity.SysClassType;
+import com.tuofan.setting.entity.SysClass;
 import lombok.Data;
 
 @Data
-public class ClassTypeV extends SysClassType {
+public class ClassV extends SysClass {
 
     private String createName;
 

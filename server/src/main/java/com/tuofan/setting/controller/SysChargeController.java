@@ -1,8 +1,8 @@
 package com.tuofan.setting.controller;
 
 
-import com.tuofan.setting.entity.SysChargeType;
-import com.tuofan.setting.service.ISysChargeTypeService;
+import com.tuofan.setting.entity.SysCharge;
+import com.tuofan.setting.service.ISysChargeService;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -21,28 +21,28 @@ import java.util.Date;
  */
 @Slf4j
 @RestController
-@RequestMapping("/bill/sys/chargeType")
-public class SysChargeTypeController {
+@RequestMapping("/bill/sys/charge")
+public class SysChargeController {
 
     @Autowired
-    private ISysChargeTypeService iSysChargeTypeService;
+    private ISysChargeService iSysChargeService;
 
     @GetMapping("list")
     public Result list() {
-        return Result.ok(iSysChargeTypeService.listV());
+        return Result.ok(iSysChargeService.listV());
     }
 
     @PostMapping("saveOrUpdate")
-    public Result save(@RequestHeader(LoginConstants.USER_ID) String userid, @RequestBody SysChargeType chargeType) {
-        chargeType.setCreateBy(userid);
-        chargeType.setCreateTime(new Date());
-        iSysChargeTypeService.saveOrUpdate(chargeType);
+    public Result save(@RequestHeader(LoginConstants.USER_ID) String userid, @RequestBody SysCharge charge) {
+        charge.setCreateBy(userid);
+        charge.setCreateTime(new Date());
+        iSysChargeService.saveOrUpdate(charge);
         return Result.ok();
     }
 
     @PostMapping("delete")
     public Result save(@RequestParam Integer id) {
-        iSysChargeTypeService.removeById(id);
+        iSysChargeService.removeById(id);
         return Result.ok();
     }
 

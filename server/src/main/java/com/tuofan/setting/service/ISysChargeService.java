@@ -1,8 +1,8 @@
 package com.tuofan.setting.service;
 
-import com.tuofan.setting.entity.SysChargeType;
+import com.tuofan.setting.entity.SysCharge;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.tuofan.setting.vo.ChargeTypeV;
+import com.tuofan.setting.vo.ChargeV;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ import java.util.List;
  * @author wangyong
  * @since 2020-02-22
  */
-public interface ISysChargeTypeService extends IService<SysChargeType> {
+public interface ISysChargeService extends IService<SysCharge> {
 
-    List<ChargeTypeV> listV();
+    List<ChargeV> listV();
 
 }

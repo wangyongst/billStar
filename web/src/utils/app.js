@@ -1,10 +1,8 @@
 // 公共方法
 exports.install = function (Vue, options) {
 
-
-
   Vue.prototype.initNullCourse = function () {
-    return {courseId: null, expireTime: null, courseLabel: "*课程信息*", beginTime: null, riseClassTime: null};
+    return {id: null, expireTime: null, courseLabel: "*课程信息*", beginTime: null, riseClassTime: null};
   };
 
   Vue.prototype.appBillCourseName = function (item) {

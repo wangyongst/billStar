@@ -18,7 +18,7 @@
           <template slot-scope="scope">
             <el-button class="normalHide" @click="updateName(scope.row.id)" round type="text" size="small">修改
             </el-button>
-            <el-button class="normalHide" @click="deleteChargeType(scope.row.id)" round type="text" size="small">删除
+            <el-button class="normalHide" @click="deleteCharge(scope.row.id)" round type="text" size="small">删除
             </el-button>
           </template>
         </el-table-column>
@@ -39,29 +39,29 @@
     },
     created: function () {
       const _this = this;
-      _this.listChargeType();
+      _this.listCharge();
     },
     methods: {
-      listChargeType() {
+      listCharge() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appGet('/sys/chargeType/list').then(function (res) {
+        _this.httpUtils.appGet('/sys/charge/list').then(function (res) {
           _this.loading = false;
           _this.list = res;
         }, _this.operateFail);
       },
-      saveOrUpdateChargeType(cmd) {
+      saveOrUpdateCharge(cmd) {
         const _this = this;
-        _this.httpUtils.appPost('/sys/chargeType/saveOrUpdate', cmd).then(function (res) {
-          _this.listChargeType();
+        _this.httpUtils.appPost('/sys/charge/saveOrUpdate', cmd).then(function (res) {
+          _this.listCharge();
           _this.baseSuccessNotify(res);
         }, _this.operateFail);
       },
       //
-      deleteChargeType(id) {
+      deleteCharge(id) {
         const _this = this;
-        _this.httpUtils.appPost('/sys/chargeType/delete?id=' + id).then(function (res) {
-          _this.listChargeType();
+        _this.httpUtils.appPost('/sys/charge/delete?id=' + id).then(function (res) {
+          _this.listCharge();
           _this.baseSuccessNotify(res);
         }, _this.operateFail);
       }
@@ -80,7 +80,7 @@
       updateNamePost(sid, name) {
         const _this = this;
         const cmd = {id: sid, name: name};
-        _this.saveOrUpdateChargeType(cmd);
+        _this.saveOrUpdateCharge(cmd);
       }
       ,
       //
@@ -97,7 +97,7 @@
       createPost(name) {
         const _this = this;
         const cmd = {name: name};
-        _this.saveOrUpdateChargeType(cmd);
+        _this.saveOrUpdateCharge(cmd);
       }
       ,
       //

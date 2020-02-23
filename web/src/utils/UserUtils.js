@@ -11,16 +11,4 @@ exports.install = function (Vue, options) {
       return names.join(' , ');
     }
   };
-
-  Vue.prototype.loginUserDeptSchools = function () {
-    const _this = this;
-    const userString = window.localStorage.getItem("user");
-    if (_this.baseIsNotBlank(userString)) {
-      const user = JSON.parse(userString);
-      return user.deptSchools;
-    }
-    return [];
-  }
-
-
 };

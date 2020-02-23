@@ -83,26 +83,26 @@
       listClassType() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appGet('/sys/classType/list').then(function (res) {
+        _this.httpUtils.appGet('/sys/class/list').then(function (res) {
           _this.loading = false;
           _this.list = res;
         }, _this.operateFail);
       },
       deleteClassType(id) {
         const _this = this;
-        _this.httpUtils.appPost('/sys/classType/delete?id=' + id).then(function (res) {
+        _this.httpUtils.appPost('/sys/class/delete?id=' + id).then(function (res) {
           _this.listClassType();
           _this.baseSuccessNotify(res);
         }, _this.operateFail);
       },
       //
       updateItem(item) {
-        this.classType = {type: 1, id: item.id, parentId: item.parentId, name: item.name};
+        this.classType = {type: 1, id: item.id, subjectId: item.subjectId, name: item.name};
         this.createDialogVisible = true;
       },
       updatePost() {
         const _this = this;
-        _this.httpUtils.appPost('/sys/classType/update', _this.classType).then(function (res) {
+        _this.httpUtils.appPost('/sys/class/update', _this.class).then(function (res) {
           _this.listClassType();
           _this.createDialogVisible = false;
           _this.baseSuccessNotify(res);
@@ -110,7 +110,7 @@
       },
       //
       create() {
-        this.classType = {type: 0};
+        this.class = {type: 0};
         this.createDialogVisible = true;
       },
       dialogCancel() {
@@ -118,15 +118,15 @@
       },
       dialogPost() {
         const _this = this;
-        if (_this.classType.type === 0) {
+        if (_this.class.type === 0) {
           _this.createPost();
-        } else if (_this.classType.type === 1) {
+        } else if (_this.class.type === 1) {
           _this.updatePost();
         }
       },
       createPost() {
         const _this = this;
-        _this.httpUtils.appPost('/sys/classType/save', _this.classType).then(function (res) {
+        _this.httpUtils.appPost('/sys/class/save', _this.classType).then(function (res) {
           _this.listClassType();
           _this.createDialogVisible = false;
           _this.baseSuccessNotify(res);
