@@ -13,7 +13,7 @@
           <SemesterSelect @dataChange="semesterChange"></SemesterSelect>
           <el-row>
             <el-col :span="6" :offset="16">
-              <el-button @click="newCourse" type="primary" style="width: 100px;" size="mini" plain round>查询</el-button>
+              <el-button @click="listCourse" type="primary" style="width: 100px;" size="mini" plain round>查询</el-button>
               <el-button @click="newCourse" type="success" style="width: 100px;" size="mini" plain round>新增</el-button>
             </el-col>
           </el-row>
@@ -41,10 +41,8 @@
 
           <el-table-column label="班别" width="150" align="left" prop="classNo">
           </el-table-column>
-
           <el-table-column label="班额" width="150" align="left" prop="classNum">
           </el-table-column>
-
           <el-table-column label="教师" width="150" align="left" prop="teacherName">
           </el-table-column>
           <el-table-column label="上课时间" width="150" align="left">
@@ -65,7 +63,7 @@
           @next-click="nextPage"
         ></el-pagination>
       </el-col>
-      <NewCourseDialog></NewCourseDialog>
+      <NewCourseDialog :onclose="listCourse"></NewCourseDialog>
     </el-row>
   </div>
 </template>
