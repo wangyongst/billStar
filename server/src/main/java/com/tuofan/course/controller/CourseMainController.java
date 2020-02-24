@@ -28,9 +28,12 @@ public class CourseMainController {
     @Autowired
     private ICourseMainService iCourseMainService;
 
-    @GetMapping("list")
-    public Result list() {
-        return Result.ok(iCourseMainService.list());
+    @PostMapping("list")
+    public Result list(@RequestBody CourseQ courseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (!CollectionUtils.isEmpty(courseQ.getSemesterIds())) queryWrapper.eq("semester.id", courseQ.getSemesterId());
+        if (!CollectionUtils.isEmpty(courseQ.getSubjectIds())) queryWrapper.eq("school.id", courseQ.getSchoolId());
+        return Result.ok(iCourseMainService.listV(queryWrapper));
     }
 
     @PostMapping("page")

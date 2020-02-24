@@ -31,4 +31,14 @@ public interface CourseMainMapper extends BaseMapper<CourseMain> {
             "left join ding_user teacher on course.teacher_id = teacher.id\n" +
             "left join sys_semester semester on course.semester_id = semester.id ${ew.customSqlSegment}")
     IPage<CourseV> pageV(IPage ipage, @Param(Constants.WRAPPER) QueryWrapper wrapper);
+
+
+    @Select("select course.*,subject.name subject_name,school.name school_name,teacher.name teacher_name,semester.name semester_name ,class.name class_name\n" +
+            "from course_main course \n" +
+            "left join sys_class class on course.class_id = class.id \n" +
+            "left join sys_subject subject on class.subject_id = subject.id \n" +
+            "left join ding_dept school on course.school_id = school.id  \n" +
+            "left join ding_user teacher on course.teacher_id = teacher.id\n" +
+            "left join sys_semester semester on course.semester_id = semester.id ${ew.customSqlSegment}")
+    List<CourseV> listV(@Param(Constants.WRAPPER) QueryWrapper wrapper);
 }

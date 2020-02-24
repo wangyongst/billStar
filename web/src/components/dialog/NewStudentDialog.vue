@@ -20,7 +20,7 @@
       <el-form-item label="性别">
         <el-radio-group v-model="student.sex">
           <el-radio :label="1">男</el-radio>
-          <el-radio :label="2">女</el-radio>
+          <el-radio :label="0">女</el-radio>
         </el-radio-group>
       </el-form-item>
       <br>
@@ -31,7 +31,7 @@
         <el-input class="bill-cmd-input" v-model="student.myclass" placeholder="班级"></el-input>
       </el-form-item>
       <el-form-item label="是否接  ">
-        <el-radio-group v-model="student.accpet">
+        <el-radio-group v-model="student.accept">
           <el-radio :label="1" :value="1">是</el-radio>
           <el-radio :label="0" :value="0">否</el-radio>
         </el-radio-group>
@@ -42,26 +42,29 @@
 
       <!-- 所属校区 -->
       <el-divider content-position="left">所属校区</el-divider>
+
+      <!--      学期-->
+      <el-form-item label="学期：" class="inlineFormItem" size="mini">
+        <el-select v-model="student.semesterId" placeholder="请选择" @change="listCourseSelect">
+          <el-option v-for="item in semesterSelect" :key="item.id" :label="item.name" :value="item.id"></el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="所属校区">
-        <el-select v-model="student.schoolId" placeholder="请选择" @change="schoolChange">
+        <el-select v-model="student.schoolId" placeholder="请选择" @change="listCourseSelect">
           <el-option v-for="item in schoolSelect" :value="item.id" :label="item.name" :key="item.id">
           </el-option>
         </el-select>
       </el-form-item>
-      <!--      学期-->
-      <el-form-item label="学期：" class="inlineFormItem" size="mini">
-        <el-select v-model="student.semesterId" placeholder="请选择" clearable @change="semesterChange">
-          <el-option v-for="item in semesterSelect" :key="item.id" :label="item.name" :value="item.id"></el-option>
-        </el-select>
-      </el-form-item>
+
       <!-- 课程1 -->
       <el-divider content-position="left" class="">课程信息</el-divider>
       <el-main class="cmdCourseMain" v-loading="courseLoading"
                element-loading-background="#f0f0f0"
                element-loading-text="正在根据【校区+学期】加载课程数据···">
         <el-form-item label="课程1">
-          <el-select v-model="student.courseList[0].id" @change="courseSelectChange(0)" placeholder="请选择">
-            <el-option v-for="item in courseSelect" :key="item.id" :label="appBillCourseName(item)" :value="item.id">
+          <el-select v-model="student.courseList[0].courseId" @change="courseSelectChange(0)" placeholder="请选择">
+            <el-option v-for="item in courseSelect" :key="item.id" :label="makeCourseName(item)" :value="item.id">
             </el-option>
           </el-select>
           <span class="marginLeft20 courseLabel">{{student.courseList[0].label}}</span>
@@ -77,7 +80,7 @@
         <!--      升班时间-->
         <el-form-item label="升班时间">
           <el-date-picker
-            v-model="student.courseList[0].riseClassTime"
+            v-model="student.courseList[0].riseTime"
             type="date"
             placeholder="选择日期">
           </el-date-picker>
@@ -94,8 +97,8 @@
         <el-divider class="marginX5"></el-divider>
         <!-- 课程2 -->
         <el-form-item label="课程2">
-          <el-select v-model="student.courseList[1].id" placeholder="请选择" clearable @change="courseSelectChange(1)">
-            <el-option v-for="item in courseSelect" :key="item.id" :label="appBillCourseName(item)" :value="item.id"></el-option>
+          <el-select v-model="student.courseList[1].courseId" placeholder="请选择" clearable @change="courseSelectChange(1)">
+            <el-option v-for="item in courseSelect" :key="item.id" :label="makeCourseName(item)" :value="item.id"></el-option>
           </el-select>
           <span class="marginLeft20 courseLabel">{{student.courseList[1].label}}</span>
         </el-form-item>
@@ -111,7 +114,7 @@
         <!--      升班时间-->
         <el-form-item label="升班时间">
           <el-date-picker
-            v-model="student.courseList[1].riseClassTime"
+            v-model="student.courseList[1].riseTime"
             type="date"
             placeholder="选择日期">
           </el-date-picker>
@@ -129,7 +132,7 @@
       <!-- 支付信息     -->
       <el-divider content-position="left" style="margin-top: 0">费用</el-divider>
       <el-form-item label="支付方式">
-        <el-select v-model="student.chargeId" placeholder="请选择">
+        <el-select v-model="student.charge.chargeId" placeholder="请选择">
           <el-option v-for="item in chargeSelect"
                      :key="item.id"
                      :label="item.name"
@@ -138,7 +141,7 @@
       </el-form-item>
 
       <el-form-item label="金额">
-        <el-input v-model="student.amount" class="bill-cmd-input" placeholder="金额"></el-input>
+        <el-input v-model="student.charge.amount" class="bill-cmd-input" placeholder="金额" type="number" step="0.01" min="0.01"></el-input>
       </el-form-item>
 
 
@@ -190,10 +193,9 @@
     mounted: function () {
       const _this = this;
       _this.listSchoolSelect();
-      // _this.listCourseForSelect();
       _this.listChargeSelect();
       _this.listSemesterSelect();
-      _this.getDefaultRemark();
+      // _this.getDefaultRemark();
       // 新增
       eventBus.$on('newStudent', function () {
         console.log(this);
@@ -206,19 +208,20 @@
         const _this = this;
         return {
           schoolId: null,
-          semesterId: null,
           mobile: "",
           remark: '',
           name: "",
           myschool: "",
           myclass: "",
           sex: null,
-          accpet: null,
-          chargeId: null,
-          amount: null,
+          accept: null,
+          charge:{
+            chargeId: null,
+            amount: null,
+          },
           courseList: [
-            {id: null, expireTime: null, courseLabel: "*课程信息*", beginTime: null, riseClassTime: null},
-            {id: null, expireTime: null, courseLabel: "*课程信息*", beginTime: null, riseClassTime: null}
+            {courseId: null, expireTime: null, label: "*课程信息*", beginTime: null, riseTime: null},
+            {courseId: null, expireTime: null, label: "*课程信息*", beginTime: null, riseTime: null}
           ],
           address: ""
         }
@@ -237,22 +240,19 @@
           for (const index in _this.semesterSelect) {
             const item = _this.semesterSelect[index];
             if (item.isDefault) {
-              if (_this.student.semesterId == null) {
-                _this.student.semesterId = item.id;
-                _this.defaultSemesterId = item.id;
-              }
+              _this.student.semesterId = item.id;
               break;
             }
           }
         }, _this.operateFail);
       },
 
-      getDefaultRemark() {
-        const _this = this;
-        _this.httpUtils.appGet('/config/getByName?name=app.schoolCommonRemark').then(function (res) {
-          _this.defaultRemark = res.value;
-        }, _this.operateFail);
-      },
+      // getDefaultRemark() {
+      //   const _this = this;
+      //   _this.httpUtils.appGet('/config/getByName?name=app.schoolCommonRemark').then(function (res) {
+      //     _this.student.remark = res.value;
+      //   }, _this.operateFail);
+      // },
 
       listChargeSelect() {
         const _this = this;
@@ -268,98 +268,70 @@
         }, _this.operateFail);
       },
 
-      listCourseForSelect() {
-        let deptSchoolId = this.bill.deptSchoolId;
-        if (!deptSchoolId) {
-          return;
-        }
-        if (!this.bill.semesterId) {
-          return;
-        }
+      listCourseSelect() {
         const _this = this;
+        const cmd = {subjectId: _this.student.subjectId, semesterId: _this.student.semesterId};
         _this.courseLoading = true;
-        _this.httpUtils.appGet('/course/listCourses?deptSchoolId=' + deptSchoolId + "&semesterId=" + this.student.semesterId).then(function (res) {
-          _this.courseLoading = false;
+        _this.httpUtils.appPost('/course/main/list', cmd).then(function (res) {
           _this.courseSelect = res;
+          _this.courseLoading = false;
         }, _this.operateFail);
       },
 
       doClose() {
-        this.student = _this.initStuent();
-        this.$emit('dialogClose');
+        const _this = this;
+        _this.student = _this.initStuent();
+        _this.$emit('dialogClose');
       },
 
       doPost() {
         const _this = this;
-        const url = _this.getUrl();
-        if (!url) {
-          _this.baseErrorNotify("系统错误，请联系管理员");
-        }
         _this.loading = true;
-        _this.httpUtils.appPost(url, _this.student).then(function (res) {
+        _this.httpUtils.appPost("/student/main/create", _this.student).then(function (res) {
           _this.loading = false;
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.dialogVisible = false;
-            _this.student = _this.initStuent();
-            eventBus.$emit('billOperateSuccess');
-          } else {
-            _this.loading = false;
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
-      },
+          _this.dialogVisible = false;
+          _this.student = _this.initStuent();
+          _this.baseSuccessNotify(res);
 
-      getUrl() {
-        return "/billOperate/createStudent";
+        }, _this.operateFail);
       },
 
       courseSelectChange(selectIndex) {
         const _this = this;
-        const val = _this.bill.billCourseList[selectIndex].courseId;
-        console.log(JSON.stringify(_this.bill.billCourseList));
-        if (_this.bill.billCourseList[0].courseId != null &&
-          _this.bill.billCourseList[0].courseId === _this.bill.billCourseList[1].courseId) {
+        const courseId = _this.student.courseList[selectIndex].courseId;
+        console.log(courseId);
+        if (_this.student.courseList[0].courseId != null && _this.student.courseList[0].courseId === _this.student.courseList[1].courseId) {
           _this.baseErrorNotify("两门课程选择重复，请重新选择");
-          _this.bill.billCourseList[selectIndex].courseId = null;
-          _this.bill.billCourseList[selectIndex].courseLabel = _this.defaultCourseLabel();
+          _this.student.courseList[selectIndex].courseId = null;
+          _this.student.courseList[selectIndex].label = _this.defaultCourseLabel();
           return;
         }
         _this.courseSelect.forEach(function (item) {
-          if (item.id === val) {
-            _this.bill.billCourseList[selectIndex].courseLabel = item.courseLabel;
+          if (item.id === courseId) {
+            _this.student.courseList[selectIndex].label = _this.makeCourseLabel(item);
           }
         });
-      },
-
-      schoolChange() {
-        const _this = this;
-        _this.courseList = [
-          _this.initNullCourse(),
-          _this.initNullCourse()
-        ];
-        _this.courseSelect = [];
-        //_this.listCourseForSelect();
-      },
-
-      semesterChange() {
-        const _this = this;
-        _this.bill.billCourseList = [
-          _this.initNullCourse(),
-          _this.initNullCourse()
-        ];
-        _this.courseSelect = [];
-        _this.listCourseForSelect();
       },
 
       defaultCourseLabel() {
         return "*课程信息*";
       },
+      initNullCourse() {
+        return {courseId: null, expireTime: null, courseLabel: "*课程信息*", beginTime: null, riseTime: null};
+      },
+
+      makeCourseName(item) {
+        return item.subjectName + " + " + item.className + "+" + item.teacherName;
+      },
+
+      makeCourseLabel(item) {
+        return " 教室号：" + item.classRoom;
+      },
 
       operateFail(r) {
         const _this = this;
         _this.loading = false;
-        _this.baseErrorNotify(r.msg);
+        _this.baseErrorNotify(r);
       }
     }
   }

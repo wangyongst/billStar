@@ -8,6 +8,8 @@ import com.tuofan.course.service.ICourseMainService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 课程信息 服务实现类
@@ -22,5 +24,10 @@ public class CourseMainServiceImpl extends ServiceImpl<CourseMainMapper, CourseM
     @Override
     public IPage pageV(IPage page, QueryWrapper queryWrapper) {
         return baseMapper.pageV(page,queryWrapper);
+    }
+
+    @Override
+    public List listV(QueryWrapper queryWrapper) {
+        return baseMapper.listV(queryWrapper);
     }
 }

@@ -1,17 +1,7 @@
 // 公共方法
 exports.install = function (Vue, options) {
 
-  Vue.prototype.initNullCourse = function () {
-    return {id: null, expireTime: null, courseLabel: "*课程信息*", beginTime: null, riseClassTime: null};
-  };
 
-  Vue.prototype.appBillCourseName = function (item) {
-    return item.dictCourseName + item.courseIndexName + " + " + item.teacherName;
-  };
-
-  Vue.prototype.appBillCourseLabel = function (item) {
-    return " 教室号：" + item.classroomNo + " 上课时间：" + item.regularTime;
-  };
 
 
   Vue.prototype.appDigitUppercase = function (n) {
@@ -53,7 +43,7 @@ exports.install = function (Vue, options) {
   };
 
   Vue.prototype.appYesNoArray = function () {
-    return [ {id: 1, name: "是"}, {id: 0, name: "否"}]
+    return [{id: 1, name: "是"}, {id: 0, name: "否"}]
   };
 
   Vue.prototype.goToPage = function (url) {
@@ -61,15 +51,13 @@ exports.install = function (Vue, options) {
     _this.$router.push({path: url});
   };
 
-  Vue.prototype.formatTableClass1=function(row, col, v)
-  {
+  Vue.prototype.formatTableClass1 = function (row, col, v) {
     if (row.courses && row.courses.length >= 1) {
       return this.formatClass(row.courses[0]);
     }
   };
 
-  Vue.prototype.formatTableClass2=function(row, col, v)
-  {
+  Vue.prototype.formatTableClass2 = function (row, col, v) {
     if (row.courses && row.courses.length >= 2) {
       return this.formatClass(row.courses[1]);
     }

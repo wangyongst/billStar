@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tuofan.course.entity.CourseMain;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 课程信息 服务类
@@ -16,4 +18,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ICourseMainService extends IService<CourseMain> {
 
     IPage pageV(IPage page, QueryWrapper queryWrapper);
+
+    List listV(QueryWrapper queryWrapper);
 }

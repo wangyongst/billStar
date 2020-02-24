@@ -9,10 +9,14 @@ import java.util.List;
 @Data
 public class CourseQ extends PageQ {
 
-    List<Integer> schoolIds;
+    private List<Integer> schoolIds;
 
-    List<Integer> subjectIds;
+    private List<Integer> subjectIds;
 
-    List<Integer> semesterIds;
+    private List<Integer> semesterIds;
+
+    private Integer semesterId;
+
+    private Integer schoolId;
 
 }
