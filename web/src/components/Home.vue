@@ -152,7 +152,6 @@
     methods: {
       newStudent() {
         eventBus.$emit("newStudent");
-        // eventBus.$emit("newCourse");
       },
 
       renewals() {

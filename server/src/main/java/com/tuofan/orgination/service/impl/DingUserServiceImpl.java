@@ -22,9 +22,9 @@ import java.util.List;
 public class DingUserServiceImpl extends ServiceImpl<DingUserMapper, DingUser> implements IDingUserService {
 
     @Override
-    public DingUser getByUserId(String userId) {
+    public DingUser getByUserId(String userid) {
         QueryWrapper query = new QueryWrapper();
-        query.eq("user_id", userId);
+        query.eq("userid", userid);
         return baseMapper.selectOne(query);
     }
 

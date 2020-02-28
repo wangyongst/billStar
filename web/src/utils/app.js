@@ -35,6 +35,20 @@ exports.install = function (Vue, options) {
       .replace(/^整$/, '零元整');
   };
 
+  Vue.prototype.DateTimeFormat = function (val) {
+    if (!val) {
+      return "-";
+    }
+    let date = new Date(val);
+    let Y = date.getFullYear() + '-';
+    let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
+    let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+    let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+    let m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+    let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+    return Y + M + D + h + m + s;
+  };
+
   Vue.prototype.formatClass = function (course) {
     if (course) {
       return course.dictCourseName + course.courseIndexName;

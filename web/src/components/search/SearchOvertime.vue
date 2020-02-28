@@ -8,41 +8,46 @@
       <el-col :span="24">
         <el-form label-width="100px" class="search-form" size="mini">
 
-          <SchoolSelect></SchoolSelect>
-          <SubjectSelect></SubjectSelect>
-          <ClassSelect></ClassSelect>
+          <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
+          <SubjectSelect @dataChange="subjectChange"></SubjectSelect>
+          <ClassSelect @dataChange="classChange"></ClassSelect>
 
+          <el-row>
+            <el-col :span="6" :offset="16">
+              <el-button @click="listStudentCharge" type="primary" style="width: 100px;" size="mini" plain round>查询</el-button>
+            </el-col>
+          </el-row>
         </el-form>
 
       </el-col>
       <!--    数据表格-->
       <el-col :span="24">
-        <el-table v-loading="loading" :data="page.list" class="bill-table" size="" style="width: 100%">
+        <el-table v-loading="loading" :data="page.records" class="bill-table" size="" style="width: 100%">
           <el-table-column label="" type="index" width="40" align="center">
           </el-table-column>
 
-          <el-table-column label="姓名" width="150" align="left">
+          <el-table-column label="姓名" width="150" align="left" prop="studentName">
           </el-table-column>
 
-          <el-table-column label="到期时间" width="150" align="left">
+          <el-table-column label="到期时间" width="150" align="left" prop="expireTime" :formatter="baseTableFormatDate">
           </el-table-column>
 
-          <el-table-column label="已超期天数" width="150" align="left">
+          <el-table-column label="已超期天数" width="150" align="left" prop="">
           </el-table-column>
 
           <el-table-column label="在学课程" width="150" align="left">
           </el-table-column>
 
-          <el-table-column label="教师" width="150" align="left">
+          <el-table-column label="教师" width="150" align="left" prop="teacherName">
           </el-table-column>
 
-          <el-table-column label="校区" width="150" align="left">
+          <el-table-column label="校区" width="150" align="left" prop="schoolName">
           </el-table-column>
 
-          <el-table-column label="开票人" width="150" align="left">
+          <el-table-column label="开票人" width="150" align="left" prop="createName">
           </el-table-column>
 
-          <el-table-column label="开票时间" width="150" align="left">
+          <el-table-column label="开票时间" width="150" align="left" prop="createTime">
           </el-table-column>
         </el-table>
       </el-col>
@@ -53,16 +58,13 @@
           background
           layout="total,prev, pager, next"
           :total="page.total"
-          :page-size="query.pageSize"
-          :current-page="query.pageNo"
-          @current-change="currentPage"
-          @prev-click="prevPage"
-          @next-click="nextPage"
+          :page-size="query.size"
+          :current-page="query.current"
+          @current-change="gotoPage"
+          @prev-click="gotoPage"
+          @next-click="gotoPage"
         ></el-pagination>
       </el-col>
-      <BillInfoDialogTable :dialogVisible="detailDialogVisible"
-                           @dialogClose="detailDialogClose"
-                           :bill="bill"/>
     </el-row>
   </div>
 </template>
@@ -72,192 +74,60 @@
   import SchoolSelect from "../select/SchoolSelect";
   import SubjectSelect from "../select/SubjectSelect";
   import BackToWork from "../back/BackToWork";
-  import TeacherSelect from "../select/TeacherSelect";
 
   export default {
     name: 'SearchOvertime',
-    components: {TeacherSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
+    components: {BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {
-        createDialogVisible: false,
-        detailDialogVisible: false,
         page: {
           total: 0,
-          list: [],
+          records: [],
         },
         query: {
-          pageNo: 1,
-          pageSize: 10,
-          orderBy: 'bill_time DESC',
-          data: {
-            deptSchoolIds: [],
-            expireEndTime: null,
-            payTypeId: null,
-          }
+          current: 1,
+          size: 10,
+          schoolIds: [],
+          subjectIds: [],
+          classIds: [],
         },
         loading: false,
-        bill: {
-          student: {
-            name: null,
-          },
-          courses: []
-        },
       }
-
     },
 
     mounted: function () {
       const _this = this;
-      eventBus.$on("billOperateSuccess", function () {
-        _this.listBills();
-      })
+      _this.listStudentCharge();
     },
 
     methods: {
-      searchFunc(queryIn) {
-        console.log("response searchFunc");
-        this.query = this.deepCopy(queryIn);
-        this.listBills();
-      },
-      deptSchoolIdChange(val) {
-        this.query.data.deptSchoolIds = val;
-      },
-      showBillInfo(item) {
-        const _this = this;
-        _this.bill = item;
-        _this.detailDialogVisible = true;
-      }
-      ,
-      listBills() {
+      listStudentCharge() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appPost('/bill/listPage', _this.query).then(function (res) {
+        _this.httpUtils.appPost('/student/charge/pageOverTime', _this.query).then(function (res) {
           _this.loading = false;
-          _this.page.list = res.data.list;
-          _this.page.total = res.data.total;
+          _this.page.records = res.records;
+          _this.page.total = res.total;
         }, _this.operateFail);
       },
-      formatterYesNo(row, column, v) {
-        return parseInt(v) === 1 ? "是" : "否";
+      schoolChange(val) {
+        this.query.schoolIds = val;
       },
-
-      // 新增
-      create() {
-        this.billOperate.createStudent();
+      subjectChange(val) {
+        this.query.subjectIds = val;
       },
-      // 续费-弹框
-      renewals(row) {
-        this.billOperate.renewals(row.id);
+      classChange(val) {
+        this.query.classIds = val;
       },
-      // 补费-弹框
-      supplement(row) {
-        this.billOperate.supplement(row.id);
-      },
-      // 退费-弹框
-      refund(row) {
-        this.billOperate.refund(row.id);
-      },
-      // 转班-弹框
-      transferClass(row) {
-        this.billOperate.transferClass(row.id);
-      },
-      transferSemester(row) {
-        this.billOperate.transferSemester(row.id);
-      },
-      // 转校-弹框
-      transferSchool(row) {
-        this.billOperate.transferSchool(row.id);
-      },
-      // 修改-弹框
-      updateInfo(row) {
-        this.billOperate.modifyInfo(row.id);
-      },
-
-      studentSuspend(row) {
+      gotoPage(page) {
         const _this = this;
-        const studentId = row.student.id;
-        const msg = '确定需要对学生 ' + row.student.name + ' 执行休学操作？';
-        _this.baseConfirmDelete(msg, function () {
-          _this.studentSuspendPost(studentId);
-        });
-      }
-      ,
-      studentSuspendPost(studentId) {
-        const _this = this;
-        _this.httpUtils.appPost('/student/suspend?id=' + studentId).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-          } else {
-            _this.baseErrorNotify(res.msg);
-
-          }
-        }, _this.operateFail);
+        _this.query.current = page;
+        _this.listStudentCourse();
       },
-      detailDialogClose() {
-        const _this = this;
-        _this.detailDialogVisible = false;
-      },
-      operateSuccess() {
-        const _this = this;
-        // _this.detailDialogVisible = false;
-        _this.listBills();
-      },
-
-      // 尝试分页
-      currentPage(page) {
-        const _this = this;
-        _this.query.pageNo = page;
-        _this.listBills();
-      }
-      ,
-      prevPage(page) {
-        const _this = this;
-        _this.query.pageNo = page;
-        _this.listBills();
-      }
-      ,
-      nextPage(page) {
-        const _this = this;
-        _this.query.pageNo = page;
-        _this.listBills();
-      }
-      ,
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(JSON.stringify(r));
+        _this.baseErrorNotify(r);
         _this.loading = false;
-      },
-      showArrearsUpdateBtn(bill) {
-        console.log(bill.initialArrears);
-        const _this = this;
-        if (parseInt(bill.type) === _this.$appConfig.billTypes.renewals || parseInt(bill.type) === _this.$appConfig.billTypes.newBill) {
-          console.log(parseFloat(bill.initialArrears));
-          if (parseFloat(bill.initialArrears) === 0) {
-            return true;
-          }
-        }
-        return false;
-      },
-      updateArrears(id) {
-        const _this = this;
-        this.$prompt('请输入欠费金额', '欠费金额请写正数', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        }).then(({value}) => _this.updateArrearsPost(id, value))
-          .catch(() => {
-          });
-      },
-      updateArrearsPost(id, value) {
-        const _this = this;
-        const data = {modelId: id, arrears: value};
-        _this.httpUtils.appPost('/bill/updateArrears', data).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.listBills();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
       }
 
     }

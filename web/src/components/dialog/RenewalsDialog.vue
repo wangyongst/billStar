@@ -43,12 +43,11 @@
       <el-divider content-position="left">课程</el-divider>
 
       <el-form-item label="科目：" class="inlineFormItem" size="mini">
-        <el-select v-model="bill.semesterId"
+        <el-select v-model="charge.subjectId"
                    placeholder="请选择"
                    clearable
-                   v-bind:disabled="fieldDisabled.semester"
-                   @change="semesterChange">
-          <el-option v-for="item in semesterForSelect"
+                   @change="subjectChange">
+          <el-option v-for="item in subjectSelect"
                      :key="item.id"
                      :label="item.name"
                      :value="item.id"></el-option>
@@ -56,12 +55,11 @@
       </el-form-item>
 
       <el-form-item label="班级：" class="inlineFormItem" size="mini">
-        <el-select v-model="bill.semesterId"
+        <el-select v-model="charge.classId"
                    placeholder="请选择"
                    clearable
-                   v-bind:disabled="fieldDisabled.semester"
-                   @change="semesterChange">
-          <el-option v-for="item in semesterForSelect"
+                   @change="classChange">
+          <el-option v-for="item in classSelect"
                      :key="item.id"
                      :label="item.name"
                      :value="item.id"></el-option>
@@ -69,12 +67,11 @@
       </el-form-item>
 
       <el-form-item label="班别：" class="inlineFormItem" size="mini">
-        <el-select v-model="bill.semesterId"
+        <el-select v-model="charge.classNo"
                    placeholder="请选择"
                    clearable
-                   v-bind:disabled="fieldDisabled.semester"
-                   @change="semesterChange">
-          <el-option v-for="item in semesterForSelect"
+                   @change="classNoChange">
+          <el-option v-for="item in classNoSelect"
                      :key="item.id"
                      :label="item.name"
                      :value="item.id"></el-option>
@@ -84,7 +81,7 @@
       <el-form-item label="到期时间" class="">
         <el-date-picker
           class="datetime"
-          v-model="bill.billTime"
+          v-model="bill.expireTime"
           type="datetime"
           style="width: 180px"
           placeholder="选择日期">
@@ -118,25 +115,13 @@
 
     </el-form>
 
-
-
-
-
   </el-dialog>
 </template>
 
 <script>
-  // import billCmdUtils from "../../utils/BillCmdUtils";
-
   export default {
     name: 'RenewalsDialog',
-    // 传入dialogVisible/操作类型operateType/关联单refBillId，进行下一步操作
     props: {},
-    created() {
-      // 全局监听新增、续费、补费、欠费、退费等操作
-
-    },
-
     data() {
       return {
         courseLoading: false,
@@ -150,11 +135,7 @@
         defaultRemark: '',
         // 下拉选择数据
         coursesSelect: [],
-        payTypeForSelect: [],
-        deptSchoolForSelect: [],
-        semesterForSelect: [],
-        // 表单数据
-        bill: this.initNullBill(),
+        chargeSelect: [],
         fieldShow: {
           arrears: false,
         },
@@ -176,35 +157,27 @@
         const _this = this;
         if (val === true) {
           _this.dialogTitle = "续费";
-          _this.loadRefBill(_this.refBillId, function () {
-            // 处理某些表单项的显示
-            _this.processFields();
-          });
+          // _this.loadRefBill(_this.refBillId, function () {
+          //   // 处理某些表单项的显示
+          //   _this.processFields();
+          // });
         }
       }
     },
 
     mounted: function () {
       const _this = this;
-      _this.listCourseForSelect();
-      _this.listChargeTypeForSelect();
-      _this.listSemesterForSelect();
-      _this.getDefaultRemark();
+      // _this.listCourseSelect();
+      // _this.listChargeTypeForSelect();
+      // _this.listSemesterForSelect();
+      // _this.getDefaultRemark();
       // 新增
       eventBus.$on('renewals', function () {
-        console.log(this);
         _this.dialogVisible = true;
-        // _this.operateType = _this.$appConfig.billTypes.newBill;
       });
     },
 
     methods: {
-      processFields() {
-        const _this = this;
-        if (_this.bill.billCourseList && _this.bill.billCourseList.length === 1) {
-          _this.bill.billCourseList.push(_this.initNullCourse());
-        }
-      },
       // 加载学期
       listSemesterForSelect() {
         const _this = this;

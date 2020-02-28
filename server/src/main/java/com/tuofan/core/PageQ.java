@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class PageQ {
     private int current = 1;
-    private int size = 20;
+    private int size = 100;
 }

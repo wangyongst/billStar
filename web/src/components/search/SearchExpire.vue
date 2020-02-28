@@ -8,9 +8,9 @@
       <el-col :span="24">
         <el-form label-width="100px" class="search-form" size="mini">
 
-          <SchoolSelect></SchoolSelect>
-          <SubjectSelect></SubjectSelect>
-          <ClassSelect></ClassSelect>
+          <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
+          <SubjectSelect @dataChange="subjectChange"></SubjectSelect>
+          <ClassSelect @dataChange="classChange"></ClassSelect>
 
           <el-form-item label="到期时间：" size="mini">
             <el-radio-group v-model="query.radio">
@@ -34,9 +34,11 @@
 
           <TeacherSelect></TeacherSelect>
 
-          <el-form-item class="inlineFormItem">
-            <el-button @click="listStudentCourse" size="mini" v-bind:disabled="this.loading">查询</el-button>
-          </el-form-item>
+          <el-row>
+            <el-col :span="6" :offset="16">
+              <el-button @click="listStudentCourse" type="primary" style="width: 100px;" size="mini" plain round>查询</el-button>
+            </el-col>
+          </el-row>
 
         </el-form>
 
@@ -59,7 +61,7 @@
           <el-table-column label="教师" width="150" align="left" prop="teacherName">
           </el-table-column>
 
-          <el-table-column label="到期时间" width="150" align="left" prop="expireTime">
+          <el-table-column label="到期时间" width="150" align="left" prop="expireTime" :formatter="baseTableFormatDate">
           </el-table-column>
 
 
@@ -130,6 +132,15 @@
           _this.page.records = res.records;
           _this.page.total = res.total;
         }, _this.operateFail);
+      },
+      schoolChange(val) {
+        this.query.schoolIds = val;
+      },
+      subjectChange(val) {
+        this.query.subjectIds = val;
+      },
+      classChange(val) {
+        this.query.classIds = val;
       },
       gotoPage(page) {
         const _this = this;
