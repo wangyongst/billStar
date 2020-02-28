@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tuofan.core.Result;
 import com.tuofan.course.entity.CourseMain;
+import com.tuofan.course.entity.CourseTime;
+import com.tuofan.course.service.ICourseTimeService;
 import com.tuofan.course.vo.CourseP;
 import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.vo.CourseQ;
@@ -28,6 +30,9 @@ public class CourseMainController {
     @Autowired
     private ICourseMainService iCourseMainService;
 
+    @Autowired
+    private ICourseTimeService iCourseTimeService;
+
     @PostMapping("list")
     public Result list(@RequestBody CourseQ courseQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -48,6 +53,19 @@ public class CourseMainController {
 
     @PostMapping("create")
     public Result create(@RequestBody CourseP courseP) {
+        if (courseP.getType() == 1) {
+            iCourseTimeService.save(courseP.getDay());
+            courseP.setTimeIds(courseP.getDay().getId().toString());
+        } else if (courseP.getType() == 2) {
+            StringBuffer ids = new StringBuffer();
+            for (CourseTime t : courseP.getDayList()) {
+                if (t.getBegin() != null && t.getEnd() != null) {
+                    iCourseTimeService.save(t);
+                    ids.append(t.getId()).append(",");
+                }
+            }
+            courseP.setTimeIds(ids.deleteCharAt(ids.length() - 1).toString());
+        }
         iCourseMainService.save(courseP);
         return Result.ok("保存成功");
     }

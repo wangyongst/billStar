@@ -64,8 +64,8 @@
       <el-divider content-position="left"></el-divider>
 
       <el-form-item label="上课时间" size="mini">
-        <el-radio-group>
-          <el-radio size="mini">
+        <el-radio-group v-model="course.type">
+          <el-radio size="mini" :label="1">
             每天&nbsp;&nbsp;
             <el-time-picker
               class="datetime"
@@ -83,6 +83,157 @@
               placeholder="选择日期">
             </el-time-picker>
             &nbsp;&nbsp;结束
+          </el-radio>
+          <br>
+          <el-radio size="mini" :label="2">
+            每周&nbsp;&nbsp;
+            <br>
+            <el-col offset="1">
+              <el-checkbox size="mini" :label="1"> 周一&nbsp;&nbsp;
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[0].begin"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;开始
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[0].end"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;结束
+              </el-checkbox>
+            </el-col>
+            <br>
+            <el-col offset="1">
+              <el-checkbox size="mini" :label="1"> 周二&nbsp;&nbsp;
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[1].begin"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;开始
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[1].end"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;结束
+              </el-checkbox>
+            </el-col>
+            <br>
+            <el-col offset="1">
+              <el-checkbox size="mini" :label="1"> 周三&nbsp;&nbsp;
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[2].begin"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;开始
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[2].end"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;结束
+              </el-checkbox>
+            </el-col>
+            <br>
+            <el-col offset="1">
+              <el-checkbox size="mini" :label="1">周四&nbsp;&nbsp;
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[3].begin"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;开始
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[3].end"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;结束
+              </el-checkbox>
+            </el-col>
+            <br>
+            <el-col offset="1">
+              <el-checkbox size="mini" :label="1">周五&nbsp;&nbsp;
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[4].begin"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;开始
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[4].end"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;结束
+              </el-checkbox>
+            </el-col>
+            <br>
+            <el-col offset="1">
+              <el-checkbox size="mini" :label="1">周六&nbsp;&nbsp;
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[5].begin"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;开始
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[5].end"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;结束
+              </el-checkbox>
+            </el-col>
+            <br>
+            <el-col offset="1">
+              <el-checkbox size="mini" :label="1">周日&nbsp;&nbsp;
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[6].begin"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;开始
+                <el-time-picker
+                  class="datetime"
+                  v-model="course.dayList[6].end"
+                  type="datetime"
+                  style="width: 180px"
+                  placeholder="选择日期">
+                </el-time-picker>
+                &nbsp;&nbsp;结束
+              </el-checkbox>
+            </el-col>
           </el-radio>
         </el-radio-group>
       </el-form-item>
@@ -150,10 +301,21 @@
           classNo: null,
           classNum: null,
           classRoom: null,
+          type: null,
           day: {
+            type: 1,
             begin: null,
             end: null
-          }
+          },
+          dayList: [
+            {id: null, type: 2, day: "一", begin: null, end: null},
+            {id: null, type: 2, day: "二", begin: null, end: null},
+            {id: null, type: 2, day: "三", begin: null, end: null},
+            {id: null, type: 2, day: "四", begin: null, end: null},
+            {id: null, type: 2, day: "五", begin: null, end: null},
+            {id: null, type: 2, day: "六", begin: null, end: null},
+            {id: null, type: 2, day: "日", begin: null, end: null}
+          ]
         }
       },
 

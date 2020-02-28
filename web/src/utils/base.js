@@ -36,6 +36,17 @@ exports.install = function (Vue, options) {
     return Y + M + D + h + m + s;
   };
 
+
+  Vue.prototype.baseFormatTimeOnly = function (val) {
+    if (!val) {
+      return "-";
+    }
+    let date = new Date(val);
+    let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+    let m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+    return h + m;
+  };
+
   Vue.prototype.baseFormatDate = function (val) {
     if (!val) {
       return "-";

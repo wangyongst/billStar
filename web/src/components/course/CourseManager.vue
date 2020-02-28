@@ -30,7 +30,7 @@
           <el-table-column label="校区" width="150" align="left" prop="schoolName">
           </el-table-column>
 
-          <el-table-column label="教室号" width="150" align="left" prop="classRoom">
+          <el-table-column label="教室号" width="100" align="left" prop="classRoom">
           </el-table-column>
 
           <el-table-column label="科目" width="150" align="left" prop="subjectName">
@@ -39,13 +39,13 @@
           <el-table-column label="班级" width="150" align="left" prop="className">
           </el-table-column>
 
-          <el-table-column label="班别" width="150" align="left" prop="classNo">
+          <el-table-column label="班别" width="100" align="left" prop="classNo">
           </el-table-column>
-          <el-table-column label="班额" width="150" align="left" prop="classNum">
+          <el-table-column label="班额" width="100" align="left" prop="classNum">
           </el-table-column>
-          <el-table-column label="教师" width="150" align="left" prop="teacherName">
+          <el-table-column label="教师" width="100" align="left" prop="teacherName">
           </el-table-column>
-          <el-table-column label="上课时间" width="150" align="left">
+          <el-table-column label="上课时间" width="200" align="left" prop="courseTime" :formatter="courseTimeFormatter">
           </el-table-column>
         </el-table>
       </el-col>
@@ -58,9 +58,9 @@
           :total="page.total"
           :page-size="query.size"
           :current-page="query.current"
-          @current-change="currentPage"
-          @prev-click="prevPage"
-          @next-click="nextPage"
+          @current-change="gotoPage"
+          @prev-click="gotoPage"
+          @next-click="gotoPage"
         ></el-pagination>
       </el-col>
       <NewCourseDialog :onclose="listCourse"></NewCourseDialog>
@@ -122,20 +122,17 @@
           _this.page.total = res.total;
         }, _this.operateFail);
       },
-      // 尝试分页
-      currentPage(page) {
+      courseTimeFormatter(row, col, val) {
         const _this = this;
-        _this.query.current = page;
-        _this.listCourse();
-      }
-      ,
-      prevPage(page) {
-        const _this = this;
-        _this.query.current = page;
-        _this.listCourse();
-      }
-      ,
-      nextPage(page) {
+        if (val && val.length > 0) {
+          let html = "";
+          val.forEach(function (ele) {
+            html += ele.day + ":" + _this.baseFormatTimeOnly(ele.begin) + "-" + _this.baseFormatTimeOnly(ele.end) + "";
+          });
+          return html;
+        }
+      },
+      gotoPage(page) {
         const _this = this;
         _this.query.current = page;
         _this.listCourse();
@@ -146,6 +143,7 @@
         _this.baseErrorNotify(r);
         _this.loading = false;
       }
+
     }
   }
 </script>

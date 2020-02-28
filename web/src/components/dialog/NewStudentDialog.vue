@@ -247,13 +247,6 @@
         }, _this.operateFail);
       },
 
-      // getDefaultRemark() {
-      //   const _this = this;
-      //   _this.httpUtils.appGet('/config/getByName?name=app.schoolCommonRemark').then(function (res) {
-      //     _this.student.remark = res.value;
-      //   }, _this.operateFail);
-      // },
-
       listChargeSelect() {
         const _this = this;
         _this.httpUtils.appGet('/sys/charge/list').then(function (res) {

@@ -8,8 +8,7 @@ import com.tuofan.course.entity.CourseMain;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tuofan.course.vo.CourseV;
 import com.tuofan.setting.vo.ClassV;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -30,6 +29,9 @@ public interface CourseMainMapper extends BaseMapper<CourseMain> {
             "left join ding_dept school on course.school_id = school.id  \n" +
             "left join ding_user teacher on course.teacher_id = teacher.id\n" +
             "left join sys_semester semester on course.semester_id = semester.id ${ew.customSqlSegment}")
+    @Results(id = "courseTime", value = {
+            @Result(column = "time_ids", property = "courseTime", javaType = List.class, many = @Many(select = "com.tuofan.course.mapper.CourseTimeMapper.listByIdIn"))
+    })
     IPage<CourseV> pageV(IPage ipage, @Param(Constants.WRAPPER) QueryWrapper wrapper);
 
 
