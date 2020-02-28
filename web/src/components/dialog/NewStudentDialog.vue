@@ -144,6 +144,9 @@
         <el-input v-model="student.charge.amount" class="bill-cmd-input" placeholder="金额" type="number" step="0.01" min="0.01"></el-input>
       </el-form-item>
 
+      <el-form-item label="欠费">
+        <el-input v-model="student.arrears" class="bill-cmd-input" placeholder="金额" type="number" step="0.01" min="0.01"></el-input>
+      </el-form-item>
 
       <el-form-item label="备注" class="not-inline address-item">
         <el-input type="text" width="400px" v-model="student.remark" placeholder="备注信息"></el-input>
@@ -195,8 +198,6 @@
       _this.listSchoolSelect();
       _this.listChargeSelect();
       _this.listSemesterSelect();
-      // _this.getDefaultRemark();
-      // 新增
       eventBus.$on('newStudent', function () {
         console.log(this);
         _this.dialogVisible = true;
@@ -215,7 +216,8 @@
           myclass: "",
           sex: null,
           accept: null,
-          charge:{
+          arrears: null,
+          charge: {
             chargeId: null,
             amount: null,
           },

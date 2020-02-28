@@ -44,6 +44,7 @@ public class StudentMainController {
 
     @PostMapping("create")
     public Result create(@RequestHeader(LoginConstants.USER_ID) String userId, @RequestBody StudentP studentP) {
+        if (studentP.getArrears() != null && studentP.getArrears().intValue() != 0) studentP.setType(1);
         iStudentMainService.save(studentP);
         if (studentP.getCharge().getAmount() != null) {
             StudentCharge sc = studentP.getCharge();

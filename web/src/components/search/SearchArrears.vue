@@ -72,9 +72,6 @@
           @next-click="nextPage"
         ></el-pagination>
       </el-col>
-      <BillInfoDialogTable :dialogVisible="detailDialogVisible"
-                           @dialogClose="detailDialogClose"
-                           :bill="bill"/>
     </el-row>
   </div>
 </template>
@@ -138,8 +135,7 @@
         const _this = this;
         _this.bill = item;
         _this.detailDialogVisible = true;
-      }
-      ,
+      },
       listBills() {
         const _this = this;
         _this.loading = true;
@@ -151,38 +147,6 @@
       },
       formatterYesNo(row, column, v) {
         return parseInt(v) === 1 ? "是" : "否";
-      },
-
-      // 新增
-      create() {
-        this.billOperate.createStudent();
-      },
-      // 续费-弹框
-      renewals(row) {
-        this.billOperate.renewals(row.id);
-      },
-      // 补费-弹框
-      supplement(row) {
-        this.billOperate.supplement(row.id);
-      },
-      // 退费-弹框
-      refund(row) {
-        this.billOperate.refund(row.id);
-      },
-      // 转班-弹框
-      transferClass(row) {
-        this.billOperate.transferClass(row.id);
-      },
-      transferSemester(row) {
-        this.billOperate.transferSemester(row.id);
-      },
-      // 转校-弹框
-      transferSchool(row) {
-        this.billOperate.transferSchool(row.id);
-      },
-      // 修改-弹框
-      updateInfo(row) {
-        this.billOperate.modifyInfo(row.id);
       },
 
       studentSuspend(row) {

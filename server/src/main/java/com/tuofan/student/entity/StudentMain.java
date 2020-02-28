@@ -69,4 +69,6 @@ public class StudentMain implements Serializable {
 
     private Date lostTime;
 
+    private Float arrears;
+
 }
