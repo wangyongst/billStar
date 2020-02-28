@@ -1,9 +1,6 @@
 // 公共方法
 exports.install = function (Vue, options) {
 
-
-
-
   Vue.prototype.appDigitUppercase = function (n) {
     const fraction = ['角', '分'];
     const digit = [

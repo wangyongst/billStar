@@ -9,8 +9,6 @@
         <el-form label-width="100px" class="search-form" size="mini">
 
           <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
-          <SubjectSelect @dataChange="subjectChange"></SubjectSelect>
-          <ClassSelect @dataChange="classChange"></ClassSelect>
 
           <el-form-item label="到期时间：" size="mini">
             <el-radio-group v-model="query.radio">
@@ -32,7 +30,7 @@
             </el-radio-group>
           </el-form-item>
 
-          <TeacherSelect></TeacherSelect>
+          <TeacherSelect @dataChange="teacherChange"></TeacherSelect>
 
           <el-row>
             <el-col :span="6" :offset="16">
@@ -97,8 +95,6 @@
     components: {TeacherSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {
-        createDialogVisible: false,
-        detailDialogVisible: false,
         page: {
           total: 0,
           records: [],
@@ -107,8 +103,6 @@
           current: 1,
           size: 10,
           schoolIds: [],
-          subjectIds: [],
-          classIds: [],
           teacherIds: [],
           before: null,
           days: null,
@@ -117,7 +111,6 @@
         loading: false,
       }
     },
-
     mounted: function () {
       const _this = this;
       _this.listStudentCourse();
@@ -136,11 +129,8 @@
       schoolChange(val) {
         this.query.schoolIds = val;
       },
-      subjectChange(val) {
-        this.query.subjectIds = val;
-      },
-      classChange(val) {
-        this.query.classIds = val;
+      teacherChange(val) {
+        this.query.teacherIds = val;
       },
       gotoPage(page) {
         const _this = this;

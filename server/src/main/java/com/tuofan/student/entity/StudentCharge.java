@@ -37,6 +37,7 @@ public class StudentCharge implements Serializable {
 
     private Float amount;
 
+    //1 新生 2 续费 3补费
     private Integer type;
 
     private String createBy;

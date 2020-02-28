@@ -81,7 +81,7 @@
       <el-form-item label="到期时间" class="">
         <el-date-picker
           class="datetime"
-          v-model="bill.expireTime"
+          v-model="course.expireTime"
           type="datetime"
           style="width: 180px"
           placeholder="选择日期">

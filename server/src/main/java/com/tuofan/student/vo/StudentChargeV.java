@@ -13,9 +13,7 @@ public class StudentChargeV extends StudentCharge {
 
     private String studentName;
 
-    private String teacherName;
-
     private String createName;
 
-    private Date expireTime;
+    private String chargeName;
 }

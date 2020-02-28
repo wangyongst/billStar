@@ -19,17 +19,11 @@ import org.apache.ibatis.annotations.Select;
  * @since 2020-02-24
  */
 public interface StudentChargeMapper extends BaseMapper<StudentCharge> {
-
-    @Select("select studentCourse.expire_time,school.name school_name,student.name student_name,teacher.name teacher_name,user.name createName,charge.create_time\n" +
-            "from student_charge charge \n" +
-            "left join student_main student on charge.student_id = student.id\n" +
-            "left join student_course studentCourse on student.id = studentCourse.student_id\n" +
-            "left join course_main course on studentCourse.course_id = course.id\n" +
-            "left join sys_class class on course.class_id = class.id\n" +
-            "left join sys_subject subject on class.subject_id = subject_id  \n" +
-            "left join ding_user teacher on course.teacher_id = teacher.id \n" +
-            "left join ding_dept school on course.school_id = school.id\n" +
-            "left join ding_user user on charge.create_by = user.id ${ew.customSqlSegment}")
+    @Select("select charge.*,student.name student_name,school.name school_name,user.name create_name,syscharge.name charge_name\n" +
+            "from student_charge charge\n" +
+            "join student_main student on student.id = charge.student_id\n" +
+            "join ding_dept school on student.school_id = school.id\n" +
+            "join ding_user user on user.id = charge.create_by\n" +
+            "join sys_charge syscharge on charge.charge_id = syscharge.id ${ew.customSqlSegment}")
     IPage<StudentChargeV> pageV(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
-
 }

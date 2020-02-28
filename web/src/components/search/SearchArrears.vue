@@ -9,8 +9,6 @@
         <el-form label-width="100px" class="search-form" size="mini">
 
           <SchoolSelect></SchoolSelect>
-          <SubjectSelect></SubjectSelect>
-          <ClassSelect></ClassSelect>
 
           <el-form-item label="退费时间：" size="mini">
             <el-radio-group>

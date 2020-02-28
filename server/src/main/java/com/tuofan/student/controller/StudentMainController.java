@@ -1,12 +1,14 @@
 package com.tuofan.student.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
 import com.tuofan.course.vo.CourseP;
 import com.tuofan.student.entity.StudentCharge;
 import com.tuofan.student.entity.StudentCourse;
+import com.tuofan.student.entity.StudentMain;
 import com.tuofan.student.service.IStudentChargeService;
 import com.tuofan.student.service.IStudentCourseService;
 import com.tuofan.student.service.IStudentMainService;
@@ -51,7 +53,6 @@ public class StudentMainController {
             sc.setCreateTime(new Date());
             iStudentChargeService.save(sc);
         }
-
         List<StudentCourse> studentCourse = Lists.newArrayList();
         for (StudentCourse sc : studentP.getCourseList()) {
             if (sc.getCourseId() != null && sc.getCourseId() != 0) {
@@ -61,6 +62,24 @@ public class StudentMainController {
         }
         if (!CollectionUtils.isEmpty(studentCourse)) iStudentCourseService.saveBatch(studentCourse);
         return Result.ok("保存成功");
+    }
+
+    @GetMapping("arrears")
+    public Result arrears(Integer studentId) {
+        StudentMain studentMain = iStudentMainService.getById(studentId);
+        studentMain.setType(1);
+        iStudentMainService.updateById(studentMain);
+        return Result.ok();
+    }
+
+
+    @GetMapping("lose")
+    public Result lose(Integer studentId) {
+        StudentMain studentMain = iStudentMainService.getById(studentId);
+        studentMain.setType(2);
+        studentMain.setLostTime(new Date());
+        iStudentMainService.updateById(studentMain);
+        return Result.ok();
     }
 }
 

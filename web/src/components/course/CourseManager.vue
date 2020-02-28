@@ -45,7 +45,7 @@
           </el-table-column>
           <el-table-column label="教师" width="100" align="left" prop="teacherName">
           </el-table-column>
-          <el-table-column label="上课时间" width="200" align="left" prop="courseTime" :formatter="courseTimeFormatter">
+          <el-table-column label="上课时间" width="140" align="left" prop="courseTime" :formatter="courseTimeFormatter">
           </el-table-column>
         </el-table>
       </el-col>

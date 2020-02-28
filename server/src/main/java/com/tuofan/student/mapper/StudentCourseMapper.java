@@ -20,14 +20,12 @@ import org.apache.ibatis.annotations.Select;
 public interface StudentCourseMapper extends BaseMapper<StudentCourse> {
 
 
-    @Select("select studentCourse.*,school.name school_name,student.name student_name,teacher.name teacher_name,course.class_no,course.class_room\n" +
-            "from student_course studentCourse \n" +
-            "left join student_main student on studentCourse.student_id = student.id \n" +
-            "left join course_main course on studentCourse.course_id = course.id \n" +
-            "left join sys_class class on course.class_id = class.id\n" +
-            "left join sys_subject subject on class.subject_id = subject_id  \n" +
-            "left join ding_user teacher on course.teacher_id = teacher.id \n" +
-            "left join ding_dept school on course.school_id = school.id ${ew.customSqlSegment}")
+    @Select("select studentCourse.*,student.name student_name,school.name school_name,teacher.name teacher_name\n" +
+            "from student_course studentCourse\n" +
+            "join student_main student on studentCourse.student_id = student.id\n" +
+            "join ding_dept school on student.school_id = school.id\n" +
+            "join course_main course on studentCourse.course_id = course.id\n" +
+            "join ding_user teacher on teacher.id = course.teacher_id ${ew.customSqlSegment}")
     IPage<StudentCourseV> pageV(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 
 }

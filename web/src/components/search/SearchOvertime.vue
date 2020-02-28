@@ -9,8 +9,6 @@
         <el-form label-width="100px" class="search-form" size="mini">
 
           <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
-          <SubjectSelect @dataChange="subjectChange"></SubjectSelect>
-          <ClassSelect @dataChange="classChange"></ClassSelect>
 
           <el-row>
             <el-col :span="6" :offset="16">
@@ -32,7 +30,7 @@
           <el-table-column label="到期时间" width="150" align="left" prop="expireTime" :formatter="baseTableFormatDate">
           </el-table-column>
 
-          <el-table-column label="已超期天数" width="150" align="left" prop="">
+          <el-table-column label="已超期天数" width="150" align="left" prop="expireTime" :formatter="countDays">
           </el-table-column>
 
           <el-table-column label="在学课程" width="150" align="left">
@@ -48,6 +46,15 @@
           </el-table-column>
 
           <el-table-column label="开票时间" width="150" align="left" prop="createTime">
+          </el-table-column>
+
+          <el-table-column fixed="right" label="操作" align="left" width="150">
+            <template slot-scope="scope">
+              <el-button @click="setArrears(scope.row.studentId)" type="text" size="mini">转为欠费
+              </el-button>
+              <el-button @click="setLose(scope.row.studentId)" type="text" size="mini">转为流失
+              </el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-col>
@@ -87,9 +94,7 @@
         query: {
           current: 1,
           size: 10,
-          schoolIds: [],
-          subjectIds: [],
-          classIds: [],
+          schoolIds: []
         },
         loading: false,
       }
@@ -104,20 +109,34 @@
       listStudentCharge() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appPost('/student/charge/pageOverTime', _this.query).then(function (res) {
+        _this.httpUtils.appPost('/student/course/pageOverTime', _this.query).then(function (res) {
           _this.loading = false;
           _this.page.records = res.records;
           _this.page.total = res.total;
         }, _this.operateFail);
       },
+      setArrears(studentId) {
+        const _this = this;
+        _this.loading = true;
+        _this.httpUtils.appGet('/student/main/arrears?studentId=' + studentId).then(function (res) {
+          _this.loading = false;
+          _this.baseSuccessNotify(res);
+        }, _this.operateFail);
+      },
+      setLose(studentId) {
+        const _this = this;
+        _this.loading = true;
+        _this.httpUtils.appGet('/student/main/lose?studentId=' + studentId).then(function (res) {
+          _this.loading = false;
+          _this.baseSuccessNotify(res);
+        }, _this.operateFail);
+      },
       schoolChange(val) {
         this.query.schoolIds = val;
       },
-      subjectChange(val) {
-        this.query.subjectIds = val;
-      },
-      classChange(val) {
-        this.query.classIds = val;
+      countDays(row, col, val) {
+        const _this = this;
+        return _this.DateDiff(new Date(), _this.baseFormatDate(val));
       },
       gotoPage(page) {
         const _this = this;
@@ -128,8 +147,16 @@
         const _this = this;
         _this.baseErrorNotify(r);
         _this.loading = false;
-      }
+      },
 
+      //计算天数差的函数，通用  
+      DateDiff(sDate1, sDate2) {
+        var aDate, oDate2, iDays
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[0] + '-' + aDate[1] + '-' + aDate[2])
+        iDays = parseInt(Math.abs(sDate1 - oDate2) / 1000 / 60 / 60 / 24)
+        return iDays
+      }
     }
   }
 </script>

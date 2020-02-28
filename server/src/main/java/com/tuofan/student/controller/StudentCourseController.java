@@ -33,25 +33,32 @@ public class StudentCourseController {
     @Autowired
     private IStudentCourseService iStudentCourseService;
 
+    //到期
     @PostMapping("pageExpire")
     public Result pageExpire(@RequestBody StudentCourseQ studentCourseQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
         if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
-        if (!CollectionUtils.isEmpty(studentCourseQ.getSubjectIds())) queryWrapper.in("subject.id", studentCourseQ.getSubjectIds());
-        if (!CollectionUtils.isEmpty(studentCourseQ.getClassIds())) queryWrapper.in("class.id", studentCourseQ.getClassIds());
-        if (!CollectionUtils.isEmpty(studentCourseQ.getClassIds())) queryWrapper.in("teacher.id", studentCourseQ.getTeacherIds());
-        if (studentCourseQ.getDays() != null && studentCourseQ.getDays() != 0 && studentCourseQ.getRadio() != null && studentCourseQ.getRadio() == 1) {
+        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherIds())) queryWrapper.in("teacher.id", studentCourseQ.getTeacherIds());
+        if (studentCourseQ.getRadio() == null) queryWrapper.le("studentCourse.expire_time", new Date());
+        if (studentCourseQ.getDays() != null && studentCourseQ.getDays() != 0 && studentCourseQ.getRadio() == 1) {
             Calendar c = Calendar.getInstance();
             c.setTime(new Date());
             c.add(Calendar.DAY_OF_MONTH, studentCourseQ.getDays());
             Date end = c.getTime();
             queryWrapper.between("studentCourse.expire_time", new Date(), end);
         }
-        if (studentCourseQ.getBefore() != null && studentCourseQ.getRadio() != null && studentCourseQ.getRadio() == 2) queryWrapper.between("studentCourse.expire_time",new Date(), studentCourseQ.getBefore());
+        if (studentCourseQ.getBefore() != null && studentCourseQ.getRadio() == 2) queryWrapper.between("studentCourse.expire_time", new Date(), studentCourseQ.getBefore());
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
     }
 
-
-
+    //超期
+    @PostMapping("pageOverTime")
+    public Result pageOverTime(@RequestBody StudentCourseQ studentCourseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
+        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherIds())) queryWrapper.in("teacher.id", studentCourseQ.getTeacherIds());
+        queryWrapper.le("studentCourse.expire_time", new Date());
+        return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
+    }
 }
 

@@ -2,7 +2,10 @@ package com.tuofan.student.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,7 +23,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class StudentMain implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -59,5 +62,11 @@ public class StudentMain implements Serializable {
 
     private String remark;
 
+    //0 正常 1欠费 2流失
+    private Integer type;
+
+    private Integer schoolId;
+
+    private Date lostTime;
 
 }
