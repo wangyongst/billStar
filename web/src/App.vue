@@ -17,14 +17,6 @@
       <el-container>
         <!--  菜单的收起与展开 -->
         <el-header class="main-header">
-          <!--  控制菜单的按钮展开与收起 -->
-          <template v-if="menuCollapse">
-            <el-button class="collapse-btn" icon="el-icon-s-unfold" plain
-                       @click="menuCollapse=!menuCollapse"></el-button>
-          </template>
-          <template v-else>
-            <el-button class="collapse-btn" icon="el-icon-s-fold" plain @click="menuCollapse=!menuCollapse"></el-button>
-          </template>
           <!--  动态tab页-->
           <el-tabs
             class="school-tabs"
