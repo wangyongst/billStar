@@ -304,17 +304,18 @@
           type: null,
           day: {
             type: 1,
+            day: "每天",
             begin: null,
             end: null
           },
           dayList: [
-            {id: null, type: 2, day: "一", begin: null, end: null},
-            {id: null, type: 2, day: "二", begin: null, end: null},
-            {id: null, type: 2, day: "三", begin: null, end: null},
-            {id: null, type: 2, day: "四", begin: null, end: null},
-            {id: null, type: 2, day: "五", begin: null, end: null},
-            {id: null, type: 2, day: "六", begin: null, end: null},
-            {id: null, type: 2, day: "日", begin: null, end: null}
+            {id: null, type: 2, day: "周一", begin: null, end: null},
+            {id: null, type: 2, day: "周二", begin: null, end: null},
+            {id: null, type: 2, day: "周三", begin: null, end: null},
+            {id: null, type: 2, day: "周四", begin: null, end: null},
+            {id: null, type: 2, day: "周五", begin: null, end: null},
+            {id: null, type: 2, day: "周六", begin: null, end: null},
+            {id: null, type: 2, day: "周日", begin: null, end: null}
           ]
         }
       },

@@ -43,7 +43,7 @@ exports.install = function (Vue, options) {
     }
     let date = new Date(val);
     let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
-    let m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+    let m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes();
     return h + m;
   };
 
