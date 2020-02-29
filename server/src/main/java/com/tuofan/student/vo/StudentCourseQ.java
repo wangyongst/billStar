@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class StudentCourseQ extends SearchQ {
 
-    private List<Integer> teacherIds;
+    private List<String> teacherName;
 
     private Integer days;
 

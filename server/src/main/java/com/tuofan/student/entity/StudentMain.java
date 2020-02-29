@@ -71,4 +71,8 @@ public class StudentMain implements Serializable {
 
     private Float arrears;
 
+    private String createBy;
+
+    private Date createTime;
+
 }

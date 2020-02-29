@@ -4,6 +4,7 @@ package com.tuofan.student.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tuofan.core.Result;
+import com.tuofan.core.SearchQ;
 import com.tuofan.orgination.vo.TeacherQ;
 import com.tuofan.student.service.IStudentCourseService;
 import com.tuofan.student.vo.StudentCourseQ;
@@ -38,7 +39,7 @@ public class StudentCourseController {
     public Result pageExpire(@RequestBody StudentCourseQ studentCourseQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
         if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
-        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherIds())) queryWrapper.in("teacher.id", studentCourseQ.getTeacherIds());
+        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
         if (studentCourseQ.getRadio() == null) queryWrapper.le("studentCourse.expire_time", new Date());
         if (studentCourseQ.getDays() != null && studentCourseQ.getDays() != 0 && studentCourseQ.getRadio() == 1) {
             Calendar c = Calendar.getInstance();
@@ -56,8 +57,25 @@ public class StudentCourseController {
     public Result pageOverTime(@RequestBody StudentCourseQ studentCourseQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
         if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
-        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherIds())) queryWrapper.in("teacher.id", studentCourseQ.getTeacherIds());
+        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
         queryWrapper.le("studentCourse.expire_time", new Date());
+        return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
+    }
+
+
+    @PostMapping("pageArrears")
+    public Result arrearsPage(@RequestBody StudentCourseQ studentCourseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("student.type", 1);
+        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
+        return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
+    }
+
+    @PostMapping("pageLose")
+    public Result pageLose(@RequestBody StudentCourseQ studentCourseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("student.type", 2);
+        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
     }
 }

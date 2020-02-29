@@ -84,7 +84,7 @@
   import TeacherSelect from "../select/TeacherSelect";
 
   export default {
-    name: 'SearchExpire',
+    name: 'SearchBackfee',
     components: {TeacherSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {

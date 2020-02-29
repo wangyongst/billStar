@@ -10,13 +10,11 @@
       <!--      -->
       <el-divider content-position="left">学生信息</el-divider>
       <el-form-item label="学生姓名" size="mini">
-        <el-input class="bill-cmd-input"
-                  placeholder="学生姓名"></el-input>
+        <el-input class="bill-cmd-input" placeholder="学生姓名"></el-input>
       </el-form-item>
 
       <el-form-item label="电话">
-        <el-input class="bill-cmd-input"
-                  placeholder="电话"></el-input>
+        <el-input class="bill-cmd-input" placeholder="电话"></el-input>
       </el-form-item>
 
       <el-form-item class="inlineFormItem  " size="mini" align="right">
@@ -26,8 +24,7 @@
       <el-divider content-position="left">续费</el-divider>
 
       <el-form-item label="续费金额">
-        <el-input class="bill-cmd-input"
-                  placeholder="续费金额"></el-input>
+        <el-input class="bill-cmd-input" placeholder="续费金额"></el-input>
       </el-form-item>
 
       <el-form-item label="欠费金额">
@@ -45,8 +42,7 @@
       <el-form-item label="科目：" class="inlineFormItem" size="mini">
         <el-select v-model="charge.subjectId"
                    placeholder="请选择"
-                   clearable
-                   @change="subjectChange">
+                   clearable>
           <el-option v-for="item in subjectSelect"
                      :key="item.id"
                      :label="item.name"
@@ -57,8 +53,7 @@
       <el-form-item label="班级：" class="inlineFormItem" size="mini">
         <el-select v-model="charge.classId"
                    placeholder="请选择"
-                   clearable
-                   @change="classChange">
+                   clearable>
           <el-option v-for="item in classSelect"
                      :key="item.id"
                      :label="item.name"
@@ -69,8 +64,7 @@
       <el-form-item label="班别：" class="inlineFormItem" size="mini">
         <el-select v-model="charge.classNo"
                    placeholder="请选择"
-                   clearable
-                   @change="classNoChange">
+                   clearable>
           <el-option v-for="item in classNoSelect"
                      :key="item.id"
                      :label="item.name"
@@ -81,7 +75,7 @@
       <el-form-item label="到期时间" class="">
         <el-date-picker
           class="datetime"
-          v-model="course.expireTime"
+          v-model="charge.expireTime"
           type="datetime"
           style="width: 180px"
           placeholder="选择日期">
@@ -126,28 +120,19 @@
       return {
         courseLoading: false,
         dialogVisible: false,
-        defaultSemesterId: null,
-        operateType: 0,
-        refBillId: null,
         loading: false,
         dialogTitle: "",
         labelWidth: '80px',
-        defaultRemark: '',
-        // 下拉选择数据
+        subjectSelect: [],
+        classSelect: [],
         coursesSelect: [],
+        classNoSelect: [],
         chargeSelect: [],
-        fieldShow: {
-          arrears: false,
-        },
-        // 控制部分字段的可编辑属性
-        fieldDisabled: {
-          arrears: false,
-          amount: false,
-          mobile: false,
-          schoolZone: false,
-          course: false,
-          studentField: false,
-          semester: false,
+        charge: {
+          subjetcId: null,
+          classId: null,
+          classNo: null,
+          expireTime: null
         }
       }
     },
@@ -157,10 +142,6 @@
         const _this = this;
         if (val === true) {
           _this.dialogTitle = "续费";
-          // _this.loadRefBill(_this.refBillId, function () {
-          //   // 处理某些表单项的显示
-          //   _this.processFields();
-          // });
         }
       }
     },
@@ -170,7 +151,6 @@
       // _this.listCourseSelect();
       // _this.listChargeTypeForSelect();
       // _this.listSemesterForSelect();
-      // _this.getDefaultRemark();
       // 新增
       eventBus.$on('renewals', function () {
         _this.dialogVisible = true;

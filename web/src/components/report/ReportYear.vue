@@ -94,19 +94,7 @@
           }
         }, _this.operateFail);
       },
-
-      listDeptSchoolForSelect() {
-        const _this = this;
-        _this.httpUtils.appPost('/schoolZone/listSchoolZone').then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.deptSchoolForSelect = res.data;
-          } else {
-            _this.baseErrorNotify(res.msg);
-
-          }
-        }, _this.operateFail);
-      },
-      deptSchoolIdChange(val) {
+      schoolChange(val) {
         const _this = this;
         this.query.deptSchoolIds = val;
       },
@@ -124,8 +112,6 @@
         if (_this.titleArr && _this.titleArr.length > 0 && _this.titleArr.length >= index) {
           return _this.baseFormatMonth(_this.titleArr[index]);
         }
-
-        // return _this.baseFormatMonth(new Date().getTime());
         return "-";
       }
     }

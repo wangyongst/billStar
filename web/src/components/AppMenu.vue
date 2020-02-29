@@ -38,7 +38,7 @@
       <el-menu-item class="normalHide" @click="toPage('search/lose')">
         <span slot="title">流失</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" @click="toPage('search/arrears')">
+      <el-menu-item class="normalHide" @click="toPage('search/backfee')">
         <span slot="title">退费</span>
       </el-menu-item>
     </el-submenu>

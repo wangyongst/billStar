@@ -33,7 +33,7 @@
           <el-table-column label="已超期天数" width="150" align="left" prop="expireTime" :formatter="countDays">
           </el-table-column>
 
-          <el-table-column label="在学课程" width="150" align="left">
+          <el-table-column label="课程" width="300" align="left" prop="courseId" :formatter="baseFormatCourse">
           </el-table-column>
 
           <el-table-column label="教师" width="150" align="left" prop="teacherName">
@@ -42,11 +42,11 @@
           <el-table-column label="校区" width="150" align="left" prop="schoolName">
           </el-table-column>
 
-          <el-table-column label="开票人" width="150" align="left" prop="createName">
-          </el-table-column>
+<!--          <el-table-column label="开票人" width="150" align="left" prop="createName">-->
+<!--          </el-table-column>-->
 
-          <el-table-column label="开票时间" width="150" align="left" prop="createTime">
-          </el-table-column>
+<!--          <el-table-column label="开票时间" width="150" align="left" prop="createTime">-->
+<!--          </el-table-column>-->
 
           <el-table-column fixed="right" label="操作" align="left" width="150">
             <template slot-scope="scope">

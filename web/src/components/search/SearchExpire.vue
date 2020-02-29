@@ -50,7 +50,7 @@
           <el-table-column label="校区" width="150" align="left" prop="schoolName">
           </el-table-column>
 
-          <el-table-column label="课程" width="150" align="left">
+          <el-table-column label="课程" width="300" align="left" prop="courseId" :formatter="baseFormatCourse">
           </el-table-column>
 
           <el-table-column label="姓名" width="150" align="left" prop="studentName">

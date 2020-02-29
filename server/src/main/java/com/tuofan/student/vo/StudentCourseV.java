@@ -14,11 +14,7 @@ public class StudentCourseV extends StudentCourse {
 
     private String studentName;
 
-    private String teacherName;
-
-    private String classNo;
-
-    private String classRoom;
-
     private String createName;
+
+    private Float arrears;
 }

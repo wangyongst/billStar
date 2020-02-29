@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/Home'
 import WorkDetails from "../components/work/WorkDetails";
-import SearchArrears from "../components/search/SearchArrears";
+import SearchBackfee from "../components/search/SearchBackfee";
 import SearchLose from "../components/search/SearchLose";
 import WorkArrears from "../components/work/WorkArrears";
 import SearchExpire from "../components/search/SearchExpire";
@@ -85,9 +85,9 @@ export default new Router({
       }
     },
     {
-      path: '/search/arrears',
+      path: '/search/backfee',
       name: '欠费',
-      component: SearchArrears,
+      component: SearchBackfee,
       meta: {
         title: '欠费'
       }

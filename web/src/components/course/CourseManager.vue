@@ -82,7 +82,7 @@
       return {
         page: {
           total: 0,
-          list: [],
+          records: [],
         },
         query: {
           current: 1,

@@ -46,10 +46,6 @@
         <el-table-column label="总计" prop="deptTotal" width="" align="center"></el-table-column>
       </el-table>
     </el-container>
-    <PayTypeReportBillDialog
-      :visible="detailVisible"
-      :paramIn="detailParam"
-      @detailClose="detailClose"></PayTypeReportBillDialog>
   </el-container>
 
 </template>

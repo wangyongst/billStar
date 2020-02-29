@@ -8,7 +8,7 @@
       <el-col :span="24">
         <el-form label-width="100px" class="search-form" size="mini">
 
-          <SchoolSelect></SchoolSelect>
+          <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
 
           <el-form-item label="流失时间：" size="mini">
             <el-radio-group>
@@ -37,22 +37,22 @@
           <el-table-column label="" type="index" width="40" align="center">
           </el-table-column>
 
-          <el-table-column label="姓名" width="150" align="left">
+          <el-table-column label="姓名" width="150" align="left" prop="studentName">
           </el-table-column>
 
-          <el-table-column label="电话" width="150" align="left">
+          <el-table-column label="电话" width="150" align="left" prop="studentPhone">
           </el-table-column>
 
-          <el-table-column label="流失时间" width="150" align="left">
+          <el-table-column label="流失时间" width="150" align="left" prop="studentLostTime">
           </el-table-column>
 
-          <el-table-column label="最后课程" width="150" align="left">
+          <el-table-column label="课程" width="300" align="left" prop="courseId" :formatter="baseFormatCourse">
           </el-table-column>
 
-          <el-table-column label="教师" width="150" align="left">
+          <el-table-column label="教师" width="150" align="left" prop="teacherName">
           </el-table-column>
 
-          <el-table-column label="校区" width="150" align="left">
+          <el-table-column label="校区" width="150" align="left" prop="schoolName">
           </el-table-column>
         </el-table>
       </el-col>
@@ -70,9 +70,6 @@
           @next-click="nextPage"
         ></el-pagination>
       </el-col>
-      <BillInfoDialogTable :dialogVisible="detailDialogVisible"
-                           @dialogClose="detailDialogClose"
-                           :bill="bill"/>
     </el-row>
   </div>
 </template>

@@ -1,7 +1,9 @@
 package com.tuofan.student.service;
 
-import com.tuofan.student.entity.StudentMain;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tuofan.student.entity.StudentMain;
 
 /**
  * <p>
@@ -12,5 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-02-24
  */
 public interface IStudentMainService extends IService<StudentMain> {
+
+    IPage pageV(IPage page, QueryWrapper queryWrapper);
 
 }

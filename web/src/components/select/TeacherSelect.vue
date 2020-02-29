@@ -9,7 +9,7 @@
       </el-checkbox>
       <el-checkbox size="mini"
                    v-for="item in deptSchoolForSelect"
-                   :label="item.id"
+                   :label="item.name"
                    :key="item.id">{{item.name}}
       </el-checkbox>
     </el-checkbox-group>
@@ -62,7 +62,7 @@
         }
         if (_this.deptSchoolForSelect && _this.deptSchoolForSelect.length > 0) {
           _this.deptSchoolIds = _this.deptSchoolForSelect.map(function (ele) {
-            return ele.id
+            return ele.name
           });
         }
       },
