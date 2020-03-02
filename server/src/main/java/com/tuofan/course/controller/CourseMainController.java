@@ -3,17 +3,23 @@ package com.tuofan.course.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tuofan.core.Result;
+import com.tuofan.core.utils.DateTimeUtils;
 import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.entity.CourseTime;
 import com.tuofan.course.service.ICourseTimeService;
 import com.tuofan.course.vo.CourseP;
 import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.vo.CourseQ;
+import com.tuofan.orgination.entity.DingUser;
 import com.tuofan.orgination.vo.TeacherQ;
+import com.tuofan.setting.entity.SysClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 /**
  * <p>
@@ -32,6 +38,12 @@ public class CourseMainController {
 
     @Autowired
     private ICourseTimeService iCourseTimeService;
+
+    @Autowired
+    private IService<DingUser> iDingUserService;
+
+    @Autowired
+    private IService<SysClass> sysClassIService;
 
     @PostMapping("list")
     public Result list(@RequestBody CourseQ courseQ) {
@@ -66,6 +78,14 @@ public class CourseMainController {
             }
             courseP.setTimeIds(ids.deleteCharAt(ids.length() - 1).toString());
         }
+        courseP.setTeacherName(iDingUserService.getById(courseP.getTeacherId()).getName());
+        courseP.setClassName(sysClassIService.getById(courseP.getClassId()).getName());
+        StringBuffer stringBuffer = new StringBuffer();
+        for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(courseP.getTimeIds().split(",")))) {
+            stringBuffer.append(ct.getDay() + ":" + DateTimeUtils.formatTime(ct.getBegin()) + "-" + DateTimeUtils.formatTime(ct.getEnd()));
+            stringBuffer.append("+\n");
+        }
+        courseP.setCourseTime(stringBuffer.toString());
         iCourseMainService.save(courseP);
         return Result.ok("保存成功");
     }

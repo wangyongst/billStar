@@ -148,10 +148,6 @@
 
     mounted: function () {
       const _this = this;
-      // _this.listCourseSelect();
-      // _this.listChargeTypeForSelect();
-      // _this.listSemesterForSelect();
-      // 新增
       eventBus.$on('renewals', function () {
         _this.dialogVisible = true;
       });

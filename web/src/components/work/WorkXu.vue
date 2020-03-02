@@ -43,15 +43,13 @@
 
           <el-table-column fixed="right" label="操作" align="left" width="180">
             <template slot-scope="scope">
-              <el-button type="text" size="mini">交费记录</el-button>
-              <el-button type="text" size="mini" @click="updateItem(scope.row.studentId)">补费</el-button>
-              <el-button type="text" size="mini" @click="updateArrears(scope.row.id)">修改金额</el-button>
+              <el-button type="text" size="mini" @click="updateItem(scope.row.studentId)">续费</el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
 
-      <el-dialog class="bill-dialog" title="补费"
+      <el-dialog class="bill-dialog" title="续费"
                  :visible.sync="createDialogVisible">
         <el-form :model="charge">
           <el-form-item label="科目">
@@ -95,7 +93,7 @@
   import BackToWork from "../back/BackToWork";
 
   export default {
-    name: 'WorkArrears',
+    name: 'WorkXu',
     components: {BackToWork, ClassSelect, SchoolSelect, SubjectSelect, TeacherSelect},
     data() {
       return {
@@ -131,10 +129,10 @@
       },
       updateArrears(id) {
         const _this = this;
-        this.$prompt('请输入欠费金额', '修改', {
+        this.$prompt('请输入续费金额', '修改', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-        }).then(({value}) => _this.updateArrearsPost(id, value))
+        }).then(({value}) => _this.updateXuPost(id, value))
           .catch(() => {
           });
       },
@@ -150,7 +148,7 @@
       },
       chargePost(sid) {
         const _this = this;
-        _this.httpUtils.appPost('/student/main/buCharge', _this.charge).then(function (res) {
+        _this.httpUtils.appPost('/student/main/xu', _this.charge).then(function (res) {
           _this.listArreas();
           _this.createDialogVisible = false;
           _this.baseSuccessNotify(res);
@@ -164,19 +162,11 @@
         }, _this.operateFail);
       },
 
-      updateArrearsPost(sid, value) {
-        const _this = this;
-        const cmd = {id: sid, arrears: value};
-        _this.httpUtils.appPost('/student/main/updateArrears', cmd).then(function (res) {
-          _this.listArreas();
-          _this.baseSuccessNotify(res);
-        }, _this.operateFail);
-      },
 
       listArreas() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appPost('/student/course/pageArrears', _this.query).then(function (res) {
+        _this.httpUtils.appPost('/student/course/pageXu', _this.query).then(function (res) {
           _this.loading = false;
           _this.page.records = res.records;
           _this.page.total = res.total;

@@ -7,10 +7,10 @@ import SearchLose from "../components/search/SearchLose";
 import WorkArrears from "../components/work/WorkArrears";
 import SearchExpire from "../components/search/SearchExpire";
 import SearchOvertime from "../components/search/SearchOvertime";
-import StudentResumption from "../components/student/StudentResumption";
+import StudentFu from "../components/student/StudentFu";
 import StudentTransfer from "../components/student/StudentTransfer";
 import StudentChange from "../components/student/StudentChange";
-import StudentAbsence from "../components/student/StudentAbsence";
+import StudentXiu from "../components/student/StudentXiu";
 import ReportYear from "../components/report/ReportYear";
 import SettingSchool from "../components/setting/SettingSchool";
 import SettingTeacher from "../components/setting/SettingTeacher";
@@ -23,6 +23,9 @@ import ReportCharge from "../components/report/ReportCharge";
 import CourseTable from "../components/course/CourseTable";
 import ReportStudents from "../components/report/ReportStudents";
 import CourseManager from "../components/course/CourseManager";
+import SettingClassNo from "../components/setting/SettingClassNo";
+import SettingClassRoom from "../components/setting/SettingClassRoom";
+import WorkXu from "../components/work/WorkXu";
 
 Vue.use(Router);
 
@@ -42,6 +45,14 @@ export default new Router({
       component: Home,
       meta: {
         title: '工作台'
+      }
+    },
+    {
+      path: '/work/xu',
+      name: '续费',
+      component: WorkXu,
+      meta: {
+        title: '续费'
       }
     },
     {
@@ -101,17 +112,17 @@ export default new Router({
       }
     },
     {
-      path: '/student/absence',
+      path: '/student/xiu',
       name: '休学',
-      component: StudentAbsence,
+      component: StudentXiu,
       meta: {
         title: '休学'
       }
     },
     {
-      path: '/student/resumption',
+      path: '/student/fu',
       name: '复学办理',
-      component: StudentResumption,
+      component: StudentFu,
       meta: {
         title: '复学办理'
       }
@@ -218,6 +229,22 @@ export default new Router({
       component: SettingClass,
       meta: {
         title: '班级设置'
+      }
+    },
+    {
+      path: '/setting/class/no',
+      name: '班别设置',
+      component: SettingClassNo,
+      meta: {
+        title: '班级设置'
+      }
+    },
+    {
+      path: '/setting/class/room',
+      name: '教室设置',
+      component: SettingClassRoom,
+      meta: {
+        title: '教室设置'
       }
     }
   ]

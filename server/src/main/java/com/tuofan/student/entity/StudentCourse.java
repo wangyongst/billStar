@@ -54,23 +54,4 @@ public class StudentCourse implements Serializable {
      */
     private Date expireTime;
 
-
-    private String subjectName;
-
-
-    private String className;
-
-
-    private String classNo;
-
-
-    private String classRoom;
-
-
-    private String teacherName;
-
-
-    private String courseTime;
-
-
 }

@@ -89,18 +89,6 @@ public class StudentMainController {
         for (StudentCourse sc : studentP.getCourseList()) {
             if (sc.getCourseId() != null && sc.getCourseId() != 0) {
                 sc.setStudentId(studentP.getId());
-                CourseMain course = iCourseMainService.getById(sc.getCourseId());
-                sc.setClassNo(course.getClassNo());
-                sc.setClassRoom(course.getClassRoom());
-                sc.setTeacherName(iDingUserService.getById(course.getTeacherId()).getName());
-                SysClass sysClass = iSysClassService.getById(course.getClassId());
-                sc.setClassName(sysClass.getName());
-                StringBuffer stringBuffer = new StringBuffer();
-                for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(course.getTimeIds().split(",")))) {
-                    stringBuffer.append(ct.getDay() + ":" + DateTimeUtils.formatTime(ct.getBegin()) + "-" + DateTimeUtils.formatTime(ct.getEnd()));
-                    stringBuffer.append("\n");
-                }
-                sc.setCourseTime(stringBuffer.toString());
                 studentCourse.add(sc);
             }
         }
@@ -124,6 +112,27 @@ public class StudentMainController {
         return Result.ok("修改成功");
     }
 
+    @PostMapping("buCharge")
+    public Result charge(@RequestHeader(LoginConstants.USER_ID) String userId, @RequestBody StudentP studentP) {
+        StudentMain studentMain = iStudentMainService.getById(studentP.getStudentId());
+        StudentCharge charge = new StudentCharge();
+        charge.setChargeId(studentP.getChargeId());
+        charge.setType(3);
+        charge.setAmount(studentP.getAmount());
+        charge.setStudentId(studentMain.getId());
+        charge.setCreateBy(userId);
+        charge.setCreateTime(new Date());
+        iStudentChargeService.save(charge);
+        if (charge.getAmount() < studentMain.getArrears()) {
+            studentMain.setArrears(studentMain.getArrears() - charge.getAmount());
+        } else {
+            studentMain.setType(0);
+            studentMain.setArrears(0f);
+        }
+        iStudentMainService.updateById(studentMain);
+        return Result.ok("补费成功");
+    }
+
     @GetMapping("lose")
     public Result lose(Integer studentId) {
         StudentMain studentMain = iStudentMainService.getById(studentId);
@@ -136,11 +145,63 @@ public class StudentMainController {
     @PostMapping("pageV")
     public Result pageV(@RequestBody StudentMainQ studentMainQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
-        if (!CollectionUtils.isEmpty(studentMainQ.getSchoolIds())) queryWrapper.in("school.id", studentMainQ.getTeacherName());
+        if (!CollectionUtils.isEmpty(studentMainQ.getSchoolIds())) queryWrapper.in("school.id", studentMainQ.getSchoolIds());
         if (StringUtils.isNotBlank(studentMainQ.getNameLike())) queryWrapper.like("student.name", studentMainQ.getNameLike());
         if (StringUtils.isNotBlank(studentMainQ.getMobileLike())) queryWrapper.like("student.mobile", studentMainQ.getMobileLike());
-        if (studentMainQ.getIsarrears() != null && studentMainQ.getIsarrears() == 1) queryWrapper.like("student.arrears", 1);
+        if (studentMainQ.getIsArrears() != null && studentMainQ.getIsArrears() == 1) queryWrapper.eq("student.type", 1);
+        if (studentMainQ.getIsArrears() != null && studentMainQ.getIsArrears() == 0) queryWrapper.ne("student.type", 1);
         return Result.ok(iStudentMainService.pageV(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper));
+    }
+
+    @PostMapping("pageXiu")
+    public Result pageXiu(@RequestBody StudentMainQ studentMainQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (!CollectionUtils.isEmpty(studentMainQ.getSchoolIds())) queryWrapper.in("school.id", studentMainQ.getSchoolIds());
+        if (StringUtils.isNotBlank(studentMainQ.getNameLike())) queryWrapper.like("student.name", studentMainQ.getNameLike());
+        queryWrapper.eq("student.type", 0);
+        return Result.ok(iStudentMainService.pageV(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper));
+    }
+
+    @PostMapping("pageFu")
+    public Result pageFu(@RequestBody StudentMainQ studentMainQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (!CollectionUtils.isEmpty(studentMainQ.getSchoolIds())) queryWrapper.in("school.id", studentMainQ.getSchoolIds());
+        if (StringUtils.isNotBlank(studentMainQ.getNameLike())) queryWrapper.like("student.name", studentMainQ.getNameLike());
+        queryWrapper.eq("student.type", 3);
+        return Result.ok(iStudentMainService.pageV(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper));
+    }
+
+    @PostMapping("xu")
+    public Result xufei(@RequestHeader(LoginConstants.USER_ID) String userId, @RequestBody StudentP studentP) {
+        StudentMain studentMain = iStudentMainService.getById(studentP.getStudentId());
+        StudentCharge charge = new StudentCharge();
+        charge.setChargeId(studentP.getChargeId());
+        charge.setType(2);
+        charge.setAmount(studentP.getAmount());
+        charge.setStudentId(studentMain.getId());
+        charge.setCreateBy(userId);
+        charge.setCreateTime(new Date());
+        iStudentChargeService.save(charge);
+        return Result.ok("续费成功");
+    }
+
+
+    @PostMapping("xiu")
+    public Result xiu(@RequestBody StudentP studentP) {
+        StudentMain studentMain = iStudentMainService.getById(studentP.getStudentId());
+        studentMain.setType(3);
+        studentMain.setFuTime(studentP.getFuTime());
+        iStudentMainService.updateById(studentMain);
+        return Result.ok();
+    }
+
+    @PostMapping("fu")
+    public Result fu(@RequestBody StudentP studentP) {
+        StudentMain studentMain = iStudentMainService.getById(studentP.getStudentId());
+        studentMain.setType(0);
+        studentMain.setFuTime(null);
+        iStudentMainService.updateById(studentMain);
+        return Result.ok();
     }
 }
 

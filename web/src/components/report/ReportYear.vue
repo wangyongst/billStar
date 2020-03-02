@@ -7,38 +7,41 @@
 
     <el-form label-width="100px" class="search-form">
 
-      <SchoolSelect></SchoolSelect>
+      <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
 
       <el-form-item label="开始月份：">
         <el-date-picker
-          v-model="query.startMonth"
+          v-model="query.begin"
           type="month"
           size="mini"
           placeholder="选择月份">
         </el-date-picker>
-        <el-button class="btn-search" @click="searchFunc" size="mini">查询</el-button>
+        <el-button class="btn-search" @click="listReport" size="mini">查询</el-button>
       </el-form-item>
     </el-form>
 
     <el-container style="width: 100%">
-      <el-table stripe v-loading="loading" :data="list" Charge="bill-table">
-        <el-table-column label="校区" prop="deptSchoolName" width="80" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(0)" prop="sale1" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(1)" prop="sale2" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(2)" prop="sale3" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(3)" prop="sale4" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(4)" prop="sale5" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(5)" prop="sale6" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(6)" prop="sale7" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(7)" prop="sale8" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(8)" prop="sale9" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(9)" prop="sale10" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(10)" prop="sale11" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(11)" prop="sale12" align="center"></el-table-column>
-        <el-table-column v-bind:label="formatLabel(12)" prop="sale13" align="center"></el-table-column>
+      <el-table stripe v-loading="loading" :data="page.records" Charge="bill-table">
+        <el-table-column label="校区" prop="schoolName" width="200" align="center"></el-table-column>
+        <el-table-column label="年月" prop="month" width="200" align="center"></el-table-column>
+        <el-table-column label="总计" prop="sum" width="200" align="center"></el-table-column>
       </el-table>
     </el-container>
 
+
+    <el-col :span="24">
+      <el-pagination
+        class="common-page"
+        background
+        layout="total,prev, pager, next"
+        :total="page.total"
+        :page-size="query.size"
+        :current-page="query.current"
+        @current-change="gotoPage"
+        @prev-click="gotoPage"
+        @next-click="gotoPage"
+      ></el-pagination>
+    </el-col>
   </el-container>
 
 </template>
@@ -51,69 +54,53 @@
     name: 'ReportYear',
     data() {
       return {
-        list: [],
-        query: {
-          deptSchoolIds: [],
-          startMonth: null,
+        page: {
+          total: 0,
+          records: [],
         },
-        titleArr: [],
-        deptSchoolForSelect: [],
-        loading: false,
+        query: {
+          current: 1,
+          size: 10,
+          schoolIds: [],
+          begin: null
+        },
+        loading: false
       }
     },
     mounted: function () {
       const _this = this;
-      _this.loadStartMonth();
-      _this.listDeptSchoolForSelect();
+      _this.listReport()
     },
     methods: {
-      searchFunc() {
-        const _this = this;
-        console.log(JSON.stringify(_this.query));
-        _this.loading = true;
-        _this.httpUtils.appPost('/report/yearReport', _this.query).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.titleArr = res.data.title;
-            _this.list = res.data.content;
-            _this.loading = false;
-          } else {
-            _this.baseErrorNotify(res.msg);
-            _this.loading = false;
-          }
-        }, _this.operateFail);
-      },
-      // 加载起始月份
-      loadStartMonth() {
-        const _this = this;
-        _this.httpUtils.appGet('/config/getDateByName?name=app.reportSchoolYearBeginTime').then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.query.startMonth = res.data;
-          } else {
-            _this.baseErrorNotify(res.msg);
 
-          }
+      listReport() {
+        const _this = this;
+        _this.loading = true;
+        _this.httpUtils.appPost('/report/month', _this.query).then(function (res) {
+          _this.page.records = res.records;
+          _this.page.total = res.total;
+          _this.loading = false;
         }, _this.operateFail);
       },
       schoolChange(val) {
-        const _this = this;
-        this.query.deptSchoolIds = val;
+        console.log(val);
+        this.query.schoolIds = val;
       },
-      //
+      gotoPage(page) {
+        const _this = this;
+        _this.query.current = page;
+        _this.listStudentCourse();
+      },
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(r.msg);
+        _this.baseErrorNotify(r);
         _this.loading = false;
       },
-      formatLabel(index) {
-        const _this = this;
-        if (parseInt(index) === 12) {
-          return "总计";
-        }
-        if (_this.titleArr && _this.titleArr.length > 0 && _this.titleArr.length >= index) {
-          return _this.baseFormatMonth(_this.titleArr[index]);
-        }
-        return "-";
-      }
+
     }
   }
 </script>
+
+<style scoped>
+
+</style>

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tuofan.student.entity.StudentCharge;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 学生-课程记录 服务类
@@ -16,5 +18,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IStudentChargeService extends IService<StudentCharge> {
 
     IPage pageV(IPage page, QueryWrapper queryWrapper);
+
+    IPage reportV(IPage page, QueryWrapper queryWrapper);
+
+    IPage reportMonth(IPage page, QueryWrapper queryWrapper);
 
 }

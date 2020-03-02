@@ -8,6 +8,8 @@ import com.tuofan.core.SearchQ;
 import com.tuofan.orgination.vo.TeacherQ;
 import com.tuofan.student.service.IStudentCourseService;
 import com.tuofan.student.vo.StudentCourseQ;
+import com.tuofan.student.vo.StudentMainQ;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +61,18 @@ public class StudentCourseController {
         if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
         if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
         queryWrapper.le("studentCourse.expire_time", new Date());
+        queryWrapper.eq("student.type",0);
+        return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
+    }
+
+    //流失
+    @PostMapping("pageLost")
+    public Result pageLost(@RequestBody StudentCourseQ studentCourseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
+        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
+        if (studentCourseQ.getMonth() != null) queryWrapper.ge("student.lost_time", lastMonth(studentCourseQ.getMonth()));
+        queryWrapper.eq("student.type", 2);
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
     }
 
@@ -71,12 +85,19 @@ public class StudentCourseController {
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
     }
 
-    @PostMapping("pageLose")
-    public Result pageLose(@RequestBody StudentCourseQ studentCourseQ) {
+    @PostMapping("pageXu")
+    public Result pageXu(@RequestBody StudentCourseQ studentCourseQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("student.type", 2);
-        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
+        queryWrapper.eq("student.type", 0);
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
+    }
+
+
+    //前几月开始
+    private Date lastMonth(int before) {
+        Calendar calendar = Calendar.getInstance();// 获取当前日期
+        calendar.add(Calendar.MONTH, -before);
+        return calendar.getTime();
     }
 }
 

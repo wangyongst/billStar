@@ -20,8 +20,9 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface StudentMainMapper extends BaseMapper<StudentMain> {
 
-    @Select("select student.*,school.name school_name\n" +
+    @Select("select student.*,school.name school_name,user.name create_name\n" +
             "from student_main student\n" +
-            "join ding_dept school on student.school_id = school.id ${ew.customSqlSegment}")
+            "join ding_dept school on student.school_id = school.id\n" +
+            "join ding_user user on student.create_by = user.id ${ew.customSqlSegment}")
     IPage<StudentMainV> pageV(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }

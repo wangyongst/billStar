@@ -38,7 +38,11 @@ exports.install = function (Vue, options) {
 
 
   Vue.prototype.baseFormatCourse = function (row, col, val) {
-    return row["className"] + "|" + row["classNo"] + "|" + row["teacherName"] + "|" + row["courseTime"];
+    return row["className"] + "+" + row["classNo"] + "+" + row["teacherName"] + "+" + row["courseTime"];
+  };
+
+  Vue.prototype.baseFormatCourse2 = function (row, col, val) {
+    return  row["courseTime"];
   };
 
 

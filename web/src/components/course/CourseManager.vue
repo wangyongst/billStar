@@ -45,7 +45,7 @@
           </el-table-column>
           <el-table-column label="教师" width="100" align="left" prop="teacherName">
           </el-table-column>
-          <el-table-column label="上课时间" width="140" align="left" prop="courseTime" :formatter="courseTimeFormatter">
+          <el-table-column label="上课时间" width="400" align="left" prop="courseTime">
           </el-table-column>
         </el-table>
       </el-col>
@@ -121,16 +121,6 @@
           _this.page.records = res.records;
           _this.page.total = res.total;
         }, _this.operateFail);
-      },
-      courseTimeFormatter(row, col, val) {
-        const _this = this;
-        if (val && val.length > 0) {
-          let html = "";
-          val.forEach(function (ele) {
-            html += ele.day + ":" + _this.baseFormatTimeOnly(ele.begin) + "-" + _this.baseFormatTimeOnly(ele.end) + "";
-          });
-          return html;
-        }
       },
       gotoPage(page) {
         const _this = this;

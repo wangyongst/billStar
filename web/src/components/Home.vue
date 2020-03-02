@@ -26,7 +26,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="renewals()">续费</el-button>
+                      <el-button type="primary" @click="toPage('work/xu')">续费</el-button>
                     </div>
                   </el-card>
                 </div>

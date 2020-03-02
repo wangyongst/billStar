@@ -18,7 +18,7 @@
       <el-menu-item class="normalHide" @click="toPage('work/arrears')">
         <span slot="title">欠费</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" @click="toPage('search/arrears')">
+      <el-menu-item class="normalHide" @click="toPage('work/xu')">
         <span slot="title">续费</span>
       </el-menu-item>
     </el-submenu>
@@ -53,10 +53,10 @@
       <el-menu-item class="normalHide" @click="toPage('student/change')">
         <span slot="title">转班</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" @click="toPage('student/absence')">
+      <el-menu-item class="normalHide" @click="toPage('student/xiu')">
         <span slot="title">休学办理</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" @click="toPage('student/resumption')">
+      <el-menu-item class="normalHide" @click="toPage('student/fu')">
         <span slot="title">复学办理</span>
       </el-menu-item>
       <el-menu-item class="normalHide" @click="toPage('student/transfer')">
@@ -122,6 +122,12 @@
       </el-menu-item>
       <el-menu-item class="normalHide" @click="toPage('setting/class')">
         <span slot="title">班级设置</span>
+      </el-menu-item>
+      <el-menu-item class="normalHide" @click="toPage('setting/class/no')">
+        <span slot="title">班别设置</span>
+      </el-menu-item>
+      <el-menu-item class="normalHide" @click="toPage('setting/class/room')">
+        <span slot="title">教室设置</span>
       </el-menu-item>
     </el-submenu>
   </el-menu>

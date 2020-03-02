@@ -41,7 +41,10 @@
       </el-form-item>
 
       <el-form-item label="班别">
-        <el-input class="bill-cmd-input" v-model="course.classNo" placeholder="班别"></el-input>
+        <el-select v-model="course.classNo" placeholder="请选择">
+          <el-option v-for="item in classNoSelect" :value="item.name" :label="item.name" :key="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="班额">
@@ -59,7 +62,10 @@
 
 
       <el-form-item label="教室" size="mini">
-        <el-input class="bill-cmd-input" v-model="course.classRoom" placeholder="教室"></el-input>
+        <el-select v-model="course.classRoom" placeholder="请选择">
+          <el-option v-for="item in classRoomSelect" :value="item.name" :label="item.name" :key="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-divider content-position="left"></el-divider>
 
@@ -68,6 +74,7 @@
           <el-radio size="mini" :label="1">
             每天&nbsp;&nbsp;
             <el-time-picker
+              format="HH:mm"
               class="datetime"
               v-model="course.day.begin"
               type="datetime"
@@ -76,6 +83,7 @@
             </el-time-picker>
             &nbsp;&nbsp;开始
             <el-time-picker
+              format="HH:mm"
               class="datetime"
               v-model="course.day.end"
               type="datetime"
@@ -88,9 +96,10 @@
           <el-radio size="mini" :label="2">
             每周&nbsp;&nbsp;
             <br>
-            <el-col offset="1">
+            <el-col :offset="1">
               <el-checkbox size="mini" :label="1"> 周一&nbsp;&nbsp;
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[0].begin"
                   type="datetime"
@@ -99,6 +108,7 @@
                 </el-time-picker>
                 &nbsp;&nbsp;开始
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[0].end"
                   type="datetime"
@@ -109,9 +119,10 @@
               </el-checkbox>
             </el-col>
             <br>
-            <el-col offset="1">
+            <el-col :offset="1">
               <el-checkbox size="mini" :label="1"> 周二&nbsp;&nbsp;
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[1].begin"
                   type="datetime"
@@ -120,6 +131,7 @@
                 </el-time-picker>
                 &nbsp;&nbsp;开始
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[1].end"
                   type="datetime"
@@ -130,9 +142,10 @@
               </el-checkbox>
             </el-col>
             <br>
-            <el-col offset="1">
+            <el-col :offset="1">
               <el-checkbox size="mini" :label="1"> 周三&nbsp;&nbsp;
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[2].begin"
                   type="datetime"
@@ -141,6 +154,7 @@
                 </el-time-picker>
                 &nbsp;&nbsp;开始
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[2].end"
                   type="datetime"
@@ -151,9 +165,10 @@
               </el-checkbox>
             </el-col>
             <br>
-            <el-col offset="1">
+            <el-col :offset="1">
               <el-checkbox size="mini" :label="1">周四&nbsp;&nbsp;
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[3].begin"
                   type="datetime"
@@ -172,9 +187,10 @@
               </el-checkbox>
             </el-col>
             <br>
-            <el-col offset="1">
+            <el-col :offset="1">
               <el-checkbox size="mini" :label="1">周五&nbsp;&nbsp;
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[4].begin"
                   type="datetime"
@@ -183,6 +199,7 @@
                 </el-time-picker>
                 &nbsp;&nbsp;开始
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[4].end"
                   type="datetime"
@@ -193,9 +210,10 @@
               </el-checkbox>
             </el-col>
             <br>
-            <el-col offset="1">
+            <el-col :offset="1">
               <el-checkbox size="mini" :label="1">周六&nbsp;&nbsp;
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[5].begin"
                   type="datetime"
@@ -204,6 +222,7 @@
                 </el-time-picker>
                 &nbsp;&nbsp;开始
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[5].end"
                   type="datetime"
@@ -214,9 +233,10 @@
               </el-checkbox>
             </el-col>
             <br>
-            <el-col offset="1">
+            <el-col :offset="1">
               <el-checkbox size="mini" :label="1">周日&nbsp;&nbsp;
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[6].begin"
                   type="datetime"
@@ -225,6 +245,7 @@
                 </el-time-picker>
                 &nbsp;&nbsp;开始
                 <el-time-picker
+                  format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[6].end"
                   type="datetime"
@@ -263,6 +284,8 @@
         // 下拉选择数据
         subjectSelect: [],
         classSelect: [],
+        classNoSelect: [],
+        classRoomSelect: [],
         schoolSelect: [],
         semesterSelect: [],
         teacherSelect: [],
@@ -285,6 +308,8 @@
       _this.listSemesterSelect();
       _this.listSchoolSelect();
       _this.listSubjectSelect();
+      _this.listClassNoSelect();
+      _this.listClassRoomSelect();
       eventBus.$on('newCourse', function () {
         _this.dialogVisible = true;
       });
@@ -347,6 +372,20 @@
         const _this = this;
         _this.httpUtils.appGet('/sys/subject/list').then(function (res) {
           _this.subjectSelect = res;
+        }, _this.operateFail);
+      },
+
+      listClassNoSelect() {
+        const _this = this;
+        _this.httpUtils.appGet('/sys/class/no/list').then(function (res) {
+          _this.classNoSelect = res;
+        }, _this.operateFail);
+      },
+
+      listClassRoomSelect() {
+        const _this = this;
+        _this.httpUtils.appGet('/sys/class/room/list').then(function (res) {
+          _this.classRoomSelect = res;
         }, _this.operateFail);
       },
 

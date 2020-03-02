@@ -20,4 +20,6 @@ public class StudentCourseQ extends SearchQ {
     private Date before;
 
     private Integer radio;
+
+    private Integer month;
 }

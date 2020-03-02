@@ -11,7 +11,7 @@ public class StudentMainQ extends SearchQ {
 
     private List<String> teacherName;
 
-    private Integer isarrears;
+    private Integer isArrears;
 
     private String mobileLike;
 

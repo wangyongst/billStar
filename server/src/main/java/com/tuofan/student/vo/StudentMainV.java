@@ -7,4 +7,6 @@ import lombok.Data;
 public class StudentMainV extends StudentMain {
 
     private String schoolName;
+
+    private String createName;
 }

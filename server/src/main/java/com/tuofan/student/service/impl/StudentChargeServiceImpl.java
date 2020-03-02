@@ -8,6 +8,8 @@ import com.tuofan.student.service.IStudentChargeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 学生-课程记录 服务实现类
@@ -21,6 +23,16 @@ public class StudentChargeServiceImpl extends ServiceImpl<StudentChargeMapper, S
 
     @Override
     public IPage pageV(IPage page, QueryWrapper queryWrapper) {
-        return baseMapper.pageV(page,queryWrapper);
+        return baseMapper.pageV(page, queryWrapper);
+    }
+
+    @Override
+    public IPage reportV(IPage page, QueryWrapper queryWrapper) {
+        return baseMapper.reportV(page, queryWrapper);
+    }
+
+    @Override
+    public IPage reportMonth(IPage page, QueryWrapper queryWrapper) {
+        return baseMapper.reportMonth(page, queryWrapper);
     }
 }

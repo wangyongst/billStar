@@ -4,7 +4,7 @@
     <el-header class="body">学生信息</el-header>
 
     <el-form label-width="100px" class="search-form">
-      <SchoolSelect></SchoolSelect>
+      <SchoolSelect  @dataChange="schoolChange"></SchoolSelect>
       <el-form-item label="姓名：" class="inlineFormItem">
         <el-input size="mini" style="width: 120px" v-model="query.nameLike" placeholder="姓名"></el-input>
       </el-form-item>
@@ -12,7 +12,7 @@
         <el-input size="mini" style="width: 120px" v-model="query.mobileLike" placeholder="手机号"></el-input>
       </el-form-item>
       <el-form-item label="是否欠费：" class="inlineFormItem" size="mini">
-        <el-select v-model="query.isrrears"
+        <el-select v-model="query.isArrears"
                    placeholder="欠费"
                    clearable
                    size="mini"
@@ -31,16 +31,16 @@
     <el-container style="width: 100%">
       <el-table v-loading="loading" :data="page.records" class="bill-table">
         <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
-        <el-table-column prop="schoolName" label="校区" width=""></el-table-column>
-        <el-table-column prop="name" label="姓名" width=""></el-table-column>
-        <el-table-column prop="mobile" label="电话" width="120"></el-table-column>
-        <el-table-column prop="arrears" label="欠费" width="60"></el-table-column>
-        <el-table-column prop="sex" label="性别" :formatter="baseSex" width=""></el-table-column>
-        <el-table-column prop="myschool" label="学校" width=""></el-table-column>
-        <el-table-column prop="myclass" label="班级" width=""></el-table-column>
-        <el-table-column prop="address" label="住址" width=""></el-table-column>
-        <el-table-column prop="type" label="休学" :formatter="isStop" width="60" align="center"></el-table-column>
-        <el-table-column prop="createName" label="创建人" width="" align="center"></el-table-column>
+        <el-table-column prop="schoolName" label="校区" width="100"></el-table-column>
+        <el-table-column prop="name" label="姓名" width="100"></el-table-column>
+        <el-table-column prop="mobile" label="电话" width="100"></el-table-column>
+        <el-table-column prop="arrears" label="欠费" width="100"></el-table-column>
+        <el-table-column prop="sex" label="性别" :formatter="baseSex" width="40"></el-table-column>
+        <el-table-column prop="myschool" label="学校" width="100"></el-table-column>
+        <el-table-column prop="myclass" label="班级" width="100"></el-table-column>
+        <el-table-column prop="address" label="住址" width="100"></el-table-column>
+        <el-table-column prop="type" label="休学" :formatter="isStop" width="40" align="center"></el-table-column>
+        <el-table-column prop="createName" label="创建人" width="100" align="center"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="baseTableFormatTime" width="100" align="center"></el-table-column>
 <!--        <el-table-column fixed="right" label="操作" align="center" width="150">-->
 <!--&lt;!&ndash;          <template slot-scope="scope">&ndash;&gt;-->
@@ -119,7 +119,7 @@
           current: 1,
           size: 10,
           schoolIds: [],
-          isrrears: null,
+          isArrears: null,
           mobileLike: null,
           nameLike: null,
         }
@@ -132,12 +132,12 @@
       _this.listStudent();
     },
     methods: {
+      schoolChange(val) {
+        this.query.schoolIds = val;
+      },
       isStop(val) {
         if (val && val == 3) return "是";
         return "否";
-      },
-      deptSchoolIdChange(val) {
-        this.query.data.deptSchoolIds = val;
       },
       listStudent() {
         const _this = this;

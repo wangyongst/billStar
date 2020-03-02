@@ -12,10 +12,4 @@ public class CourseV extends CourseMain {
     private String schoolName;
 
     private String subjectName;
-
-    private String className;
-
-    private String teacherName;
-
-    private List<CourseTime> courseTime;
 }

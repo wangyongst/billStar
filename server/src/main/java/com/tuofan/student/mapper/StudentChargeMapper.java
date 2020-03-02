@@ -3,12 +3,16 @@ package com.tuofan.student.mapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.tuofan.report.vo.ChargeReportV;
 import com.tuofan.student.entity.StudentCharge;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tuofan.student.vo.ChargeV;
 import com.tuofan.student.vo.StudentChargeV;
 import com.tuofan.student.vo.StudentCourseV;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * <p>
@@ -26,4 +30,24 @@ public interface StudentChargeMapper extends BaseMapper<StudentCharge> {
             "join ding_user user on user.id = charge.create_by\n" +
             "join sys_charge syscharge on charge.charge_id = syscharge.id ${ew.customSqlSegment}")
     IPage<StudentChargeV> pageV(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+
+    @Select("select school.name school_name,type.name charge_type,sum(charge.amount) sum\n" +
+            "from student_charge charge\n" +
+            "join student_main student on charge.student_id = student.id\n" +
+            "join ding_dept school on school.id = student.school_id\n" +
+            "join sys_charge type on type.id = charge.charge_id\n" +
+            "${ew.customSqlSegment}\n" +
+            "group by school.name,type.id")
+    IPage<ChargeReportV> reportV(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+
+    @Select("select date_format(charge.create_time, '%Y-%m') month,school.name school_name,sum(charge.amount) sum\n" +
+            "from student_charge charge\n" +
+            "join student_main student on charge.student_id = student.id\n" +
+            "join ding_dept school on school.id = student.school_id\n" +
+            "join sys_charge type on type.id = charge.charge_id\n" +
+            "${ew.customSqlSegment}\n" +
+            "group by school.name,month")
+    IPage<ChargeReportV> reportMonth(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }

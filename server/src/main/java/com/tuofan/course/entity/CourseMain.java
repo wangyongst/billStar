@@ -49,4 +49,11 @@ public class CourseMain implements Serializable {
 
     private String timeIds;
 
+    private String className;
+
+    private String teacherName;
+
+    private String courseTime;
+
+
 }

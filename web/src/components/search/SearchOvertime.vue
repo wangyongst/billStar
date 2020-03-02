@@ -24,7 +24,7 @@
           <el-table-column label="" type="index" width="40" align="center">
           </el-table-column>
 
-          <el-table-column label="姓名" width="150" align="left" prop="studentName">
+          <el-table-column label="姓名" width="150" align="left" prop="name">
           </el-table-column>
 
           <el-table-column label="到期时间" width="150" align="left" prop="expireTime" :formatter="baseTableFormatDate">

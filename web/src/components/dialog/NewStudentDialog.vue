@@ -298,12 +298,12 @@
         if (_this.student.courseList[0].courseId != null && _this.student.courseList[0].courseId === _this.student.courseList[1].courseId) {
           _this.baseErrorNotify("两门课程选择重复，请重新选择");
           _this.student.courseList[selectIndex].courseId = null;
-          _this.student.courseList[selectIndex].label = _this.defaultCourseLabel();
+          _this.student.courseList[selectIndex].label = "*课程信息*";
           return;
         }
         _this.courseSelect.forEach(function (item) {
           if (item.id === courseId) {
-            _this.student.courseList[selectIndex].label = _this.makeCourseLabel(item);
+            _this.student.courseList[selectIndex].label = _this.baseFormatCourse2(item);
           }
         });
       },
@@ -320,7 +320,7 @@
       },
 
       makeCourseLabel(item) {
-        return " 教室号：" + item.classRoom;
+        return
       },
 
       operateFail(r) {

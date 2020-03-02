@@ -62,7 +62,7 @@ public class StudentMain implements Serializable {
 
     private String remark;
 
-    //0 正常 1欠费 2流失
+    //0 正常 1欠费 2流失 3休学
     private Integer type;
 
     private Integer schoolId;
@@ -74,5 +74,7 @@ public class StudentMain implements Serializable {
     private String createBy;
 
     private Date createTime;
+
+    private Date fuTime;
 
 }

@@ -61,8 +61,6 @@
           <el-table-column label="开票时间" width="180" align="left" prop="createTime" :formatter="baseTableFormatTime">
           </el-table-column>
 
-          <el-table-column label="课程" width="150" align="left">
-          </el-table-column>
         </el-table>
       </el-col>
 
@@ -140,9 +138,9 @@
         _this.listStudentCourse();
       },
       typeFomatter(row, col, val) {
-        if(val = 1) return "新生";
-        if(val = 2) return "续费";
-        if(val = 3) return "补费";
+        if(val == 1) return "新生";
+        if(val == 2) return "续费";
+        if(val == 3) return "补费";
       },
       operateFail(r) {
         const _this = this;

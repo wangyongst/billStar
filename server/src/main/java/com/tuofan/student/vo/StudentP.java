@@ -13,4 +13,10 @@ public class StudentP extends StudentMain {
     private StudentCharge charge;
 
     private List<StudentCourse> courseList;
+
+    private Integer studentId;
+
+    private Integer chargeId;
+
+    private Float amount;
 }
