@@ -26,6 +26,7 @@ import CourseManager from "../components/course/CourseManager";
 import SettingClassNo from "../components/setting/SettingClassNo";
 import SettingClassRoom from "../components/setting/SettingClassRoom";
 import WorkXu from "../components/work/WorkXu";
+import WorkTui from "../components/work/WorkTui";
 
 Vue.use(Router);
 
@@ -45,6 +46,14 @@ export default new Router({
       component: Home,
       meta: {
         title: '工作台'
+      }
+    },
+    {
+      path: '/work/tui',
+      name: '退费',
+      component: WorkTui,
+      meta: {
+        title: '退费'
       }
     },
     {
@@ -101,6 +110,14 @@ export default new Router({
       component: SearchBackfee,
       meta: {
         title: '欠费'
+      }
+    },
+    {
+      path: '/search/backfee',
+      name: '退费',
+      component: SearchBackfee,
+      meta: {
+        title: '退费'
       }
     },
     {

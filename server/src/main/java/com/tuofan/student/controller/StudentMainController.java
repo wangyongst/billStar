@@ -171,6 +171,20 @@ public class StudentMainController {
         return Result.ok(iStudentMainService.pageV(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper));
     }
 
+    @PostMapping("tui")
+    public Result tuifei(@RequestHeader(LoginConstants.USER_ID) String userId, @RequestBody StudentP studentP) {
+        StudentMain studentMain = iStudentMainService.getById(studentP.getStudentId());
+        StudentCharge charge = new StudentCharge();
+        charge.setChargeId(studentP.getChargeId());
+        charge.setType(4);
+        charge.setAmount(-studentP.getAmount());
+        charge.setStudentId(studentMain.getId());
+        charge.setCreateBy(userId);
+        charge.setCreateTime(new Date());
+        iStudentChargeService.save(charge);
+        return Result.ok("退费成功");
+    }
+
     @PostMapping("xu")
     public Result xufei(@RequestHeader(LoginConstants.USER_ID) String userId, @RequestBody StudentP studentP) {
         StudentMain studentMain = iStudentMainService.getById(studentP.getStudentId());

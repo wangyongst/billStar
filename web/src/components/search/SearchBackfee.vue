@@ -31,7 +31,7 @@
           <el-table-column label="" type="index" width="40" align="center">
           </el-table-column>
 
-          <el-table-column label="校区" width="150" align="left">
+          <el-table-column label="校区" width="150" align="left" prop="schoolName">
           </el-table-column>
 
           <el-table-column label="原因" width="150" align="left">
@@ -40,16 +40,16 @@
           <el-table-column label="最后课程" width="150" align="left">
           </el-table-column>
 
-          <el-table-column label="姓名" width="150" align="left">
+          <el-table-column label="姓名" width="150" align="left" prop="name">
           </el-table-column>
 
-          <el-table-column label="金额" width="150" align="left">
+          <el-table-column label="金额" width="150" align="left" prop="amount">
           </el-table-column>
 
-          <el-table-column label="教师" width="150" align="left">
+          <el-table-column label="教师" width="150" align="left" prop="teacherName">
           </el-table-column>
 
-          <el-table-column label="退费时间" width="150" align="left">
+          <el-table-column label="退费时间" width="150" align="left" prop="createTime">
           </el-table-column>
 
           <el-table-column label="备注" width="150" align="left">
@@ -65,11 +65,11 @@
           background
           layout="total,prev, pager, next"
           :total="page.total"
-          :page-size="query.pageSize"
-          :current-page="query.pageNo"
-          @current-change="currentPage"
-          @prev-click="prevPage"
-          @next-click="nextPage"
+          :page-size="query.size"
+          :current-page="query.current"
+          @current-change="gotoPage"
+          @prev-click="gotoPage"
+          @next-click="gotoPage"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -88,152 +88,52 @@
     components: {TeacherSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {
-        createDialogVisible: false,
-        detailDialogVisible: false,
         page: {
           total: 0,
           list: [],
         },
         query: {
-          pageNo: 1,
-          pageSize: 10,
-          orderBy: 'bill_time DESC',
-          data: {
-            deptSchoolIds: [],
-            expireEndTime: null,
-            payTypeId: null,
-          }
+          current: 1,
+          size: 10,
+          schoolIds: [],
+          teacherIds: [],
+          month: null,
         },
-        loading: false,
-        bill: {
-          student: {
-            name: null,
-          },
-          courses: []
-        },
+        loading: false
       }
 
     },
 
     mounted: function () {
       const _this = this;
-      eventBus.$on("billOperateSuccess", function () {
-        _this.listBills();
-      })
+      _this.listStudentCourse();
     },
 
     methods: {
-      searchFunc(queryIn) {
-        console.log("response searchFunc");
-        this.query = this.deepCopy(queryIn);
-        this.listBills();
+      schoolIdChange(val) {
+        this.query.schoolIds = val;
       },
-      deptSchoolIdChange(val) {
-        this.query.data.deptSchoolIds = val;
-      },
-      showBillInfo(item) {
-        const _this = this;
-        _this.bill = item;
-        _this.detailDialogVisible = true;
-      },
-      listBills() {
+      listStudentCourse() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appPost('/bill/listPage', _this.query).then(function (res) {
+        _this.httpUtils.appPost('/student/course/pageTui', _this.query).then(function (res) {
           _this.loading = false;
-          _this.page.list = res.data.list;
-          _this.page.total = res.data.total;
+          _this.page.list = res.records;
+          _this.page.total = res.total;
         }, _this.operateFail);
       },
-      formatterYesNo(row, column, v) {
-        return parseInt(v) === 1 ? "是" : "否";
+      schoolChange(val) {
+        this.query.schoolIds = val;
       },
-
-      studentSuspend(row) {
+      gotoPage(page) {
         const _this = this;
-        const studentId = row.student.id;
-        const msg = '确定需要对学生 ' + row.student.name + ' 执行休学操作？';
-        _this.baseConfirmDelete(msg, function () {
-          _this.studentSuspendPost(studentId);
-        });
-      }
-      ,
-      studentSuspendPost(studentId) {
-        const _this = this;
-        _this.httpUtils.appPost('/student/suspend?id=' + studentId).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-          } else {
-            _this.baseErrorNotify(res.msg);
-
-          }
-        }, _this.operateFail);
+        _this.query.current = page;
+        _this.listStudentCourse();
       },
-      detailDialogClose() {
-        const _this = this;
-        _this.detailDialogVisible = false;
-      },
-      operateSuccess() {
-        const _this = this;
-        // _this.detailDialogVisible = false;
-        _this.listBills();
-      },
-
-      // 尝试分页
-      currentPage(page) {
-        const _this = this;
-        _this.query.pageNo = page;
-        _this.listBills();
-      }
-      ,
-      prevPage(page) {
-        const _this = this;
-        _this.query.pageNo = page;
-        _this.listBills();
-      }
-      ,
-      nextPage(page) {
-        const _this = this;
-        _this.query.pageNo = page;
-        _this.listBills();
-      }
-      ,
       operateFail(r) {
         const _this = this;
-        _this.baseErrorNotify(JSON.stringify(r));
+        _this.baseErrorNotify(r);
         _this.loading = false;
-      },
-      showArrearsUpdateBtn(bill) {
-        console.log(bill.initialArrears);
-        const _this = this;
-        if (parseInt(bill.type) === _this.$appConfig.billTypes.renewals || parseInt(bill.type) === _this.$appConfig.billTypes.newBill) {
-          console.log(parseFloat(bill.initialArrears));
-          if (parseFloat(bill.initialArrears) === 0) {
-            return true;
-          }
-        }
-        return false;
-      },
-      updateArrears(id) {
-        const _this = this;
-        this.$prompt('请输入欠费金额', '欠费金额请写正数', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        }).then(({value}) => _this.updateArrearsPost(id, value))
-          .catch(() => {
-          });
-      },
-      updateArrearsPost(id, value) {
-        const _this = this;
-        const data = {modelId: id, arrears: value};
-        _this.httpUtils.appPost('/bill/updateArrears', data).then(function (res) {
-          if (parseInt(res.code) === 0) {
-            _this.baseSuccessNotify(res.msg);
-            _this.listBills();
-          } else {
-            _this.baseErrorNotify(res.msg);
-          }
-        }, _this.operateFail);
       }
 
     }

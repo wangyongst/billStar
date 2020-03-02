@@ -21,6 +21,9 @@
       <el-menu-item class="normalHide" @click="toPage('work/xu')">
         <span slot="title">续费</span>
       </el-menu-item>
+      <el-menu-item class="normalHide" @click="toPage('work/tui')">
+        <span slot="title">退费</span>
+      </el-menu-item>
     </el-submenu>
 
     <!--    查询 组-->

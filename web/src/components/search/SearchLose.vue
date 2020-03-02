@@ -109,7 +109,14 @@
           _this.page.total = res.total;
         }, _this.operateFail);
       },
-
+      schoolChange(val) {
+        this.query.schoolIds = val;
+      },
+      gotoPage(page) {
+        const _this = this;
+        _this.query.current = page;
+        _this.listStudentCourse();
+      },
       operateFail(r) {
         const _this = this;
         _this.baseErrorNotify(r);

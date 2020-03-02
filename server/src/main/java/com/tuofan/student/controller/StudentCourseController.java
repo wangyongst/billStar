@@ -76,6 +76,16 @@ public class StudentCourseController {
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
     }
 
+    //退费
+    @PostMapping("pageTui")
+    public Result pageTui(@RequestBody StudentCourseQ studentCourseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
+        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
+        queryWrapper.eq("student.type", 4);
+        return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
+    }
+
 
     @PostMapping("pageArrears")
     public Result arrearsPage(@RequestBody StudentCourseQ studentCourseQ) {
