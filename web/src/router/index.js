@@ -121,7 +121,7 @@ export default new Router({
       }
     },
     {
-      path: '/student/change',
+      path: '/student/ban',
       name: '转班',
       component: StudentBan,
       meta: {
@@ -145,7 +145,7 @@ export default new Router({
       }
     },
     {
-      path: '/student/transfer',
+      path: '/student/qi',
       name: '转期',
       component: StudentQi,
       meta: {

@@ -65,7 +65,7 @@
                 <div class="grid-content bg-purple"></div>
                 <el-card class="box-card">
                   <div>
-                    <el-button type="primary" @click="toPage('student/change')">转班管理</el-button>
+                    <el-button type="primary" @click="toPage('student/ban')">转班管理</el-button>
                   </div>
                 </el-card>
               </el-col>

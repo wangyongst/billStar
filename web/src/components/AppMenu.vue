@@ -53,7 +53,7 @@
         <i class="el-icon-menu"></i>
         <span slot="title">学生管理</span>
       </template>
-      <el-menu-item class="normalHide" @click="toPage('student/change')">
+      <el-menu-item class="normalHide" @click="toPage('student/ban')">
         <span slot="title">转班</span>
       </el-menu-item>
       <el-menu-item class="normalHide" @click="toPage('student/xiu')">
@@ -62,7 +62,7 @@
       <el-menu-item class="normalHide" @click="toPage('student/fu')">
         <span slot="title">复学办理</span>
       </el-menu-item>
-      <el-menu-item class="normalHide" @click="toPage('student/transfer')">
+      <el-menu-item class="normalHide" @click="toPage('student/qi')">
         <span slot="title">转期</span>
       </el-menu-item>
     </el-submenu>

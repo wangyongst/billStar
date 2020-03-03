@@ -7,26 +7,32 @@
         <el-form label-width="100px" class="search-form" size="mini">
 
           <SchoolSelect></SchoolSelect>
-          <SubjectSelect></SubjectSelect>
-          <ClassSelect></ClassSelect>
+<!--          <SubjectSelect></SubjectSelect>-->
+<!--          <ClassSelect></ClassSelect>-->
 
-          <el-form-item label="流失时间：" size="mini">
-            <el-radio-group>
-              <el-radio size="mini">
-                最近&nbsp;&nbsp;
-                <el-date-picker
-                  class="datetime"
-                  v-model="bill.billTime"
-                  type="datetime"
-                  style="width: 180px"
-                  placeholder="选择日期">
-                </el-date-picker>
-                &nbsp;&nbsp;月
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
+<!--          <el-form-item label="流失时间：" size="mini">-->
+<!--            <el-radio-group>-->
+<!--              <el-radio size="mini">-->
+<!--                最近&nbsp;&nbsp;-->
+<!--                <el-date-picker-->
+<!--                  class="datetime"-->
+<!--                  v-model="bill.billTime"-->
+<!--                  type="datetime"-->
+<!--                  style="width: 180px"-->
+<!--                  placeholder="选择日期">-->
+<!--                </el-date-picker>-->
+<!--                &nbsp;&nbsp;月-->
+<!--              </el-radio>-->
+<!--            </el-radio-group>-->
+<!--          </el-form-item>-->
 
           <TeacherSelect></TeacherSelect>
+
+          <el-row>
+            <el-col :span="6" :offset="16">
+              <el-button @click="listStudentCharge" type="primary" style="width: 100px;" size="mini" plain round>查询</el-button>
+            </el-col>
+          </el-row>
 
         </el-form>
 
