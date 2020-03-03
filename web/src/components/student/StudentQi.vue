@@ -43,10 +43,7 @@
           <el-table-column label="电话" width="150" align="left">
           </el-table-column>
 
-          <el-table-column label="流失时间" width="150" align="left">
-          </el-table-column>
-
-          <el-table-column label="最后课程" width="150" align="left">
+          <el-table-column label="课程" width="150" align="left">
           </el-table-column>
 
           <el-table-column label="教师" width="150" align="left">
@@ -82,7 +79,7 @@
   import TeacherSelect from "../select/TeacherSelect";
 
   export default {
-    name: 'StudentTransfer',
+    name: 'StudentQi',
     components: {TeacherSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {

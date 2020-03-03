@@ -8,8 +8,6 @@ import WorkArrears from "../components/work/WorkArrears";
 import SearchExpire from "../components/search/SearchExpire";
 import SearchOvertime from "../components/search/SearchOvertime";
 import StudentFu from "../components/student/StudentFu";
-import StudentTransfer from "../components/student/StudentTransfer";
-import StudentChange from "../components/student/StudentChange";
 import StudentXiu from "../components/student/StudentXiu";
 import ReportYear from "../components/report/ReportYear";
 import SettingSchool from "../components/setting/SettingSchool";
@@ -27,6 +25,8 @@ import SettingClassNo from "../components/setting/SettingClassNo";
 import SettingClassRoom from "../components/setting/SettingClassRoom";
 import WorkXu from "../components/work/WorkXu";
 import WorkTui from "../components/work/WorkTui";
+import StudentQi from "../components/student/StudentQi";
+import StudentBan from "../components/student/StudentBan";
 
 Vue.use(Router);
 
@@ -123,7 +123,7 @@ export default new Router({
     {
       path: '/student/change',
       name: '转班',
-      component: StudentChange,
+      component: StudentBan,
       meta: {
         title: '转班'
       }
@@ -147,7 +147,7 @@ export default new Router({
     {
       path: '/student/transfer',
       name: '转期',
-      component: StudentTransfer,
+      component: StudentQi,
       meta: {
         title: '转期'
       }
