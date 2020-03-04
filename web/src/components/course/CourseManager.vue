@@ -47,6 +47,14 @@
           </el-table-column>
           <el-table-column label="上课时间" width="400" align="left" prop="courseTime">
           </el-table-column>
+          <el-table-column fixed="right" label="操作" align="left" width="150">
+            <template slot-scope="scope">
+              <el-button @click="update(scope.row.id)" type="text" size="mini">修改
+              </el-button>
+              <el-button @click="delete(scope.row.id)" type="text" size="mini">删除
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-col>
 
@@ -113,6 +121,13 @@
       semesterChange(val) {
         this.query.semesterIds = val;
       },
+      delete(id) {
+        const _this = this;
+        _this.httpUtils.appPost('/course/main/delete?id=' + id).then(function (res) {
+          _this.listClassNo();
+          _this.baseSuccessNotify(res);
+        }, _this.operateFail);
+      },
       listCourse() {
         const _this = this;
         _this.loading = true;
@@ -126,8 +141,7 @@
         const _this = this;
         _this.query.current = page;
         _this.listCourse();
-      }
-      ,
+      },
       operateFail(r) {
         const _this = this;
         _this.baseErrorNotify(r);
