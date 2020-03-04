@@ -22,9 +22,14 @@
 
     <el-container style="width: 100%">
       <el-table stripe v-loading="loading" :data="page.records" Charge="bill-table">
-        <el-table-column label="校区" prop="schoolName" width="200" align="center"></el-table-column>
-        <el-table-column label="年月" prop="month" width="200" align="center"></el-table-column>
-        <el-table-column label="总计" prop="sum" width="200" align="center"></el-table-column>
+        <el-table style="width: 100%" border :data="tableData">
+          <template v-for="(item,index) in tableHead">
+            <el-table-column :prop="item.column_name" :label="item.column_comment" :key="index" v-if="item.column_name != 'id'"></el-table-column>
+          </template>
+        </el-table>
+<!--        <el-table-column label="校区" prop="schoolName" width="200" align="center"></el-table-column>-->
+<!--        <el-table-column label="年月" prop="month" width="200" align="center"></el-table-column>-->
+<!--        <el-table-column label="总计" prop="sum" width="200" align="center"></el-table-column>-->
       </el-table>
     </el-container>
 
