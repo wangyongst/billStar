@@ -41,9 +41,13 @@ public class CourseMain implements Serializable {
 
     private Integer schoolId;
 
+    private Integer classNoId;
+
     private String classNo;
 
     private Integer classNum;
+
+    private Integer classRoomId;
 
     private String classRoom;
 

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
+import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.setting.entity.SysClassNo;
 import com.tuofan.setting.service.ISysClassNoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class SysClassNoController {
 
     @Autowired
     private ISysClassNoService iSysClassNoService;
+
+    @Autowired
+    private ICourseMainService iCourseMainService;
 
 
     @GetMapping("list")
@@ -60,6 +64,9 @@ public class SysClassNoController {
 
     @PostMapping("delete")
     public Result save(@RequestParam Integer id) {
+        QueryWrapper query = new QueryWrapper();
+        query.eq("class_no_id", id);
+        if (iCourseMainService.list(query).size() > 0) return Result.error("有课程，不能删除");
         iSysClassNoService.removeById(id);
         return Result.ok();
     }

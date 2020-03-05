@@ -4,6 +4,7 @@ package com.tuofan.setting.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
+import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.setting.entity.SysClassNo;
 import com.tuofan.setting.entity.SysClassRoom;
 import com.tuofan.setting.service.ISysClassRoomService;
@@ -26,6 +27,9 @@ public class SysClassRoomController {
 
     @Autowired
     private ISysClassRoomService iSysClassRoomService;
+
+    @Autowired
+    private ICourseMainService iCourseMainService;
 
 
     @GetMapping("list")
@@ -60,6 +64,9 @@ public class SysClassRoomController {
 
     @PostMapping("delete")
     public Result save(@RequestParam Integer id) {
+        QueryWrapper query = new QueryWrapper();
+        query.eq("class_id", id);
+        if (iCourseMainService.list(query).size() > 0) return Result.error("有课程，不能删除");
         iSysClassRoomService.removeById(id);
         return Result.ok();
     }
