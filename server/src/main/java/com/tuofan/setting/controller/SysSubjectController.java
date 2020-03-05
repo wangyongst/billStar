@@ -42,7 +42,6 @@ public class SysSubjectController {
         sysSubject.setCreateBy(userid);
         sysSubject.setCreateTime(new Date());
         iSysSubjectService.saveOrUpdate(sysSubject);
-        UpdateWrapper wrapper = new UpdateWrapper();
         return Result.ok();
     }
 
@@ -54,6 +53,5 @@ public class SysSubjectController {
         iSysSubjectService.removeById(id);
         return Result.ok();
     }
-
 }
 
