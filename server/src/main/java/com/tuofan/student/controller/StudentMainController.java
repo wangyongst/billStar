@@ -4,6 +4,7 @@ package com.tuofan.student.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
+import com.tuofan.core.CheckUtils;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
 import com.tuofan.core.SearchQ;
@@ -17,6 +18,8 @@ import com.tuofan.orgination.entity.DingUser;
 import com.tuofan.orgination.service.IDingUserService;
 import com.tuofan.setting.entity.SysClass;
 import com.tuofan.setting.service.ISysClassService;
+import com.tuofan.setting.service.ISysMyClassService;
+import com.tuofan.setting.service.ISysMySchoolService;
 import com.tuofan.student.entity.StudentCharge;
 import com.tuofan.student.entity.StudentCourse;
 import com.tuofan.student.entity.StudentMain;
@@ -56,7 +59,10 @@ public class StudentMainController {
     private IStudentMainService iStudentMainService;
 
     @Autowired
-    private ICourseMainService iCourseMainService;
+    private ISysMyClassService iSysMyClassService;
+
+    @Autowired
+    private ISysMySchoolService iSysMySchoolService;
 
     @Autowired
     private IStudentChargeService iStudentChargeService;
@@ -76,10 +82,11 @@ public class StudentMainController {
         if (studentP.getArrears() != null && studentP.getArrears().intValue() != 0) studentP.setType(1);
         studentP.setCreateBy(userId);
         studentP.setCreateTime(new Date());
+        if(CheckUtils.isNotZero(studentP.getMyclassId())) studentP.setMyclass(iSysMyClassService.getById(studentP.getMyclassId()).getName());
+        if(CheckUtils.isNotZero(studentP.getMyschoolId())) studentP.setMyschool(iSysMySchoolService.getById(studentP.getMyschoolId()).getName());
         iStudentMainService.save(studentP);
-        if (studentP.getCharge().getAmount() != null) {
+        if (studentP.getCharge().getAmount() != null && studentP.getCharge().getChargeId() !=null) {
             StudentCharge sc = studentP.getCharge();
-            sc.setChargeId(studentP.getChargeId());
             sc.setStudentId(studentP.getId());
             sc.setType(1);
             sc.setCreateBy(userId);
