@@ -2,9 +2,10 @@ package com.tuofan.setting.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
+import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.setting.entity.SysClassNo;
 import com.tuofan.setting.service.ISysClassNoService;
@@ -59,6 +60,12 @@ public class SysClassNoController {
         SysClassNo saved = iSysClassNoService.getOne(queryWrapper);
         if (saved != null && saved.getId() != sysClassNo.getId()) return Result.error("班别不能重复");
         iSysClassNoService.saveOrUpdate(sysClassNo);
+        UpdateWrapper wrapper = new UpdateWrapper();
+        wrapper.eq("class_no_id", sysClassNo.getId());
+        CourseMain courseMain = new CourseMain();
+        courseMain.setClassId(sysClassNo.getId());
+        courseMain.setClassNo(sysClassNo.getName());
+        iCourseMainService.update(courseMain, wrapper);
         return Result.ok();
     }
 

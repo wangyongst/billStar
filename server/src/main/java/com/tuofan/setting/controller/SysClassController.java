@@ -1,9 +1,12 @@
 package com.tuofan.setting.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
+import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.setting.entity.SysClass;
 import com.tuofan.setting.service.ISysClassService;
@@ -56,6 +59,12 @@ public class SysClassController {
         sysClass.setCreateBy(userid);
         sysClass.setCreateTime(new Date());
         iSysClassService.saveOrUpdate(sysClass);
+        UpdateWrapper wrapper = new UpdateWrapper();
+        wrapper.eq("class_id", sysClass.getId());
+        CourseMain courseMain = new CourseMain();
+        courseMain.setClassId(sysClass.getId());
+        courseMain.setClassName(sysClass.getName());
+        iCourseMainService.update(courseMain, wrapper);
         return Result.ok();
     }
 

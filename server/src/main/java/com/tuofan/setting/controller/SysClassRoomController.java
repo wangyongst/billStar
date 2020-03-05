@@ -2,10 +2,11 @@ package com.tuofan.setting.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
+import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.service.ICourseMainService;
-import com.tuofan.setting.entity.SysClassNo;
 import com.tuofan.setting.entity.SysClassRoom;
 import com.tuofan.setting.service.ISysClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,12 @@ public class SysClassRoomController {
         SysClassRoom saved = iSysClassRoomService.getOne(queryWrapper);
         if (saved != null && saved.getId() != sysClassRoom.getId()) return Result.error("教室不能重复");
         iSysClassRoomService.saveOrUpdate(sysClassRoom);
+        UpdateWrapper wrapper = new UpdateWrapper();
+        wrapper.eq("class_room_id", sysClassRoom.getId());
+        CourseMain courseMain = new CourseMain();
+        courseMain.setClassId(sysClassRoom.getId());
+        courseMain.setClassRoom(sysClassRoom.getName());
+        iCourseMainService.update(courseMain, wrapper);
         return Result.ok();
     }
 

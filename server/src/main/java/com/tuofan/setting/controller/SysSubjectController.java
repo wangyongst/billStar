@@ -2,6 +2,8 @@ package com.tuofan.setting.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.tuofan.course.entity.CourseMain;
 import com.tuofan.setting.entity.SysSubject;
 import com.tuofan.setting.service.ISysClassService;
 import com.tuofan.setting.service.ISysSubjectService;
@@ -40,6 +42,7 @@ public class SysSubjectController {
         sysSubject.setCreateBy(userid);
         sysSubject.setCreateTime(new Date());
         iSysSubjectService.saveOrUpdate(sysSubject);
+        UpdateWrapper wrapper = new UpdateWrapper();
         return Result.ok();
     }
 
