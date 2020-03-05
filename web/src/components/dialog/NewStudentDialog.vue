@@ -25,10 +25,16 @@
       </el-form-item>
       <br>
       <el-form-item label="学校">
-        <el-input class="bill-cmd-input" v-model="student.myschool" placeholder="学校"></el-input>
+        <el-select v-model="student.myschoolId" placeholder="请选择">
+          <el-option v-for="item in mySchoolSelect" :value="item.id" :label="item.name" :key="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="班级">
-        <el-input class="bill-cmd-input" v-model="student.myclass" placeholder="班级"></el-input>
+        <el-select v-model="student.myclassId" placeholder="请选择">
+          <el-option v-for="item in myClassSelect" :value="item.id" :label="item.name" :key="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="是否接  ">
         <el-radio-group v-model="student.accept">
@@ -178,6 +184,8 @@
         chargeSelect: [],
         schoolSelect: [],
         semesterSelect: [],
+        mySchoolSelect: [],
+        myClassSelect: [],
         // 表单数据
         student: this.initStuent()
       }
@@ -198,6 +206,8 @@
       _this.listSchoolSelect();
       _this.listChargeSelect();
       _this.listSemesterSelect();
+      _this.listMySchoolSelect();
+      _this.listMyClassSelect();
       eventBus.$on('newStudent', function () {
         console.log(this);
         _this.dialogVisible = true;
@@ -212,8 +222,8 @@
           mobile: "",
           remark: '',
           name: "",
-          myschool: "",
-          myclass: "",
+          mySchoolId: null,
+          myClassId: null,
           sex: null,
           accept: null,
           arrears: null,
@@ -253,6 +263,20 @@
         const _this = this;
         _this.httpUtils.appGet('/sys/charge/list').then(function (res) {
           _this.chargeSelect = res;
+        }, _this.operateFail);
+      },
+
+      listMySchoolSelect() {
+        const _this = this;
+        _this.httpUtils.appGet('/sys/my/school/list').then(function (res) {
+          _this.mySchoolSelect = res;
+        }, _this.operateFail);
+      },
+
+      listMyClassSelect() {
+        const _this = this;
+        _this.httpUtils.appGet('/sys/my/class/list').then(function (res) {
+          _this.myClassSelect = res;
         }, _this.operateFail);
       },
 
@@ -317,10 +341,6 @@
 
       makeCourseName(item) {
         return item.subjectName + " + " + item.className + "+" + item.teacherName;
-      },
-
-      makeCourseLabel(item) {
-        return
       },
 
       operateFail(r) {

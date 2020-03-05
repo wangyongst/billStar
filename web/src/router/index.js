@@ -27,6 +27,8 @@ import WorkXu from "../components/work/WorkXu";
 import WorkTui from "../components/work/WorkTui";
 import StudentQi from "../components/student/StudentQi";
 import StudentBan from "../components/student/StudentBan";
+import SettingMyShcool from "../components/setting/SettingMyShcool";
+import SettingMyClass from "../components/setting/SettingMyClass";
 
 Vue.use(Router);
 
@@ -262,6 +264,22 @@ export default new Router({
       component: SettingClassRoom,
       meta: {
         title: '教室设置'
+      }
+    },
+    {
+      path: '/setting/my/school',
+      name: '学生学校',
+      component: SettingMyShcool,
+      meta: {
+        title: '学生学校'
+      }
+    },
+    {
+      path: '/setting/my/class',
+      name: '学生班级',
+      component: SettingMyClass,
+      meta: {
+        title: '学生班级'
       }
     }
   ]

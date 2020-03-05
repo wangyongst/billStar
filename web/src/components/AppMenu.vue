@@ -132,6 +132,12 @@
       <el-menu-item class="normalHide" @click="toPage('setting/class/room')">
         <span slot="title">教室设置</span>
       </el-menu-item>
+      <el-menu-item class="normalHide" @click="toPage('setting/my/school')">
+        <span slot="title">学生学校</span>
+      </el-menu-item>
+      <el-menu-item class="normalHide" @click="toPage('setting/my/class')">
+        <span slot="title">学生班级</span>
+      </el-menu-item>
     </el-submenu>
   </el-menu>
 </template>

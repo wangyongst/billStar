@@ -79,6 +79,7 @@ public class StudentMainController {
         iStudentMainService.save(studentP);
         if (studentP.getCharge().getAmount() != null) {
             StudentCharge sc = studentP.getCharge();
+            sc.setChargeId(studentP.getChargeId());
             sc.setStudentId(studentP.getId());
             sc.setType(1);
             sc.setCreateBy(userId);

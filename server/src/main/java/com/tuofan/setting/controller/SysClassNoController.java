@@ -1,6 +1,7 @@
 package com.tuofan.setting.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
@@ -37,6 +38,10 @@ public class SysClassNoController {
     public Result save(@RequestHeader(LoginConstants.USER_ID) String userid, @RequestBody SysClassNo sysClassNo) {
         sysClassNo.setCreateBy(userid);
         sysClassNo.setCreateTime(new Date());
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("name", sysClassNo.getName());
+        SysClassNo saved = iSysClassNoService.getOne(queryWrapper);
+        if (saved != null) return Result.error("班别不能重复");
         iSysClassNoService.saveOrUpdate(sysClassNo);
         return Result.ok();
     }
@@ -45,6 +50,10 @@ public class SysClassNoController {
     public Result update(@RequestHeader(LoginConstants.USER_ID) String userid, @RequestBody SysClassNo sysClassNo) {
         sysClassNo.setCreateBy(userid);
         sysClassNo.setCreateTime(new Date());
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("name", sysClassNo.getName());
+        SysClassNo saved = iSysClassNoService.getOne(queryWrapper);
+        if (saved != null && saved.getId() != sysClassNo.getId()) return Result.error("班别不能重复");
         iSysClassNoService.saveOrUpdate(sysClassNo);
         return Result.ok();
     }

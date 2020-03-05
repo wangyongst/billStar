@@ -1,0 +1,71 @@
+package com.tuofan.setting.controller;
+
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tuofan.core.LoginConstants;
+import com.tuofan.core.Result;
+import com.tuofan.setting.entity.SysClassNo;
+import com.tuofan.setting.entity.SysClassRoom;
+import com.tuofan.setting.entity.SysMyClass;
+import com.tuofan.setting.service.ISysClassNoService;
+import com.tuofan.setting.service.ISysMyClassService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+
+/**
+ * <p>
+ *  前端控制器
+ * </p>
+ *
+ * @author wangyong
+ * @since 2020-03-04
+ */
+@RestController
+@RequestMapping("/bill/sys/my/class")
+public class SysMyClassController {
+
+
+    @Autowired
+    private ISysMyClassService iSysMyClassService;
+
+
+    @GetMapping("list")
+    public Result list() {
+        return Result.ok(iSysMyClassService.listV());
+    }
+
+
+    @PostMapping("save")
+    public Result save(@RequestHeader(LoginConstants.USER_ID) String userid, @RequestBody SysMyClass sysMyClass) {
+        sysMyClass.setCreateBy(userid);
+        sysMyClass.setCreateTime(new Date());
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("name", sysMyClass.getName());
+        SysMyClass saved = iSysMyClassService.getOne(queryWrapper);
+        if (saved != null) return Result.error("学生班级不能重复");
+        iSysMyClassService.saveOrUpdate(sysMyClass);
+        return Result.ok();
+    }
+
+    @PostMapping("update")
+    public Result update(@RequestHeader(LoginConstants.USER_ID) String userid, @RequestBody SysMyClass sysMyClass) {
+        sysMyClass.setCreateBy(userid);
+        sysMyClass.setCreateTime(new Date());
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("name", sysMyClass.getName());
+        SysMyClass saved = iSysMyClassService.getOne(queryWrapper);
+        if (saved != null && saved.getId() != sysMyClass.getId()) return Result.error("学生班级不能重复");
+        iSysMyClassService.saveOrUpdate(sysMyClass);
+        return Result.ok();
+    }
+
+    @PostMapping("delete")
+    public Result save(@RequestParam Integer id) {
+        iSysMyClassService.removeById(id);
+        return Result.ok();
+    }
+
+}
+
