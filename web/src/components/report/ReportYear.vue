@@ -22,9 +22,12 @@
 
     <el-container style="width: 100%">
       <el-table stripe v-loading="loading" :data="page.records" Charge="bill-table">
-        <el-table-column label="校区" prop="schoolName" width="200" align="center"></el-table-column>
-        <el-table-column label="年月" prop="month" width="200" align="center"></el-table-column>
-        <el-table-column label="总计" prop="sum" width="200" align="center"></el-table-column>
+        <template v-for="item in page.header">
+          <el-table-column :prop="item.myProp" :label="item.myLabel"></el-table-column>
+        </template>
+        <!--        <el-table-column label="校区" prop="schoolName" width="200" align="center"></el-table-column>-->
+        <!--        <el-table-column label="年月" prop="month" width="200" align="center"></el-table-column>-->
+        <!--        <el-table-column label="总计" prop="sum" width="200" align="center"></el-table-column>-->
       </el-table>
     </el-container>
 
@@ -57,6 +60,7 @@
         page: {
           total: 0,
           records: [],
+          header: []
         },
         query: {
           current: 1,
@@ -67,20 +71,20 @@
         loading: false
       }
     },
-    mounted: function () {
-      const _this = this;
-      _this.listReport()
-    },
     methods: {
 
       listReport() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appPost('/report/month', _this.query).then(function (res) {
-          _this.page.records = res.records;
-          _this.page.total = res.total;
+        _this.httpUtils.appPost('/report/header', _this.query).then(function (res) {
+          _this.page.header = res;
           _this.loading = false;
         }, _this.operateFail);
+        // _this.httpUtils.appPost('/report/month', _this.query).then(function (res) {
+        //   _this.page.records = res.records;
+        //   _this.page.total = res.total;
+        //   _this.loading = false;
+        // }, _this.operateFail);
       },
       schoolChange(val) {
         console.log(val);

@@ -3,21 +3,23 @@ package com.tuofan.course.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.tuofan.core.Result;
 import com.tuofan.core.utils.DateTimeUtils;
 import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.entity.CourseTime;
+import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.service.ICourseTimeService;
 import com.tuofan.course.vo.CourseP;
-import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.vo.CourseQ;
-import com.tuofan.orgination.entity.DingUser;
-import com.tuofan.orgination.vo.TeacherQ;
-import com.tuofan.setting.entity.SysClass;
+import com.tuofan.orgination.service.IDingUserService;
+import com.tuofan.setting.service.ISysClassService;
+import com.tuofan.student.service.IStudentCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 
@@ -40,10 +42,13 @@ public class CourseMainController {
     private ICourseTimeService iCourseTimeService;
 
     @Autowired
-    private IService<DingUser> iDingUserService;
+    private IDingUserService iDingUserService;
 
     @Autowired
-    private IService<SysClass> sysClassIService;
+    private ISysClassService iSysClassService;
+
+    @Autowired
+    private IStudentCourseService iStudentCourseService;
 
     @PostMapping("list")
     public Result list(@RequestBody CourseQ courseQ) {
@@ -60,6 +65,16 @@ public class CourseMainController {
         if (!CollectionUtils.isEmpty(courseQ.getSubjectIds())) queryWrapper.in("subject.id", courseQ.getSubjectIds());
         if (!CollectionUtils.isEmpty(courseQ.getSchoolIds())) queryWrapper.in("school.id", courseQ.getSchoolIds());
         return Result.ok(iCourseMainService.pageV(new Page(courseQ.getCurrent(), courseQ.getSize()), queryWrapper));
+    }
+
+    @PostMapping("delete")
+    public Result delete(Integer id) {
+        CourseMain course = iCourseMainService.getById(id);
+        QueryWrapper query = new QueryWrapper();
+        query.eq("course_id", id);
+        if (iStudentCourseService.list(query).size() > 0) return Result.error("课程有学生，不能删除");
+        iCourseMainService.removeById(id);
+        return Result.ok();
     }
 
 
@@ -79,7 +94,7 @@ public class CourseMainController {
             courseP.setTimeIds(ids.deleteCharAt(ids.length() - 1).toString());
         }
         courseP.setTeacherName(iDingUserService.getById(courseP.getTeacherId()).getName());
-        courseP.setClassName(sysClassIService.getById(courseP.getClassId()).getName());
+        courseP.setClassName(iSysClassService.getById(courseP.getClassId()).getName());
         StringBuffer stringBuffer = new StringBuffer();
         for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(courseP.getTimeIds().split(",")))) {
             stringBuffer.append(ct.getDay() + ":" + DateTimeUtils.formatTime(ct.getBegin()) + "-" + DateTimeUtils.formatTime(ct.getEnd()));

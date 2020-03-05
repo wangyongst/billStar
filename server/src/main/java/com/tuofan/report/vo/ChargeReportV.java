@@ -12,4 +12,6 @@ public class ChargeReportV {
     private Float sum;
 
     private String month;
+
+    private String type;
 }
