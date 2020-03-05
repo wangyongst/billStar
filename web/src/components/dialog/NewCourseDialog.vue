@@ -41,8 +41,8 @@
       </el-form-item>
 
       <el-form-item label="班别">
-        <el-select v-model="course.classNo" placeholder="请选择">
-          <el-option v-for="item in classNoSelect" :value="item.name" :label="item.name" :key="item.id">
+        <el-select v-model="course.classNoId" placeholder="请选择">
+          <el-option v-for="item in classNoSelect" :value="item.id" :label="item.name" :key="item.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -62,8 +62,8 @@
 
 
       <el-form-item label="教室" size="mini">
-        <el-select v-model="course.classRoom" placeholder="请选择">
-          <el-option v-for="item in classRoomSelect" :value="item.name" :label="item.name" :key="item.id">
+        <el-select v-model="course.classRoomId" placeholder="请选择">
+          <el-option v-for="item in classRoomSelect" :value="item.id" :label="item.name" :key="item.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -323,9 +323,9 @@
           subjectId: null,
           classId: null,
           teacherId: null,
-          classNo: null,
+          classNoId: null,
           classNum: null,
-          classRoom: null,
+          classRoomId: null,
           type: null,
           day: {
             type: 1,

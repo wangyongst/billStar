@@ -3,6 +3,7 @@ package com.tuofan.course.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tuofan.core.CheckUtils;
 import com.tuofan.core.Result;
 import com.tuofan.core.utils.DateTimeUtils;
 import com.tuofan.course.entity.CourseMain;
@@ -12,14 +13,13 @@ import com.tuofan.course.service.ICourseTimeService;
 import com.tuofan.course.vo.CourseP;
 import com.tuofan.course.vo.CourseQ;
 import com.tuofan.orgination.service.IDingUserService;
+import com.tuofan.setting.service.ISysClassNoService;
+import com.tuofan.setting.service.ISysClassRoomService;
 import com.tuofan.setting.service.ISysClassService;
 import com.tuofan.student.service.IStudentCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 
@@ -48,6 +48,12 @@ public class CourseMainController {
     private ISysClassService iSysClassService;
 
     @Autowired
+    private ISysClassNoService iSysClassNoService;
+
+    @Autowired
+    private ISysClassRoomService iSysClassRoomService;
+
+    @Autowired
     private IStudentCourseService iStudentCourseService;
 
     @PostMapping("list")
@@ -68,7 +74,7 @@ public class CourseMainController {
     }
 
     @PostMapping("delete")
-    public Result delete(Integer id) {
+    public Result delete(@RequestParam Integer id) {
         CourseMain course = iCourseMainService.getById(id);
         QueryWrapper query = new QueryWrapper();
         query.eq("course_id", id);
@@ -80,7 +86,7 @@ public class CourseMainController {
 
     @PostMapping("create")
     public Result create(@RequestBody CourseP courseP) {
-        if (courseP.getType() == 1) {
+        if (courseP.getType() == 1 && courseP.getDay() != null) {
             iCourseTimeService.save(courseP.getDay());
             courseP.setTimeIds(courseP.getDay().getId().toString());
         } else if (courseP.getType() == 2) {
@@ -93,14 +99,16 @@ public class CourseMainController {
             }
             courseP.setTimeIds(ids.deleteCharAt(ids.length() - 1).toString());
         }
-        courseP.setTeacherName(iDingUserService.getById(courseP.getTeacherId()).getName());
-        courseP.setClassName(iSysClassService.getById(courseP.getClassId()).getName());
+        if (CheckUtils.isNotZero(courseP.getTeacherId())) courseP.setTeacherName(iDingUserService.getById(courseP.getTeacherId()).getName());
+        if (CheckUtils.isNotZero(courseP.getClassId())) courseP.setClassName(iSysClassService.getById(courseP.getClassId()).getName());
         StringBuffer stringBuffer = new StringBuffer();
         for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(courseP.getTimeIds().split(",")))) {
             stringBuffer.append(ct.getDay() + ":" + DateTimeUtils.formatTime(ct.getBegin()) + "-" + DateTimeUtils.formatTime(ct.getEnd()));
             stringBuffer.append("+\n");
         }
         courseP.setCourseTime(stringBuffer.toString());
+        if (CheckUtils.isNotZero(courseP.getClassNoId())) courseP.setClassNo(iSysClassNoService.getById(courseP.getClassNoId()).getName());
+        if (CheckUtils.isNotZero(courseP.getClassRoomId())) courseP.setClassRoom(iSysClassNoService.getById(courseP.getClassRoomId()).getName());
         iCourseMainService.save(courseP);
         return Result.ok("保存成功");
     }

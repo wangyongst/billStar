@@ -51,7 +51,7 @@
             <template slot-scope="scope">
               <el-button @click="update(scope.row.id)" type="text" size="mini">修改
               </el-button>
-              <el-button @click="delete(scope.row.id)" type="text" size="mini">删除
+              <el-button @click="deleteCourse(scope.row.id)" type="text" size="mini">删除
               </el-button>
             </template>
           </el-table-column>
@@ -121,10 +121,10 @@
       semesterChange(val) {
         this.query.semesterIds = val;
       },
-      delete(id) {
+      deleteCourse(id) {
         const _this = this;
         _this.httpUtils.appPost('/course/main/delete?id=' + id).then(function (res) {
-          _this.listClassNo();
+          _this.listCourse();
           _this.baseSuccessNotify(res);
         }, _this.operateFail);
       },
