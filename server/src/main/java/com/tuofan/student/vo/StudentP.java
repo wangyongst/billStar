@@ -19,8 +19,4 @@ public class StudentP extends StudentMain {
     private Integer chargeId;
 
     private Float amount;
-
-    private Integer myschoolId;
-
-    private Integer myclassId;
 }
