@@ -1,7 +1,9 @@
 package com.tuofan.setting.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tuofan.setting.entity.SysSubject;
+import com.tuofan.setting.service.ISysClassService;
 import com.tuofan.setting.service.ISysSubjectService;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
@@ -25,6 +27,9 @@ public class SysSubjectController {
     @Autowired
     private ISysSubjectService iSysSubjectService;
 
+    @Autowired
+    private ISysClassService iSysClassService;
+
     @GetMapping("list")
     public Result list() {
         return Result.ok(iSysSubjectService.listV());
@@ -40,6 +45,9 @@ public class SysSubjectController {
 
     @PostMapping("delete")
     public Result save(@RequestParam Integer id) {
+        QueryWrapper query = new QueryWrapper();
+        query.eq("subject_id", id);
+        if (iSysClassService.list(query).size() > 0) return Result.error("有班级，不能删除");
         iSysSubjectService.removeById(id);
         return Result.ok();
     }
