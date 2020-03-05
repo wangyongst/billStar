@@ -43,16 +43,13 @@ public class StudentMain implements Serializable {
      */
     private Boolean sex;
 
-    /**
-     * 学校；注意，该学校为学生就读学校
-     */
+    private Integer myschoolId;
+
     private String myschool;
 
-    /**
-     * 班级
-     */
-    private String myclass;
+    private Integer myclassId;
 
+    private String myclass;
     /**
      * 住址
      */
@@ -76,5 +73,4 @@ public class StudentMain implements Serializable {
     private Date createTime;
 
     private Date fuTime;
-
 }
