@@ -18,7 +18,7 @@
       </el-form-item>
 
       <el-form-item label="所属校区">
-        <el-select v-model="course.schoolId" placeholder="请选择" @change="listSchoolSelect">
+        <el-select v-model="course.schoolId" placeholder="请选择" @change="listTeacherSelect">
           <el-option v-for="item in schoolSelect" :value="item.id" :label="item.name" :key="item.id">
           </el-option>
         </el-select>
