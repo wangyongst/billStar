@@ -1,7 +1,6 @@
 package com.tuofan.core;
 
 
-
 import org.springframework.cglib.beans.BeanGenerator;
 import org.springframework.cglib.beans.BeanMap;
 
@@ -13,10 +12,6 @@ public class DynamicBean {
 
     private Object object = null; //动态生成的类
     private BeanMap beanMap = null; //存放属性名称以及属性的类型
-
-    public DynamicBean() {
-        super();
-    }
 
     public DynamicBean(Map propertyMap) {
         this.object = generateBean(propertyMap);

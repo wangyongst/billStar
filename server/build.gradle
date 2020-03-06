@@ -67,5 +67,4 @@ dependencies {
     compile("com.google.guava:guava:27.1-jre")
     compile("org.apache.commons:commons-lang3:3.8.1")
     compile("commons-beanutils:commons-beanutils:1.9.3")
-
 }

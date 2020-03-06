@@ -2,7 +2,6 @@ package com.tuofan.report.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.tuofan.configs.service.ISysConfigsService;
@@ -14,11 +13,9 @@ import com.tuofan.report.vo.ChargeReportQ;
 import com.tuofan.report.vo.ChargeReportV;
 import com.tuofan.report.vo.YearHeaderV;
 import com.tuofan.report.vo.YearReportV;
-import com.tuofan.setting.service.ISysChargeService;
 import com.tuofan.student.service.IStudentChargeService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,7 +72,7 @@ public class ReportController {
         propertyMap.put("schoolName", Class.forName("java.lang.String"));
         propertyMap.put("type", Class.forName("java.lang.String"));
         for (String s : createMonthBetween(begin, new Date()).stream().collect(Collectors.toSet())) {
-            propertyMap.put(s, Class.forName("java.lang.Float"));
+            propertyMap.put(s.replace("-","_"), Class.forName("java.lang.String"));
         }
         DynamicBean bean = new DynamicBean(propertyMap);
         return bean;
@@ -102,7 +99,7 @@ public class ReportController {
     public void makeBeanValue(List<DynamicBean> beanList, ChargeReportV crv) {
         for (DynamicBean bean : beanList) {
             if (bean.getValue("schoolName").equals(crv.getSchoolName())) {
-                bean.setValue(crv.getMonth(), crv.getSum());
+                bean.setValue(crv.getMonth().replace("-","_"), crv.getSum().toString());
             }
         }
     }
@@ -110,7 +107,7 @@ public class ReportController {
     public void makeBeanValueTotal(List<DynamicBean> beanList, ChargeReportV crv) {
         for (DynamicBean bean : beanList) {
             if (bean.getValue("schoolName").equals("总计")) {
-                bean.setValue(crv.getMonth(), crv.getSum());
+                bean.setValue(crv.getMonth().replace("-","_"), crv.getSum().toString());
             }
         }
     }
@@ -161,7 +158,7 @@ public class ReportController {
     public YearHeaderV makeHeader(String label, String prop) {
         YearHeaderV y = new YearHeaderV();
         y.setMyLabel(label);
-        y.setMyProp(prop);
+        y.setMyProp(prop.replace("-","_"));
         return y;
     }
 }
