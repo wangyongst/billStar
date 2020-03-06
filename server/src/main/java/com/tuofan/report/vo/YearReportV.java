@@ -10,5 +10,5 @@ public class YearReportV {
 
     public List header;
 
-    public IPage pageRecords;
+    public List pageRecords;
 }

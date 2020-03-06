@@ -28,20 +28,6 @@
       </el-table>
     </el-container>
 
-
-    <el-col :span="24">
-      <el-pagination
-        class="common-page"
-        background
-        layout="total,prev, pager, next"
-        :total="page.total"
-        :page-size="query.size"
-        :current-page="query.current"
-        @current-change="gotoPage"
-        @prev-click="gotoPage"
-        @next-click="gotoPage"
-      ></el-pagination>
-    </el-col>
   </el-container>
 
 </template>
@@ -55,13 +41,10 @@
     data() {
       return {
         page: {
-          total: 0,
           records: [],
           header: []
         },
         query: {
-          current: 1,
-          size: 10,
           schoolIds: [],
           begin: null
         },
@@ -79,19 +62,13 @@
         _this.loading = true;
         _this.httpUtils.appPost('/report/month', _this.query).then(function (res) {
           _this.page.header = res.header;
-          _this.page.records = res.pageRecords.records;
-          _this.page.total = res.pageRecords.total;
+          _this.page.records = res.pageRecords;
           _this.loading = false;
         }, _this.operateFail);
       },
       schoolChange(val) {
         console.log(val);
         this.query.schoolIds = val;
-      },
-      gotoPage(page) {
-        const _this = this;
-        _this.query.current = page;
-        _this.listStudentCourse();
       },
       operateFail(r) {
         const _this = this;
