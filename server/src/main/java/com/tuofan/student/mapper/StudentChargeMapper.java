@@ -49,5 +49,14 @@ public interface StudentChargeMapper extends BaseMapper<StudentCharge> {
             "join sys_charge type on type.id = charge.charge_id\n" +
             "${ew.customSqlSegment}\n" +
             "group by school.name,month")
-    IPage<ChargeReportV> reportMonth(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+    List<ChargeReportV> reportMonth(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+    @Select("select date_format(charge.create_time, '%Y-%m') month,sum(charge.amount) sum\n" +
+            "from student_charge charge\n" +
+            "join student_main student on charge.student_id = student.id\n" +
+            "join ding_dept school on school.id = student.school_id\n" +
+            "join sys_charge type on type.id = charge.charge_id\n" +
+            "${ew.customSqlSegment}\n" +
+            "group by month")
+    List<ChargeReportV> reportMonthTotal(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }

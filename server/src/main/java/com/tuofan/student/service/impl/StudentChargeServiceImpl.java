@@ -32,7 +32,12 @@ public class StudentChargeServiceImpl extends ServiceImpl<StudentChargeMapper, S
     }
 
     @Override
-    public IPage reportMonth(IPage page, QueryWrapper queryWrapper) {
-        return baseMapper.reportMonth(page, queryWrapper);
+    public List reportMonth(QueryWrapper queryWrapper) {
+        return baseMapper.reportMonth(queryWrapper);
+    }
+
+    @Override
+    public List reportMonthTotal(QueryWrapper queryWrapper) {
+        return baseMapper.reportMonthTotal(queryWrapper);
     }
 }

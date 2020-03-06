@@ -2,6 +2,7 @@ package com.tuofan.student.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tuofan.report.vo.ChargeReportV;
 import com.tuofan.student.entity.StudentCharge;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,6 +22,8 @@ public interface IStudentChargeService extends IService<StudentCharge> {
 
     IPage reportV(IPage page, QueryWrapper queryWrapper);
 
-    IPage reportMonth(IPage page, QueryWrapper queryWrapper);
+    List<ChargeReportV> reportMonth(QueryWrapper queryWrapper);
+
+    List<ChargeReportV>  reportMonthTotal(QueryWrapper queryWrapper);
 
 }

@@ -91,6 +91,10 @@ public class ReportController {
             b.setValue("type", "完成");
             beanList.add(b);
         }
+        DynamicBean b = makeBean(begin);
+        b.setValue("schoolName", "总计");
+        b.setValue("type", "完成");
+        beanList.add(b);
         return beanList;
     }
 
@@ -98,6 +102,14 @@ public class ReportController {
     public void makeBeanValue(List<DynamicBean> beanList, ChargeReportV crv) {
         for (DynamicBean bean : beanList) {
             if (bean.getValue("schoolName").equals(crv.getSchoolName())) {
+                bean.setValue(crv.getMonth(), crv.getSum());
+            }
+        }
+    }
+
+    public void makeBeanValueTotal(List<DynamicBean> beanList, ChargeReportV crv) {
+        for (DynamicBean bean : beanList) {
+            if (bean.getValue("schoolName").equals("总计")) {
                 bean.setValue(crv.getMonth(), crv.getSum());
             }
         }
@@ -128,20 +140,20 @@ public class ReportController {
             result.add(DateTimeUtils.formatDateTime(curr.getTime(), DateTimeUtils.DATE_FORMAT_MONTH));
             curr.add(Calendar.MONTH, 1);
         }
-
         return result;
     }
 
-
+    //5
     public List makeRecords(ChargeReportQ chargeReportQ) throws ClassNotFoundException, ParseException {
         QueryWrapper queryWrapper = new QueryWrapper();
         if (!CollectionUtils.isEmpty(chargeReportQ.getSchoolIds())) queryWrapper.in("school.id", chargeReportQ.getSchoolIds());
         if (chargeReportQ.getBegin() != null) queryWrapper.ge("charge.create_time", chargeReportQ.getBegin());
-        IPage page = iStudentChargeService.reportMonth(new Page(1, 999), queryWrapper);
-        List<ChargeReportV> list = page.getRecords();
         List<DynamicBean> beanList = makeBeanList();
-        for (ChargeReportV crv : list) {
+        for (ChargeReportV crv : iStudentChargeService.reportMonth(queryWrapper)) {
             makeBeanValue(beanList, crv);
+        }
+        for (val rmt : iStudentChargeService.reportMonthTotal(queryWrapper)) {
+            makeBeanValueTotal(beanList, rmt);
         }
         return beanList.stream().map(e -> e.getObject()).collect(Collectors.toList());
     }
