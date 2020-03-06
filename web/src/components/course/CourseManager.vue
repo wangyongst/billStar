@@ -49,7 +49,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" align="left" width="150">
             <template slot-scope="scope">
-              <el-button @click="update(scope.row.id)" type="text" size="mini">修改
+              <el-button @click="updateCourse(scope.row.id)" type="text" size="mini">修改
               </el-button>
               <el-button @click="deleteCourse(scope.row.id)" type="text" size="mini">删除
               </el-button>
@@ -72,6 +72,7 @@
         ></el-pagination>
       </el-col>
       <NewCourseDialog :onclose="listCourse"></NewCourseDialog>
+      <UpdateCourseDialog :id="updateId"></UpdateCourseDialog>
     </el-row>
   </div>
 </template>
@@ -82,12 +83,14 @@
   import BackToWork from "../back/BackToWork";
   import SemesterSelect from "../select/SemesterSelect";
   import NewCourseDialog from "../dialog/NewCourseDialog";
+  import UpdateCourseDialog from "../dialog/UpdateCourseDialog";
 
   export default {
     name: 'CourseManager',
-    components: {NewCourseDialog, SemesterSelect, BackToWork, SchoolSelect, SubjectSelect},
+    components: {UpdateCourseDialog, NewCourseDialog, SemesterSelect, BackToWork, SchoolSelect, SubjectSelect},
     data() {
       return {
+        updateId: null,
         page: {
           total: 0,
           records: [],
@@ -111,6 +114,11 @@
     methods: {
       newCourse() {
         eventBus.$emit("newCourse");
+      },
+      updateCourse(val) {
+        const _this = this;
+        _this.updateId = val;
+        eventBus.$emit("updateCourse");
       },
       schoolChange(val) {
         this.query.schoolIds = val;

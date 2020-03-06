@@ -113,5 +113,10 @@ public class CourseMainController {
         return Result.ok("保存成功");
     }
 
+    @PostMapping("update")
+    public Result update(@RequestBody CourseP courseP) {
+        System.out.println(courseP.getId());
+        return Result.ok("保存成功");
+    }
 }
 
