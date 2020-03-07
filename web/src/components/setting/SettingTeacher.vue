@@ -12,8 +12,7 @@
 
 
     <el-form label-width="100px" class="search-form">
-      <SchoolSelect @dataChange="schoolChange"
-                    @initFinish="schoolInitFinish"></SchoolSelect>
+      <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
       <el-form-item label="姓名：">
         <el-input size="mini" style="width: 120px" v-model="query.nameLike" placeholder="教师姓名"></el-input>
         <el-button class="btn-search" @click="searchFunc" size="mini">查询</el-button>
@@ -102,12 +101,14 @@
         loading: true,
       }
     },
+    mounted() {
+      const _this = this;
+      _this.listTeacher();
+    },
     methods: {
-      schoolInitFinish() {
-        this.listTeacher();
-      },
       searchFunc() {
         const _this = this;
+        this.query.current = 1;
         _this.listTeacher();
       },
       schoolChange(val) {
@@ -164,7 +165,7 @@
       gotoPage(page) {
         const _this = this;
         _this.query.current = page;
-        _this.listCourse();
+        _this.listTeacher();
       },
       operateFail(r) {
         const _this = this;
