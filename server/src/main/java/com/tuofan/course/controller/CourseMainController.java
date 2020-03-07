@@ -2,6 +2,7 @@ package com.tuofan.course.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tuofan.core.CheckUtils;
 import com.tuofan.core.Result;
@@ -17,12 +18,14 @@ import com.tuofan.setting.service.ISysClassNoService;
 import com.tuofan.setting.service.ISysClassRoomService;
 import com.tuofan.setting.service.ISysClassService;
 import com.tuofan.student.service.IStudentCourseService;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -80,6 +83,7 @@ public class CourseMainController {
         QueryWrapper query = new QueryWrapper();
         query.eq("course_id", id);
         if (iStudentCourseService.list(query).size() > 0) return Result.error("课程有学生，不能删除");
+        deleteCourseTime(course);
         iCourseMainService.removeById(id);
         return Result.ok();
     }
@@ -87,20 +91,43 @@ public class CourseMainController {
 
     @PostMapping("create")
     public Result create(@RequestBody CourseP courseP) {
-        iCourseMainService.save(makeCourse(courseP));
+        courseP = makeCourse(courseP);
+        Result result = checkCourseNot(courseP);
+        if (result.getCode() == 0) return result;
+        result = checkCourseDuplicate(courseP);
+        if (result.getCode() == 0) return result;
+        courseP = addCourseTime(courseP);
+        iCourseMainService.save(courseP);
         return Result.ok("保存成功");
     }
 
     @PostMapping("update")
     public Result update(@RequestBody CourseP courseP) {
-        iCourseMainService.updateById(makeCourse(courseP));
+        courseP = makeCourse(courseP);
+        Result result = checkCourseNot(courseP);
+        if (result.getCode() == 0) return result;
+        result = checkCourseDuplicate(courseP);
+        if (result.getCode() == 0) return result;
+        deleteCourseTime(iCourseMainService.getById(courseP.getId()));
+        courseP = addCourseTime(courseP);
+        iCourseMainService.updateById(courseP);
         return Result.ok("修改成功");
     }
 
     public CourseP makeCourse(CourseP courseP) {
+        if (CheckUtils.isNotZero(courseP.getTeacherId())) courseP.setTeacherName(iDingUserService.getById(courseP.getTeacherId()).getName());
+        if (CheckUtils.isNotZero(courseP.getClassId())) courseP.setClassName(iSysClassService.getById(courseP.getClassId()).getName());
+        if (CheckUtils.isNotZero(courseP.getClassNoId())) courseP.setClassNo(iSysClassNoService.getById(courseP.getClassNoId()).getName());
+        if (CheckUtils.isNotZero(courseP.getClassRoomId())) courseP.setClassRoom(iSysClassRoomService.getById(courseP.getClassRoomId()).getName());
+        return courseP;
+    }
+
+    public CourseP addCourseTime(CourseP courseP) {
         if (courseP.getType() == 1 && courseP.getDay() != null) {
-            iCourseTimeService.save(courseP.getDay());
-            courseP.setTimeIds(courseP.getDay().getId().toString());
+            if (courseP.getDay().getBegin() != null && courseP.getDay().getEnd() != null) {
+                iCourseTimeService.save(courseP.getDay());
+                courseP.setTimeIds(courseP.getDay().getId().toString());
+            }
         } else if (courseP.getType() == 2) {
             StringBuffer ids = new StringBuffer();
             for (CourseTime t : courseP.getDayList()) {
@@ -111,8 +138,7 @@ public class CourseMainController {
             }
             courseP.setTimeIds(ids.deleteCharAt(ids.length() - 1).toString());
         }
-        if (CheckUtils.isNotZero(courseP.getTeacherId())) courseP.setTeacherName(iDingUserService.getById(courseP.getTeacherId()).getName());
-        if (CheckUtils.isNotZero(courseP.getClassId())) courseP.setClassName(iSysClassService.getById(courseP.getClassId()).getName());
+        if (StringUtils.isBlank(courseP.getTimeIds())) return courseP;
         StringBuffer stringBuffer = new StringBuffer();
         for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(courseP.getTimeIds().split(",")))) {
             if (StringUtils.isNotBlank(ct.getDay()) && ct.getBegin() != null && ct.getEnd() != null) {
@@ -121,9 +147,31 @@ public class CourseMainController {
             }
         }
         courseP.setCourseTime(stringBuffer.toString());
-        if (CheckUtils.isNotZero(courseP.getClassNoId())) courseP.setClassNo(iSysClassNoService.getById(courseP.getClassNoId()).getName());
-        if (CheckUtils.isNotZero(courseP.getClassRoomId())) courseP.setClassRoom(iSysClassNoService.getById(courseP.getClassRoomId()).getName());
         return courseP;
+    }
+
+    public void deleteCourseTime(CourseMain courseMain) {
+        QueryWrapper query = new QueryWrapper();
+        query.in("id", courseMain.getTimeIds());
+        iCourseTimeService.remove(query);
+    }
+
+    public Result checkCourseNot(CourseP courseP) {
+        if (CheckUtils.isZero(courseP.getClassId())) return Result.error("班级是必填项");
+        if (CheckUtils.isZero(courseP.getSchoolId())) return Result.error("学区是必填项");
+        if (CheckUtils.isZero(courseP.getTeacherId())) return Result.error("教师是必填项");
+        return Result.ok();
+    }
+
+    public Result checkCourseDuplicate(CourseP courseP) {
+        if (CheckUtils.isNotZero(courseP.getId())) {
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("teacher_id", courseP.getTeacherId());
+            queryWrapper.eq("class_id", courseP.getClassId());
+            List<CourseMain> list = iCourseMainService.list(queryWrapper);
+            if (list.size() > 1 || list.get(0).getId() != courseP.getId()) return Result.error("课程信息不能重复");
+        }
+        return Result.ok();
     }
 }
 
