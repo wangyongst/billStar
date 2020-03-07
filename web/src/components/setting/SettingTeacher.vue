@@ -20,7 +20,7 @@
       </el-form-item>
 
     </el-form>
-    <el-container style="width: 100%">
+    <el-col :span="24">
       <el-table v-loading="loading" :data="page.records" class="bill-table" style="width: 100%">
         <el-table-column label="序号" type="index" width="80" align="center"></el-table-column>
         <el-table-column prop="name" label="姓名" width="120"></el-table-column>
@@ -60,19 +60,21 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-container>
+    </el-col>
 
-    <el-pagination
-      class="common-page"
-      background
-      layout="total,prev, pager, next"
-      :total="page.total"
-      :page-size="query.size"
-      :current-page="query.current"
-      @current-change="currentPage"
-      @prev-click="prevPage"
-      @next-click="nextPage"
-    ></el-pagination>
+    <el-col :span="24">
+      <el-pagination
+        class="common-page"
+        background
+        layout="total,prev, pager, next"
+        :total="page.total"
+        :page-size="query.size"
+        :current-page="query.current"
+        @current-change="gotoPage"
+        @prev-click="gotoPage"
+        @next-click="gotoPage"
+      ></el-pagination>
+    </el-col>
 
   </el-container>
 
@@ -159,20 +161,10 @@
       },
 
       // 尝试分页
-      currentPage(page) {
+      gotoPage(page) {
         const _this = this;
         _this.query.current = page;
-        _this.listTeacher();
-      },
-      prevPage(page) {
-        const _this = this;
-        _this.query.current = page;
-        _this.listTeacher();
-      },
-      nextPage(page) {
-        const _this = this;
-        _this.query.current = page;
-        _this.listTeacher();
+        _this.listCourse();
       },
       operateFail(r) {
         const _this = this;
