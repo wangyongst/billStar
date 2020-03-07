@@ -17,6 +17,7 @@ import com.tuofan.setting.service.ISysClassNoService;
 import com.tuofan.setting.service.ISysClassRoomService;
 import com.tuofan.setting.service.ISysClassService;
 import com.tuofan.student.service.IStudentCourseService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -86,35 +87,17 @@ public class CourseMainController {
 
     @PostMapping("create")
     public Result create(@RequestBody CourseP courseP) {
-        if (courseP.getType() == 1 && courseP.getDay() != null) {
-            iCourseTimeService.save(courseP.getDay());
-            courseP.setTimeIds(courseP.getDay().getId().toString());
-        } else if (courseP.getType() == 2) {
-            StringBuffer ids = new StringBuffer();
-            for (CourseTime t : courseP.getDayList()) {
-                if (t.getBegin() != null && t.getEnd() != null) {
-                    iCourseTimeService.save(t);
-                    ids.append(t.getId()).append(",");
-                }
-            }
-            courseP.setTimeIds(ids.deleteCharAt(ids.length() - 1).toString());
-        }
-        if (CheckUtils.isNotZero(courseP.getTeacherId())) courseP.setTeacherName(iDingUserService.getById(courseP.getTeacherId()).getName());
-        if (CheckUtils.isNotZero(courseP.getClassId())) courseP.setClassName(iSysClassService.getById(courseP.getClassId()).getName());
-        StringBuffer stringBuffer = new StringBuffer();
-        for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(courseP.getTimeIds().split(",")))) {
-            stringBuffer.append(ct.getDay() + ":" + DateTimeUtils.formatTime(ct.getBegin()) + "-" + DateTimeUtils.formatTime(ct.getEnd()));
-            stringBuffer.append("+\n");
-        }
-        courseP.setCourseTime(stringBuffer.toString());
-        if (CheckUtils.isNotZero(courseP.getClassNoId())) courseP.setClassNo(iSysClassNoService.getById(courseP.getClassNoId()).getName());
-        if (CheckUtils.isNotZero(courseP.getClassRoomId())) courseP.setClassRoom(iSysClassNoService.getById(courseP.getClassRoomId()).getName());
-        iCourseMainService.save(courseP);
+        iCourseMainService.save(makeCourse(courseP));
         return Result.ok("保存成功");
     }
 
     @PostMapping("update")
     public Result update(@RequestBody CourseP courseP) {
+        iCourseMainService.updateById(makeCourse(courseP));
+        return Result.ok("修改成功");
+    }
+
+    public CourseP makeCourse(CourseP courseP) {
         if (courseP.getType() == 1 && courseP.getDay() != null) {
             iCourseTimeService.save(courseP.getDay());
             courseP.setTimeIds(courseP.getDay().getId().toString());
@@ -132,14 +115,15 @@ public class CourseMainController {
         if (CheckUtils.isNotZero(courseP.getClassId())) courseP.setClassName(iSysClassService.getById(courseP.getClassId()).getName());
         StringBuffer stringBuffer = new StringBuffer();
         for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(courseP.getTimeIds().split(",")))) {
-            stringBuffer.append(ct.getDay() + ":" + DateTimeUtils.formatTime(ct.getBegin()) + "-" + DateTimeUtils.formatTime(ct.getEnd()));
-            stringBuffer.append("+\n");
+            if (StringUtils.isNotBlank(ct.getDay()) && ct.getBegin() != null && ct.getEnd() != null) {
+                stringBuffer.append(ct.getDay() + ":" + DateTimeUtils.formatTime(ct.getBegin()) + "-" + DateTimeUtils.formatTime(ct.getEnd()));
+                stringBuffer.append("+\n");
+            }
         }
         courseP.setCourseTime(stringBuffer.toString());
         if (CheckUtils.isNotZero(courseP.getClassNoId())) courseP.setClassNo(iSysClassNoService.getById(courseP.getClassNoId()).getName());
         if (CheckUtils.isNotZero(courseP.getClassRoomId())) courseP.setClassRoom(iSysClassNoService.getById(courseP.getClassRoomId()).getName());
-        iCourseMainService.updateById(courseP);
-        return Result.ok("修改成功");
+        return courseP;
     }
 }
 

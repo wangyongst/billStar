@@ -126,7 +126,6 @@
       listTeacher() {
         const _this = this;
         _this.loading = true;
-        _this.query.current = 1;
         _this.httpUtils.appPost('/teacher/page', _this.query).then(function (res) {
           _this.loading = false;
           _this.page.records = res.records;
