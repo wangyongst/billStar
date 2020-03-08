@@ -41,9 +41,16 @@ public class DateTimeUtils extends DateUtils {
 
     public static final String TIME_FORMAT_DEFAULT = "HH:mm:ss";
 
+    public static final String TIME_FORMAT_HOURMINTER = "HH:mm:ss";
+
     public static String formatTime(Date date) {
         return DateFormatUtils.format(date, TIME_FORMAT_DEFAULT);
     }
+
+    public static String formatTimeHourminter(Date date) {
+        return DateFormatUtils.format(date, TIME_FORMAT_HOURMINTER);
+    }
+
 
     /**
      * 获取当前时间字符串
