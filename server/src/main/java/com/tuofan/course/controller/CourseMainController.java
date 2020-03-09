@@ -94,15 +94,17 @@ public class CourseMainController {
 
     @PostMapping("create")
     public Result create(@RequestBody CourseP courseP) {
-        courseP = makeCourse(courseP);
         Result result = checkCourseNot(courseP);
         if (result.getCode() == 0) return result;
+        result = checkClassNoNotMe(courseP);
+        if (result.getCode() == 0) return result;
+        courseP = makeCourseTime(courseP);
+        if(CollectionUtils.isEmpty(courseP.getDayList()))  return Result.error("上课时间是必填项");
         result = checkTeacherAndTime(courseP);
         if (result.getCode() == 0) return result;
         result = checkClassNoAndTime(courseP);
         if (result.getCode() == 0) return result;
-        result = checkClassNoNotMe(courseP);
-        if (result.getCode() == 0) return result;
+        courseP = makeCourse(courseP);
         courseP = addCourseTime(courseP);
         iCourseMainService.save(courseP);
         return Result.ok("保存成功");
@@ -110,19 +112,36 @@ public class CourseMainController {
 
     @PostMapping("update")
     public Result update(@RequestBody CourseP courseP) {
-        courseP = makeCourse(courseP);
         Result result = checkCourseNot(courseP);
         if (result.getCode() == 0) return result;
+        result = checkClassNoNotMe(courseP);
+        if (result.getCode() == 0) return result;
+        courseP = makeCourseTime(courseP);
+        if(CollectionUtils.isEmpty(courseP.getDayList()))  return Result.error("上课时间是必填项");
         result = checkTeacherAndTime(courseP);
         if (result.getCode() == 0) return result;
         result = checkClassNoAndTime(courseP);
         if (result.getCode() == 0) return result;
-        result = checkClassNoNotMe(courseP);
+        courseP = makeCourse(courseP);
         deleteCourseTime(iCourseMainService.getById(courseP.getId()));
-        courseP.setCourseTime(null);
         courseP = addCourseTime(courseP);
         iCourseMainService.updateById(courseP);
         return Result.ok("修改成功");
+    }
+
+    public CourseP makeCourseTime(CourseP courseP) {
+        List<CourseTime> courseTimeList = Lists.newArrayList();
+        if (courseP.getType() == 1 && courseP.getDay() != null && courseP.getDay().getBegin() != null && courseP.getDay().getEnd() != null) {
+            courseTimeList.add(courseP.getDay());
+        } else if (courseP.getType() == 2) {
+            for (CourseTime t : courseP.getDayList()) {
+                if (t.getBegin() != null && t.getEnd() != null) {
+                    courseTimeList.add(t);
+                }
+            }
+        }
+        courseP.setDayList(courseTimeList);
+        return courseP;
     }
 
     public CourseP makeCourse(CourseP courseP) {
@@ -134,34 +153,23 @@ public class CourseMainController {
     }
 
     public CourseP addCourseTime(CourseP courseP) {
-        if (courseP.getType() == 1 && courseP.getDay() != null) {
-            if (courseP.getDay().getBegin() != null && courseP.getDay().getEnd() != null) {
-                iCourseTimeService.save(courseP.getDay());
-                courseP.setTimeIds(courseP.getDay().getId().toString());
-            }
-        } else if (courseP.getType() == 2) {
-            StringBuffer ids = new StringBuffer();
-            for (CourseTime t : courseP.getDayList()) {
-                if (t.getBegin() != null && t.getEnd() != null) {
-                    iCourseTimeService.save(t);
-                    ids.append(t.getId()).append(",");
-                }
-            }
-            courseP.setTimeIds(ids.toString());
+        StringBuffer courseTime = new StringBuffer();
+        StringBuffer timeIds = new StringBuffer();
+        if (courseP.getDayList().size() == 0) return courseP;
+        iCourseTimeService.saveBatch(courseP.getDayList());
+        for (CourseTime ct : courseP.getDayList()) {
+            timeIds.append(ct.getId());
+            timeIds.append(",");
+            courseTime.append(ct.getDay() + ":" + ct.getBegin().format(DateTimeFormatter.ofPattern("HH:mm")) + "-" + ct.getEnd().format(DateTimeFormatter.ofPattern("HH:mm")));
+            courseTime.append("+\n");
         }
-        if (StringUtils.isBlank(courseP.getTimeIds())) return courseP;
-        StringBuffer stringBuffer = new StringBuffer();
-        for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(courseP.getTimeIds().split(",")))) {
-            if (StringUtils.isNotBlank(ct.getDay()) && ct.getBegin() != null && ct.getEnd() != null) {
-                stringBuffer.append(ct.getDay() + ":" + ct.getBegin().format(DateTimeFormatter.ofPattern("HH:mm")) + "-" + ct.getEnd().format(DateTimeFormatter.ofPattern("HH:mm")));
-                stringBuffer.append("+\n");
-            }
-        }
-        if (stringBuffer.length() > 1) courseP.setCourseTime(stringBuffer.substring(0, stringBuffer.length() - 2));
+        courseP.setCourseTime(courseTime.substring(0, courseTime.length() - 2));
+        courseP.setTimeIds(timeIds.substring(0, timeIds.length() - 1));
         return courseP;
     }
 
     public void deleteCourseTime(CourseMain courseMain) {
+        if (StringUtils.isBlank(courseMain.getTimeIds())) return;
         QueryWrapper query = new QueryWrapper();
         query.in("id", Arrays.asList(courseMain.getTimeIds().split(",")));
         iCourseTimeService.remove(query);
@@ -225,41 +233,28 @@ public class CourseMainController {
 
     public List<CourseTime> checkTimeDuplicateNotMe(CourseP courseP) {
         List<CourseTime> courseTimes = Lists.newArrayList();
-        if (courseP.getType() == 1 && courseP.getDay() != null) {
-            if (courseP.getDay().getBegin() != null && courseP.getDay().getEnd() != null) {
-                QueryWrapper<CourseTime> queryWrapper = new QueryWrapper();
-                queryWrapper.lambda()
-                        .or(e -> e.le(CourseTime::getBegin, courseP.getDay().getBegin()).ge(CourseTime::getEnd, courseP.getDay().getBegin()))
-                        .or(e -> e.le(CourseTime::getBegin, courseP.getDay().getEnd()).ge(CourseTime::getEnd, courseP.getDay().getEnd()));
-                List<CourseTime> list = iCourseTimeService.list(queryWrapper);
-                if (CheckUtils.isNotZero(courseP.getId())) {
-                    list = list.stream().filter(e -> !Arrays.asList(courseP.getTimeIds().split(",")).contains(e)).collect(Collectors.toList());
-                }
-                if (list.size() > 0) courseTimes.addAll(list);
-            }
-        } else if (courseP.getType() == 2) {
-            for (CourseTime t : courseP.getDayList()) {
-                if (t.getBegin() != null && t.getEnd() != null) {
-                    QueryWrapper<CourseTime> queryWrapper = new QueryWrapper();
-                    queryWrapper.lambda()
-                            .or(e -> e.le(CourseTime::getBegin, t.getBegin()).ge(CourseTime::getEnd, t.getBegin()))
-                            .or(e -> e.le(CourseTime::getBegin, t.getEnd()).ge(CourseTime::getEnd, t.getEnd()));
-                    List<CourseTime> list = iCourseTimeService.list(queryWrapper);
-                    if (CheckUtils.isNotZero(courseP.getId())) {
-                        list = list.stream().filter(e -> !Arrays.asList(courseP.getTimeIds().split(",")).contains(e)).collect(Collectors.toList());
-                    }
-                    list = list.stream().filter(e -> e.getDay() == t.getDay() || e.getType() == 1).collect(Collectors.toList());
-                    if (list.size() > 0) courseTimes.addAll(list);
-                }
-            }
+        for (CourseTime t : courseP.getDayList()) {
+            QueryWrapper<CourseTime> queryWrapper = new QueryWrapper();
+            queryWrapper.lambda()
+                    .or(e -> e.le(CourseTime::getBegin, t.getBegin()).ge(CourseTime::getEnd, t.getBegin()))
+                    .or(e -> e.le(CourseTime::getBegin, t.getEnd()).ge(CourseTime::getEnd, t.getEnd()));
+            List<CourseTime> list = iCourseTimeService.list(queryWrapper);
+            list = list.stream().filter(e -> e.getDay().equals(t.getDay()) || e.getType() == 1).collect(Collectors.toList());
+            if (list.size() > 0) courseTimes.addAll(list);
+        }
+        if (CheckUtils.isNotZero(courseP.getId())) {
+            courseTimes = courseTimes.stream().filter(e -> !Arrays.asList(courseP.getTimeIds().split(",")).contains(e)).collect(Collectors.toList());
         }
         return courseTimes;
     }
 
+
     public List<CourseMain> listTeacherDuplicateNotMe(CourseP courseP) {
         QueryWrapper<CourseMain> queryWrapper = new QueryWrapper();
         queryWrapper.eq("teacher_id", courseP.getTeacherId());
-        return iCourseMainService.list(queryWrapper).stream().filter(e -> e.getId() != courseP.getId()).collect(Collectors.toList());
+        List<CourseMain> list = iCourseMainService.list(queryWrapper);
+        if (CheckUtils.isNotZero(courseP.getId())) list = list.stream().filter(e -> e.getId() != courseP.getId()).collect(Collectors.toList());
+        return list;
     }
 }
 
