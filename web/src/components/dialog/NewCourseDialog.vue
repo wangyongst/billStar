@@ -75,6 +75,7 @@
             每天&nbsp;&nbsp;
             <el-time-picker
               format="HH:mm"
+              value-format="HH:mm"
               class="datetime"
               v-model="course.day.begin"
               type="datetime"
@@ -84,6 +85,7 @@
             &nbsp;&nbsp;开始
             <el-time-picker
               format="HH:mm"
+              value-format="HH:mm"
               class="datetime"
               v-model="course.day.end"
               type="datetime"
@@ -100,6 +102,7 @@
               <el-checkbox size="mini" :label="1"> 周一&nbsp;&nbsp;
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[0].begin"
                   type="datetime"
@@ -109,6 +112,7 @@
                 &nbsp;&nbsp;开始
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[0].end"
                   type="datetime"
@@ -123,6 +127,7 @@
               <el-checkbox size="mini" :label="1"> 周二&nbsp;&nbsp;
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[1].begin"
                   type="datetime"
@@ -132,6 +137,7 @@
                 &nbsp;&nbsp;开始
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[1].end"
                   type="datetime"
@@ -146,6 +152,7 @@
               <el-checkbox size="mini" :label="1"> 周三&nbsp;&nbsp;
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[2].begin"
                   type="datetime"
@@ -155,6 +162,7 @@
                 &nbsp;&nbsp;开始
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[2].end"
                   type="datetime"
@@ -169,6 +177,7 @@
               <el-checkbox size="mini" :label="1">周四&nbsp;&nbsp;
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[3].begin"
                   type="datetime"
@@ -177,6 +186,8 @@
                 </el-time-picker>
                 &nbsp;&nbsp;开始
                 <el-time-picker
+                  format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[3].end"
                   type="datetime"
@@ -191,6 +202,7 @@
               <el-checkbox size="mini" :label="1">周五&nbsp;&nbsp;
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[4].begin"
                   type="datetime"
@@ -200,6 +212,7 @@
                 &nbsp;&nbsp;开始
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[4].end"
                   type="datetime"
@@ -214,6 +227,7 @@
               <el-checkbox size="mini" :label="1">周六&nbsp;&nbsp;
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[5].begin"
                   type="datetime"
@@ -223,6 +237,7 @@
                 &nbsp;&nbsp;开始
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[5].end"
                   type="datetime"
@@ -237,6 +252,7 @@
               <el-checkbox size="mini" :label="1">周日&nbsp;&nbsp;
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[6].begin"
                   type="datetime"
@@ -246,6 +262,7 @@
                 &nbsp;&nbsp;开始
                 <el-time-picker
                   format="HH:mm"
+                  value-format="HH:mm"
                   class="datetime"
                   v-model="course.dayList[6].end"
                   type="datetime"

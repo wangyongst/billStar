@@ -3,6 +3,7 @@ package com.tuofan.course.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.Lists;
 import com.tuofan.core.CheckUtils;
 import com.tuofan.core.Result;
 import com.tuofan.core.utils.DateTimeUtils;
@@ -22,7 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,9 +97,11 @@ public class CourseMainController {
         courseP = makeCourse(courseP);
         Result result = checkCourseNot(courseP);
         if (result.getCode() == 0) return result;
-        result = checkCourseDuplicate(courseP);
+        result = checkTeacherAndTime(courseP);
         if (result.getCode() == 0) return result;
-        result = checkTimeDuplicate(courseP);
+        result = checkClassNoAndTime(courseP);
+        if (result.getCode() == 0) return result;
+        result = checkClassNoNotMe(courseP);
         if (result.getCode() == 0) return result;
         courseP = addCourseTime(courseP);
         iCourseMainService.save(courseP);
@@ -107,11 +113,13 @@ public class CourseMainController {
         courseP = makeCourse(courseP);
         Result result = checkCourseNot(courseP);
         if (result.getCode() == 0) return result;
-        result = checkCourseDuplicate(courseP);
+        result = checkTeacherAndTime(courseP);
         if (result.getCode() == 0) return result;
-        result = checkTimeDuplicate(courseP);
+        result = checkClassNoAndTime(courseP);
         if (result.getCode() == 0) return result;
+        result = checkClassNoNotMe(courseP);
         deleteCourseTime(iCourseMainService.getById(courseP.getId()));
+        courseP.setCourseTime(null);
         courseP = addCourseTime(courseP);
         iCourseMainService.updateById(courseP);
         return Result.ok("修改成功");
@@ -145,17 +153,17 @@ public class CourseMainController {
         StringBuffer stringBuffer = new StringBuffer();
         for (CourseTime ct : iCourseTimeService.listByIds(Arrays.asList(courseP.getTimeIds().split(",")))) {
             if (StringUtils.isNotBlank(ct.getDay()) && ct.getBegin() != null && ct.getEnd() != null) {
-                stringBuffer.append(ct.getDay() + ":" + DateTimeUtils.formatTimeHourminter(ct.getBegin()) + "-" + DateTimeUtils.formatTimeHourminter(ct.getEnd()));
+                stringBuffer.append(ct.getDay() + ":" + ct.getBegin().format(DateTimeFormatter.ofPattern("HH:mm")) + "-" + ct.getEnd().format(DateTimeFormatter.ofPattern("HH:mm")));
                 stringBuffer.append("+\n");
             }
         }
-        if (stringBuffer.length() > 1) courseP.setCourseTime(stringBuffer.substring(0, stringBuffer.length() - 1));
+        if (stringBuffer.length() > 1) courseP.setCourseTime(stringBuffer.substring(0, stringBuffer.length() - 2));
         return courseP;
     }
 
     public void deleteCourseTime(CourseMain courseMain) {
         QueryWrapper query = new QueryWrapper();
-        query.in("id", courseMain.getTimeIds());
+        query.in("id", Arrays.asList(courseMain.getTimeIds().split(",")));
         iCourseTimeService.remove(query);
     }
 
@@ -164,54 +172,94 @@ public class CourseMainController {
         if (CheckUtils.isZero(courseP.getClassId())) return Result.error("班级是必填项");
         if (CheckUtils.isZero(courseP.getSchoolId())) return Result.error("学区是必填项");
         if (CheckUtils.isZero(courseP.getTeacherId())) return Result.error("教师是必填项");
+        if (CheckUtils.isZero(courseP.getClassRoomId())) return Result.error("教室是必填项");
+        if (CheckUtils.isZero(courseP.getClassNoId())) return Result.error("班别是必填项");
         return Result.ok();
     }
 
-    public Result checkCourseDuplicate(CourseP courseP) {
+    //3、相同班级和科目的情况下，班别不能相同。
+    public Result checkClassNoNotMe(CourseP courseP) {
         QueryWrapper<CourseMain> queryWrapper = new QueryWrapper();
-        queryWrapper.lambda()
-                .or(e -> e.eq(CourseMain::getClassId, courseP.getClassId()))
-                .or(e -> e.eq(CourseMain::getTeacherId, courseP.getTeacherId()))
-                .or(e -> e.eq(CourseMain::getClassNoId, courseP.getClassNoId()))
-                .or(e -> e.eq(CourseMain::getClassRoomId, courseP.getClassRoomId()));
+        queryWrapper.eq("class_id", courseP.getClassId());
+        queryWrapper.eq("class_no_id", courseP.getClassNoId());
         List<CourseMain> list = iCourseMainService.list(queryWrapper);
         if (CheckUtils.isNotZero(courseP.getId())) {
             list = list.stream().filter(e -> e.getId() != courseP.getId()).collect(Collectors.toList());
         }
-        if (list.size() > 0) return Result.error("课程信息不能重复");
+        if (list.size() > 0) return Result.error("相同班级和科目的情况下，班别不能相同");
         return Result.ok();
     }
 
-    public Result checkTimeDuplicate(CourseP courseP) {
+    //2、同一个教室在同一个时间段，只能有一个班。
+    public Result checkClassNoAndTime(CourseP courseP) {
+        StringBuffer ids = new StringBuffer();
+        listClassRoomDuplicateNotMe(courseP).forEach(e -> ids.append(e.getTimeIds()).append(","));
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.in("id", Arrays.asList(ids.toString().split(",")));
+        List<CourseTime> courseTimes = iCourseTimeService.list(queryWrapper);
+        List<CourseTime> courseTimeList = checkTimeDuplicateNotMe(courseP);
+        List list = courseTimeList.stream().filter(e -> courseTimes.contains(e)).collect(Collectors.toList());
+        if (list.size() > 0) return Result.error("同一个教室在同一个时间段，只能有一个班");
+        return Result.ok();
+    }
+
+    //1、同一个老师在同一个时间段，只能带一个课
+    public Result checkTeacherAndTime(CourseP courseP) {
+        StringBuffer ids = new StringBuffer();
+        listTeacherDuplicateNotMe(courseP).forEach(e -> ids.append(e.getTimeIds()).append(","));
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.in("id", Arrays.asList(ids.toString().split(",")));
+        List<CourseTime> courseTimes = iCourseTimeService.list(queryWrapper);
+        List<CourseTime> courseTimeList = checkTimeDuplicateNotMe(courseP);
+        List list = courseTimeList.stream().filter(e -> courseTimes.contains(e)).collect(Collectors.toList());
+        if (list.size() > 0) return Result.error("同一个老师在同一个时间段，只能带一个课");
+        return Result.ok();
+    }
+
+    public List<CourseMain> listClassRoomDuplicateNotMe(CourseP courseP) {
+        QueryWrapper<CourseMain> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("class_room_id", courseP.getClassRoomId());
+        return iCourseMainService.list(queryWrapper).stream().filter(e -> e.getId() != courseP.getId()).collect(Collectors.toList());
+    }
+
+
+    public List<CourseTime> checkTimeDuplicateNotMe(CourseP courseP) {
+        List<CourseTime> courseTimes = Lists.newArrayList();
         if (courseP.getType() == 1 && courseP.getDay() != null) {
             if (courseP.getDay().getBegin() != null && courseP.getDay().getEnd() != null) {
                 QueryWrapper<CourseTime> queryWrapper = new QueryWrapper();
                 queryWrapper.lambda()
-                        .or(e -> e.le(CourseTime::getBegin, courseP.getDay().getEnd()))
-                        .or(e -> e.ge(CourseTime::getEnd, courseP.getDay().getBegin()));
+                        .or(e -> e.le(CourseTime::getBegin, courseP.getDay().getBegin()).ge(CourseTime::getEnd, courseP.getDay().getBegin()))
+                        .or(e -> e.le(CourseTime::getBegin, courseP.getDay().getEnd()).ge(CourseTime::getEnd, courseP.getDay().getEnd()));
                 List<CourseTime> list = iCourseTimeService.list(queryWrapper);
                 if (CheckUtils.isNotZero(courseP.getId())) {
                     list = list.stream().filter(e -> !Arrays.asList(courseP.getTimeIds().split(",")).contains(e)).collect(Collectors.toList());
                 }
-                if (list.size() > 0) return Result.error("课程时间不能重复");
+                if (list.size() > 0) courseTimes.addAll(list);
             }
         } else if (courseP.getType() == 2) {
             for (CourseTime t : courseP.getDayList()) {
                 if (t.getBegin() != null && t.getEnd() != null) {
                     QueryWrapper<CourseTime> queryWrapper = new QueryWrapper();
                     queryWrapper.lambda()
-                            .or(e -> e.le(CourseTime::getBegin, courseP.getDay().getEnd()))
-                            .or(e -> e.ge(CourseTime::getEnd, courseP.getDay().getBegin()));
+                            .or(e -> e.le(CourseTime::getBegin, t.getBegin()).ge(CourseTime::getEnd, t.getBegin()))
+                            .or(e -> e.le(CourseTime::getBegin, t.getEnd()).ge(CourseTime::getEnd, t.getEnd()));
                     List<CourseTime> list = iCourseTimeService.list(queryWrapper);
                     if (CheckUtils.isNotZero(courseP.getId())) {
                         list = list.stream().filter(e -> !Arrays.asList(courseP.getTimeIds().split(",")).contains(e)).collect(Collectors.toList());
                     }
-                    list = list.stream().filter(e -> e.getDay() != t.getDay()).collect(Collectors.toList());
-                    if (list.size() > 0) return Result.error("课程时间不能重复");
+                    list = list.stream().filter(e -> e.getDay() == t.getDay() || e.getType() == 1).collect(Collectors.toList());
+                    if (list.size() > 0) courseTimes.addAll(list);
                 }
             }
         }
-        return Result.ok();
+        return courseTimes;
+    }
+
+    public List<CourseMain> listTeacherDuplicateNotMe(CourseP courseP) {
+        QueryWrapper<CourseMain> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("teacher_id", courseP.getTeacherId());
+        return iCourseMainService.list(queryWrapper).stream().filter(e -> e.getId() != courseP.getId()).collect(Collectors.toList());
     }
 }
 

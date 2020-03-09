@@ -1,14 +1,17 @@
 package com.tuofan.course.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.Date;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.JdbcType;
 
 /**
  * <p>
@@ -32,9 +35,9 @@ public class CourseTime implements Serializable {
 
     private String day;
 
-    private Date begin;
+    private LocalTime begin;
 
-    private Date end;
+    private LocalTime end;
 
 
 }
