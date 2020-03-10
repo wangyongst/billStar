@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/bill/report")
-public class ReportController {
+public class ChargeReportController {
 
     @Autowired
     private ISysConfigsService iSysConfigsService;
@@ -56,14 +55,6 @@ public class ReportController {
         if (!CollectionUtils.isEmpty(chargeReportQ.getSchoolIds())) queryWrapper.in("school.id", chargeReportQ.getSchoolIds());
         if (chargeReportQ.getBegin() != null && chargeReportQ.getEnd() != null) queryWrapper.between("charge.create_time", chargeReportQ.getBegin(), chargeReportQ.getEnd());
         return Result.ok(iStudentChargeService.reportV(new Page(chargeReportQ.getCurrent(), chargeReportQ.getSize()), queryWrapper));
-    }
-
-    @PostMapping("month")
-    public Result month(@RequestBody ChargeReportQ chargeReportQ) throws ClassNotFoundException, ParseException {
-        YearReportV yearReportV = new YearReportV();
-        yearReportV.setHeader(makeHeader(chargeReportQ));
-        yearReportV.setPageRecords(makeRecords(chargeReportQ));
-        return Result.ok(yearReportV);
     }
 
     //1

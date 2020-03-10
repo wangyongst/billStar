@@ -10,10 +10,10 @@
 
           <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
           <el-row>
-            <el-col :span="4">
-              欠费总金额：<span>{{page.arrears}}</span>
+            <el-col :span="4" :offset="1">
+              <span style="font-family: 黑体">欠费总金额：{{page.arrears}}</span>
             </el-col>
-            <el-col :span="6" :offset="16">
+            <el-col :span="6" :offset="10">
               <el-button @click="listArreas" type="primary" size="mini" plain round>查询</el-button>
             </el-col>
           </el-row>
@@ -48,7 +48,7 @@
       <el-dialog class="bill-dialog" title="补费"
                  :visible.sync="createDialogVisible">
         <el-form :model="charge">
-          <el-form-item label="科目">
+          <el-form-item label="收费类型">
             <el-select v-model="charge.chargeId" placeholder="请选择收费类型">
               <el-option v-for="item in chargeSelect" :key="item.id" :label="item.name" :value="item.id">
               </el-option>

@@ -113,6 +113,7 @@
 
     mounted: function () {
       const _this = this;
+      _this.query.current = 1;
       _this.listStudentCharge();
     },
 
@@ -135,7 +136,7 @@
       gotoPage(page) {
         const _this = this;
         _this.query.current = page;
-        _this.listStudentCourse();
+        _this.listStudentCharge();
       },
       typeFomatter(row, col, val) {
         if(val == 1) return "新生";
