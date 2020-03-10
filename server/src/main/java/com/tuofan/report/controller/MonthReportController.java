@@ -50,14 +50,6 @@ public class MonthReportController {
     @Autowired
     private IDingDeptService iDingDeptService;
 
-    @PostMapping("charge")
-    public Result list(@RequestBody ChargeReportQ chargeReportQ) {
-        QueryWrapper queryWrapper = new QueryWrapper();
-        if (!CollectionUtils.isEmpty(chargeReportQ.getSchoolIds())) queryWrapper.in("school.id", chargeReportQ.getSchoolIds());
-        if (chargeReportQ.getBegin() != null && chargeReportQ.getEnd() != null) queryWrapper.between("charge.create_time", chargeReportQ.getBegin(), chargeReportQ.getEnd());
-        return Result.ok(iStudentChargeService.reportV(new Page(chargeReportQ.getCurrent(), chargeReportQ.getSize()), queryWrapper));
-    }
-
     @PostMapping("month")
     public Result month(@RequestBody ChargeReportQ chargeReportQ) throws ClassNotFoundException, ParseException {
         YearReportV yearReportV = new YearReportV();

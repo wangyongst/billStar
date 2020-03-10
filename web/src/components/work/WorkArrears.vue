@@ -9,6 +9,7 @@
         <el-form label-width="100px" class="search-form" size="mini">
 
           <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
+          <el-row style="height: 20px"></el-row>
           <el-row>
             <el-col :span="4" :offset="1">
               <span style="font-family: 黑体">欠费总金额：{{page.arrears}}</span>
