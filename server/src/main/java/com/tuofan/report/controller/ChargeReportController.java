@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.core.DynamicBean;
 import com.tuofan.core.Result;
+import com.tuofan.core.TimeUtils;
 import com.tuofan.core.utils.DateTimeUtils;
 import com.tuofan.orgination.service.IDingDeptService;
 import com.tuofan.report.vo.ChargeReportQ;
@@ -63,7 +64,7 @@ public class ChargeReportController {
         HashMap propertyMap = new HashMap();
         propertyMap.put("schoolName", Class.forName("java.lang.String"));
         for (String s : createType()) {
-            propertyMap.put(s, Class.forName("java.lang.String"));
+            propertyMap.put(s.replace("-", "_"), Class.forName("java.lang.String"));
         }
         propertyMap.put("total", Class.forName("java.lang.String"));
         DynamicBean bean = new DynamicBean(propertyMap);
@@ -88,7 +89,7 @@ public class ChargeReportController {
     public void makeBeanValue(List<DynamicBean> beanList, ChargeReportV crv) {
         for (DynamicBean bean : beanList) {
             if (bean.getValue("schoolName").equals(crv.getSchoolName())) {
-                bean.setValue(crv.getChargeType(), crv.getSum().toString());
+                bean.setValue(crv.getChargeType().replace("-", "_"), crv.getSum().toString());
             }
         }
     }
@@ -96,7 +97,7 @@ public class ChargeReportController {
     public void makeBeanValueTotal(List<DynamicBean> beanList, ChargeReportV crv) {
         for (DynamicBean bean : beanList) {
             if (bean.getValue("schoolName").equals("总计")) {
-                bean.setValue(crv.getChargeType(), crv.getSum().toString());
+                bean.setValue(crv.getChargeType().replace("-", "_"), crv.getSum().toString());
             }
         }
     }
@@ -116,6 +117,7 @@ public class ChargeReportController {
         for (DynamicBean bean : beanList) {
             Float total = 0f;
             for (String prop : header) {
+                prop = prop.replace("-", "_");
                 if (bean.getValue(prop) != null) total += Float.valueOf(bean.getValue(prop).toString());
             }
             bean.setValue("total", total.toString());
@@ -131,10 +133,12 @@ public class ChargeReportController {
         QueryWrapper queryWrapper = new QueryWrapper();
         if (!CollectionUtils.isEmpty(chargeReportQ.getSchoolIds())) queryWrapper.in("school.id", chargeReportQ.getSchoolIds());
         if (chargeReportQ.getBegin() != null && chargeReportQ.getEnd() != null) queryWrapper.between("charge.create_time", chargeReportQ.getBegin(), chargeReportQ.getEnd());
-        if (chargeReportQ.getBefore() != null && chargeReportQ.getBefore() == 1) queryWrapper.between("charge.create_time", day(1), new Date());
-        if (chargeReportQ.getBefore() != null && chargeReportQ.getBefore() == 2) queryWrapper.between("charge.create_time", day(0), new Date());
-        if (chargeReportQ.getBefore() != null && chargeReportQ.getBefore() == 3) queryWrapper.between("charge.create_time", month(0), new Date());
-        if (chargeReportQ.getBefore() != null && chargeReportQ.getBefore() == 4) queryWrapper.between("charge.create_time", month(1), new Date());
+        else {
+            if (chargeReportQ.getBefore() != null && chargeReportQ.getBefore() == 1) queryWrapper.between("charge.create_time", TimeUtils.day(1), TimeUtils.day(0));
+            if (chargeReportQ.getBefore() != null && chargeReportQ.getBefore() == 2) queryWrapper.between("charge.create_time", TimeUtils.day(0), new Date());
+            if (chargeReportQ.getBefore() != null && chargeReportQ.getBefore() == 3) queryWrapper.between("charge.create_time", TimeUtils.month(0), new Date());
+            if (chargeReportQ.getBefore() != null && chargeReportQ.getBefore() == 4) queryWrapper.between("charge.create_time", TimeUtils.month(1), TimeUtils.month(0));
+        }
         List<DynamicBean> beanList = makeBeanList();
         for (ChargeReportV crv : iStudentChargeService.reportChargeType(queryWrapper)) {
             makeBeanValue(beanList, crv);
@@ -151,28 +155,6 @@ public class ChargeReportController {
         y.setMyLabel(label);
         y.setMyProp(prop.replace("-", "_"));
         return y;
-    }
-
-    private Date month(Integer before) {
-        Calendar calendar = Calendar.getInstance();// 获取当前日期
-        calendar.add(Calendar.YEAR, 0);
-        calendar.add(Calendar.MONTH, -before);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);// 设置为1号,当前日期既为本月第一天
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        return new Date(calendar.getTimeInMillis());
-    }
-
-    private Date day(int before) {
-        Calendar calendar = Calendar.getInstance();// 获取当前日期
-        calendar.add(Calendar.YEAR, 0);
-        calendar.add(Calendar.MONTH, 0);
-        calendar.add(Calendar.DAY_OF_MONTH, -before);// 设置为1号,当前日期既为本月第一天
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        return new Date(calendar.getTimeInMillis());
     }
 }
 

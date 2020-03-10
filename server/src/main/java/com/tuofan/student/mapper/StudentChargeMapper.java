@@ -74,7 +74,7 @@ public interface StudentChargeMapper extends BaseMapper<StudentCharge> {
             "group by school.name,charge_type")
     List<ChargeReportV> reportChargeType(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 
-    @Select("select type.name charge_type,school.name school_name,sum(charge.amount) sum\n" +
+    @Select("select type.name charge_type,sum(charge.amount) sum\n" +
             "from student_charge charge\n" +
             "join student_main student on charge.student_id = student.id\n" +
             "join ding_dept school on school.id = student.school_id\n" +
