@@ -87,14 +87,6 @@ public class StudentCourseController {
     }
 
 
-    @PostMapping("pageArrears")
-    public Result arrearsPage(@RequestBody StudentCourseQ studentCourseQ) {
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("student.type", 1);
-        if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
-        return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
-    }
-
     @PostMapping("pageXu")
     public Result pageXu(@RequestBody StudentCourseQ studentCourseQ) {
         QueryWrapper queryWrapper = new QueryWrapper();

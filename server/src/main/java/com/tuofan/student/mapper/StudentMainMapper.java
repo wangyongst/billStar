@@ -10,6 +10,8 @@ import com.tuofan.student.vo.StudentMainV;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * <p>
  * 学生信息 Mapper 接口
@@ -25,4 +27,13 @@ public interface StudentMainMapper extends BaseMapper<StudentMain> {
             "join ding_dept school on student.school_id = school.id\n" +
             "join ding_user user on student.create_by = user.id ${ew.customSqlSegment}")
     IPage<StudentMainV> pageV(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+
+    @Select("select student.*,school.name school_name\n" +
+            "from student_main student\n" +
+            "join ding_dept school on student.school_id = school.id ${ew.customSqlSegment}")
+    IPage<StudentMainV> pageArrear(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+    @Select("select sum(student.arrears) from student_main student")
+    Float sumArrear();
 }

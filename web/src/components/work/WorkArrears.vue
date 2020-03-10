@@ -10,8 +10,11 @@
 
           <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
           <el-row>
+            <el-col :span="4">
+              欠费总金额：<span>{{page.arrears}}</span>
+            </el-col>
             <el-col :span="6" :offset="16">
-              <el-button @click="listArreas" type="primary" style="width: 100px;" size="mini" plain round>查询</el-button>
+              <el-button @click="listArreas" type="primary" size="mini" plain round>查询</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -32,12 +35,9 @@
           <el-table-column label="欠费金额" width="150" align="left" prop="arrears">
           </el-table-column>
 
-          <el-table-column label="教师" width="100" align="left" prop="teacherName">
-          </el-table-column>
-
           <el-table-column fixed="right" label="操作" align="left" width="180">
             <template slot-scope="scope">
-              <el-button type="text" size="mini">交费记录</el-button>
+              <el-button type="text" size="mini" @click="showChargeRecords(scope.row.studentId)">交费记录</el-button>
               <el-button type="text" size="mini" @click="updateItem(scope.row.studentId)">补费</el-button>
               <el-button type="text" size="mini" @click="updateArrears(scope.row.id)">修改金额</el-button>
             </template>
@@ -90,12 +90,13 @@
 
   export default {
     name: 'WorkArrears',
-    components: {BackToWork, ClassSelect, SchoolSelect, SubjectSelect, TeacherSelect},
+    components: {BackToWork, SchoolSelect},
     data() {
       return {
         createDialogVisible: false,
         page: {
           total: 0,
+          arrears: null,
           records: [],
         },
         query: {
@@ -170,10 +171,11 @@
       listArreas() {
         const _this = this;
         _this.loading = true;
-        _this.httpUtils.appPost('/student/course/pageArrears', _this.query).then(function (res) {
+        _this.httpUtils.appPost('/student/main/pageArrear', _this.query).then(function (res) {
           _this.loading = false;
-          _this.page.records = res.records;
-          _this.page.total = res.total;
+          _this.page.records = res.page.records;
+          _this.page.total = res.page.total;
+          _this.page.arrears = res.object;
         }, _this.operateFail);
       },
       gotoPage(page) {

@@ -2,21 +2,15 @@ package com.tuofan.student.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.tuofan.core.CheckUtils;
 import com.tuofan.core.LoginConstants;
+import com.tuofan.core.PageAndObject;
 import com.tuofan.core.Result;
-import com.tuofan.core.SearchQ;
-import com.tuofan.core.utils.DateTimeUtils;
-import com.tuofan.course.entity.CourseMain;
-import com.tuofan.course.entity.CourseTime;
-import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.service.ICourseTimeService;
-import com.tuofan.course.vo.CourseP;
-import com.tuofan.orgination.entity.DingUser;
 import com.tuofan.orgination.service.IDingUserService;
-import com.tuofan.setting.entity.SysClass;
 import com.tuofan.setting.service.ISysClassService;
 import com.tuofan.setting.service.ISysMyClassService;
 import com.tuofan.setting.service.ISysMySchoolService;
@@ -26,17 +20,13 @@ import com.tuofan.student.entity.StudentMain;
 import com.tuofan.student.service.IStudentChargeService;
 import com.tuofan.student.service.IStudentCourseService;
 import com.tuofan.student.service.IStudentMainService;
-import com.tuofan.student.vo.StudentCourseQ;
 import com.tuofan.student.vo.StudentMainQ;
 import com.tuofan.student.vo.StudentP;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.couchbase.CouchbaseReactiveDataAutoConfiguration;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -82,10 +72,10 @@ public class StudentMainController {
         if (studentP.getArrears() != null && studentP.getArrears().intValue() != 0) studentP.setType(1);
         studentP.setCreateBy(userId);
         studentP.setCreateTime(new Date());
-        if(CheckUtils.isNotZero(studentP.getMyclassId())) studentP.setMyclass(iSysMyClassService.getById(studentP.getMyclassId()).getName());
-        if(CheckUtils.isNotZero(studentP.getMyschoolId())) studentP.setMyschool(iSysMySchoolService.getById(studentP.getMyschoolId()).getName());
+        if (CheckUtils.isNotZero(studentP.getMyclassId())) studentP.setMyclass(iSysMyClassService.getById(studentP.getMyclassId()).getName());
+        if (CheckUtils.isNotZero(studentP.getMyschoolId())) studentP.setMyschool(iSysMySchoolService.getById(studentP.getMyschoolId()).getName());
         iStudentMainService.save(studentP);
-        if (studentP.getCharge().getAmount() != null && studentP.getCharge().getChargeId() !=null) {
+        if (studentP.getCharge().getAmount() != null && studentP.getCharge().getChargeId() != null) {
             StudentCharge sc = studentP.getCharge();
             sc.setStudentId(studentP.getId());
             sc.setType(1);
@@ -102,6 +92,14 @@ public class StudentMainController {
         }
         if (!CollectionUtils.isEmpty(studentCourse)) iStudentCourseService.saveBatch(studentCourse);
         return Result.ok("保存成功");
+    }
+
+    @PostMapping("pageArrear")
+    public Result pageArrear(@RequestBody StudentMainQ studentMainQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("student.type", 1);
+        if (!CollectionUtils.isEmpty(studentMainQ.getSchoolIds())) queryWrapper.in("school.id", studentMainQ.getSchoolIds());
+        return Result.ok(new PageAndObject(iStudentMainService.pageArrear(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper), iStudentMainService.sumArrear()));
     }
 
     @GetMapping("arrears")
