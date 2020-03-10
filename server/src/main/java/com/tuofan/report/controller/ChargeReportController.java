@@ -132,10 +132,10 @@ public class ChargeReportController {
         if (!CollectionUtils.isEmpty(chargeReportQ.getSchoolIds())) queryWrapper.in("school.id", chargeReportQ.getSchoolIds());
         if (chargeReportQ.getBegin() != null && chargeReportQ.getEnd() != null) queryWrapper.between("charge.create_time", chargeReportQ.getBegin(), chargeReportQ.getEnd());
         List<DynamicBean> beanList = makeBeanList();
-        for (ChargeReportV crv : iStudentChargeService.reportMonth(queryWrapper)) {
+        for (ChargeReportV crv : iStudentChargeService.reportChargeType(queryWrapper)) {
             makeBeanValue(beanList, crv);
         }
-        for (val rmt : iStudentChargeService.reportMonthTotal(queryWrapper)) {
+        for (val rmt : iStudentChargeService.reportChargeTypeTotal(queryWrapper)) {
             makeBeanValueTotal(beanList, rmt);
         }
         makeBeanValueTotal(beanList);
