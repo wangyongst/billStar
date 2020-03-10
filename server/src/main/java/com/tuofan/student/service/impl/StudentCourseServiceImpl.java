@@ -6,7 +6,10 @@ import com.tuofan.student.entity.StudentCourse;
 import com.tuofan.student.mapper.StudentCourseMapper;
 import com.tuofan.student.service.IStudentCourseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tuofan.student.vo.StudentCourseV;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -22,5 +25,10 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseMapper, S
     @Override
     public IPage pageV(IPage page, QueryWrapper queryWrapper) {
         return baseMapper.pageV(page, queryWrapper);
+    }
+
+    @Override
+    public List<StudentCourseV> listStudentCourseV(QueryWrapper queryWrapper) {
+        return baseMapper.listStudentCourseV(queryWrapper);
     }
 }

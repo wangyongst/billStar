@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.tuofan.student.entity.StudentCourse;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tuofan.student.vo.StudentChargeV;
 import com.tuofan.student.vo.StudentCourseV;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * <p>
@@ -26,4 +29,9 @@ public interface StudentCourseMapper extends BaseMapper<StudentCourse> {
             "join ding_dept school on student.school_id = school.id ${ew.customSqlSegment}")
     IPage<StudentCourseV> pageV(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 
+    @Select("select studentCourse.*,course.*\n" +
+            "from student_course studentCourse\n" +
+            "join course_main course on studentCourse.course_id = course.id\n" +
+            "${ew.customSqlSegment}")
+    List<StudentCourseV> listStudentCourseV(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }

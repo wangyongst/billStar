@@ -12,11 +12,7 @@ import com.tuofan.student.vo.StudentMainQ;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -61,7 +57,7 @@ public class StudentCourseController {
         if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
         if (!CollectionUtils.isEmpty(studentCourseQ.getTeacherName())) queryWrapper.in("teacher_name", studentCourseQ.getTeacherName());
         queryWrapper.le("studentCourse.expire_time", new Date());
-        queryWrapper.eq("student.type",0);
+        queryWrapper.eq("student.type", 0);
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
     }
 
@@ -86,6 +82,12 @@ public class StudentCourseController {
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
     }
 
+    @GetMapping("list/{studentId}")
+    public Result list(@PathVariable Integer studentId) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("studentCourse.student_id", studentId);
+        return Result.ok(iStudentCourseService.listStudentCourseV(queryWrapper));
+    }
 
     @PostMapping("pageXu")
     public Result pageXu(@RequestBody StudentCourseQ studentCourseQ) {

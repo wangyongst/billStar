@@ -6,6 +6,7 @@ import com.tuofan.student.entity.StudentCharge;
 import com.tuofan.student.mapper.StudentChargeMapper;
 import com.tuofan.student.service.IStudentChargeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tuofan.student.vo.StudentChargeV;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,5 +40,10 @@ public class StudentChargeServiceImpl extends ServiceImpl<StudentChargeMapper, S
     @Override
     public List reportMonthTotal(QueryWrapper queryWrapper) {
         return baseMapper.reportMonthTotal(queryWrapper);
+    }
+
+    @Override
+    public List<StudentChargeV> listStudentChargeV(QueryWrapper queryWrapper) {
+        return baseMapper.listStudentChargeV(queryWrapper);
     }
 }

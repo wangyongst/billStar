@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tuofan.student.entity.StudentCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tuofan.student.vo.StudentChargeV;
+import com.tuofan.student.vo.StudentCourseV;
 
 import java.util.List;
 
@@ -18,5 +20,7 @@ import java.util.List;
 public interface IStudentCourseService extends IService<StudentCourse> {
 
     IPage pageV(IPage page, QueryWrapper queryWrapper);
+
+    List<StudentCourseV> listStudentCourseV(QueryWrapper queryWrapper);
 
 }

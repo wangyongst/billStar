@@ -13,11 +13,7 @@ import com.tuofan.student.vo.StudentCourseQ;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -48,6 +44,13 @@ public class StudentChargeController {
             if (studentChargeQ.getTime() == 5) queryWrapper.between("charge.create_time", lastMonth(), month());
         }
         return Result.ok(iStudentChargeService.pageV(new Page(studentChargeQ.getCurrent(), studentChargeQ.getSize()), queryWrapper));
+    }
+
+    @GetMapping("list/{studentId}")
+    public Result list(@PathVariable Integer studentId) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("studentCharge.student_id", studentId);
+        return Result.ok(iStudentChargeService.listStudentChargeV(queryWrapper));
     }
 
     //当天开始

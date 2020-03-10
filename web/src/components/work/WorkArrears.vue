@@ -19,7 +19,6 @@
           </el-row>
         </el-form>
 
-
       </el-col>
       <!--    数据表格-->
       <el-col :span="24">
@@ -35,10 +34,11 @@
           <el-table-column label="欠费金额" width="150" align="left" prop="arrears">
           </el-table-column>
 
-          <el-table-column fixed="right" label="操作" align="left" width="180">
+          <el-table-column fixed="right" label="操作" align="left" width="300">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="showChargeRecords(scope.row.studentId)">交费记录</el-button>
-              <el-button type="text" size="mini" @click="updateItem(scope.row.studentId)">补费</el-button>
+              <el-button type="text" size="mini" @click="showStudentCourse(scope.row.id)">课程详情</el-button>
+              <el-button type="text" size="mini" @click="showStudentCharge(scope.row.id)">交费记录</el-button>
+              <el-button type="text" size="mini" @click="updateItem(scope.row.id)">补费</el-button>
               <el-button type="text" size="mini" @click="updateArrears(scope.row.id)">修改金额</el-button>
             </template>
           </el-table-column>
@@ -64,6 +64,9 @@
         </div>
       </el-dialog>
 
+      <StudentCourseDialog></StudentCourseDialog>
+      <StudentChargeDialog></StudentChargeDialog>
+
       <el-col :span="24">
         <el-pagination
           class="common-page"
@@ -82,15 +85,14 @@
 </template>
 
 <script>
-  import ClassSelect from "../select/ClassSelect";
   import SchoolSelect from "../select/SchoolSelect";
-  import SubjectSelect from "../select/SubjectSelect";
-  import TeacherSelect from "../select/TeacherSelect";
   import BackToWork from "../back/BackToWork";
+  import StudentCourseDialog from "../dialog/StudentCourseDialog";
+  import StudentChargeDialog from "../dialog/StudentChargeDialog";
 
   export default {
     name: 'WorkArrears',
-    components: {BackToWork, SchoolSelect},
+    components: {StudentChargeDialog, StudentCourseDialog, BackToWork, SchoolSelect},
     data() {
       return {
         createDialogVisible: false,
@@ -121,6 +123,14 @@
     },
 
     methods: {
+      showStudentCourse(val) {
+        const _this = this;
+        eventBus.$emit("studentCourse", val);
+      },
+      showStudentCharge(val) {
+        const _this = this;
+        eventBus.$emit("studentCharge", val);
+      },
       schoolChange(val) {
         this.query.schoolIds = val;
       },

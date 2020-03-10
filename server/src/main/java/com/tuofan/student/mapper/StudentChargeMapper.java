@@ -59,4 +59,9 @@ public interface StudentChargeMapper extends BaseMapper<StudentCharge> {
             "${ew.customSqlSegment}\n" +
             "group by month")
     List<ChargeReportV> reportMonthTotal(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+    @Select("select studentCharge.*,SysCharge.*,SysCharge.name charge_name\n" +
+            "from student_charge studentCharge\n" +
+            "left join sys_charge SysCharge on studentCharge.charge_id= SysCharge.id ${ew.customSqlSegment}")
+    List<StudentChargeV> listStudentChargeV(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }
