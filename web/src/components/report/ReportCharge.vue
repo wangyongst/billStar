@@ -24,6 +24,12 @@
           placeholder="选择日期">
         </el-date-picker>
         <el-button class="btn-search" @click="listReport" size="mini">查询</el-button>
+        <el-radio-group v-model="query.before">
+          <el-radio size="mini" label="1">昨天</el-radio>
+          <el-radio size="mini" label="2">今天</el-radio>
+          <el-radio size="mini" label="3">本月</el-radio>
+          <el-radio size="mini" label="4">上月</el-radio>
+        </el-radio-group>
       </el-form-item>
     </el-form>
 
@@ -70,7 +76,8 @@
           size: 10,
           schoolIds: [],
           begin: null,
-          end: null
+          end: null,
+          before:null
         },
         loading: false
       }

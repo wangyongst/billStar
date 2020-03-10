@@ -11,4 +11,6 @@ public class ChargeReportQ extends SearchQ {
     private Date begin;
 
     private Date end;
+
+    private Integer before;
 }
