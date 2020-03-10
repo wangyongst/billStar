@@ -94,6 +94,10 @@
         console.log(val);
         this.query.schoolIds = val;
       },
+      setZero(row, col, val) {
+        if (!val) return 0;
+        else return val;
+      },
       gotoPage(page) {
         const _this = this;
         _this.query.current = page;
