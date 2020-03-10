@@ -23,7 +23,7 @@
     <el-container style="width: 100%">
       <el-table stripe v-loading="loading" :data="page.records" Charge="bill-table">
         <template v-for="(item) in page.header">
-          <el-table-column :prop="item.myProp" :label="item.myLabel" :key="item.myProp" :formatter="setZero"></el-table-column>
+          <el-table-column :prop="item.myProp" :label="item.myLabel" :key="item.myProp" :formatter="setZero" style="width: 80px"></el-table-column>
         </template>
       </el-table>
     </el-container>

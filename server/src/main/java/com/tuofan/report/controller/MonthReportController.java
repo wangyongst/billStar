@@ -2,7 +2,6 @@ package com.tuofan.report.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.core.DynamicBean;
@@ -11,8 +10,8 @@ import com.tuofan.core.utils.DateTimeUtils;
 import com.tuofan.orgination.service.IDingDeptService;
 import com.tuofan.report.vo.ChargeReportQ;
 import com.tuofan.report.vo.ChargeReportV;
-import com.tuofan.report.vo.YearHeaderV;
-import com.tuofan.report.vo.YearReportV;
+import com.tuofan.report.vo.HeaderV;
+import com.tuofan.report.vo.ReportV;
 import com.tuofan.student.service.IStudentChargeService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,7 +50,7 @@ public class MonthReportController {
 
     @PostMapping("month")
     public Result month(@RequestBody ChargeReportQ chargeReportQ) throws ClassNotFoundException, ParseException {
-        YearReportV yearReportV = new YearReportV();
+        ReportV yearReportV = new ReportV();
         yearReportV.setHeader(makeHeader(chargeReportQ));
         yearReportV.setPageRecords(makeRecords(chargeReportQ));
         return Result.ok(yearReportV);
@@ -106,8 +104,8 @@ public class MonthReportController {
     }
 
     //4
-    public List<YearHeaderV> makeHeader(ChargeReportQ chargeReportQ) {
-        List<YearHeaderV> headerList = Lists.newArrayList();
+    public List<HeaderV> makeHeader(ChargeReportQ chargeReportQ) {
+        List<HeaderV> headerList = Lists.newArrayList();
         headerList.add(makeHeader("校区", "schoolName"));
         headerList.add(makeHeader("类型", "type"));
         val begin = DateTimeUtils.getFormatDate(iSysConfigsService.findByName("app.reportSchoolYearBeginTime").getValue());
@@ -168,8 +166,8 @@ public class MonthReportController {
         return beanList.stream().map(e -> e.getObject()).collect(Collectors.toList());
     }
 
-    public YearHeaderV makeHeader(String label, String prop) {
-        YearHeaderV y = new YearHeaderV();
+    public HeaderV makeHeader(String label, String prop) {
+        HeaderV y = new HeaderV();
         y.setMyLabel(label);
         y.setMyProp(prop.replace("-", "_"));
         return y;

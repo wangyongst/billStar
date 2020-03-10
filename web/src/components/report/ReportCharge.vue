@@ -29,9 +29,9 @@
 
     <el-container style="width: 100%">
       <el-table stripe v-loading="loading" :data="page.records" Charge="bill-table">
-        <el-table-column label="校区" prop="schoolName" width="80" align="center"></el-table-column>
-        <el-table-column label="支付方式" prop="chargeType" width="" align="center"></el-table-column>
-        <el-table-column label="总计" prop="sum" width="" align="center"></el-table-column>
+        <template v-for="(item) in page.header">
+          <el-table-column :prop="item.myProp" :label="item.myLabel" :key="item.myProp" :formatter="setZero" style="width: 80px"></el-table-column>
+        </template>
       </el-table>
     </el-container>
 
@@ -62,8 +62,8 @@
     data() {
       return {
         page: {
-          total: 0,
           records: [],
+          header: []
         },
         query: {
           current: 1,
@@ -85,8 +85,8 @@
         const _this = this;
         _this.loading = true;
         _this.httpUtils.appPost('/report/charge', _this.query).then(function (res) {
-          _this.page.records = res.records;
-          _this.page.total = res.total;
+          _this.page.header = res.header;
+          _this.page.records = res.pageRecords;
           _this.loading = false;
         }, _this.operateFail);
       },
@@ -97,7 +97,7 @@
       gotoPage(page) {
         const _this = this;
         _this.query.current = page;
-        _this.listStudentCourse();
+        _this.listReport();
       },
       operateFail(r) {
         const _this = this;

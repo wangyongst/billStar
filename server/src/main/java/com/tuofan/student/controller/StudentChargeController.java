@@ -43,6 +43,7 @@ public class StudentChargeController {
             if (studentChargeQ.getTime() == 3) queryWrapper.between("charge.create_time", month(), new Date());
             if (studentChargeQ.getTime() == 5) queryWrapper.between("charge.create_time", lastMonth(), month());
         }
+        queryWrapper.orderByDesc("charge.create_time");
         return Result.ok(iStudentChargeService.pageV(new Page(studentChargeQ.getCurrent(), studentChargeQ.getSize()), queryWrapper));
     }
 

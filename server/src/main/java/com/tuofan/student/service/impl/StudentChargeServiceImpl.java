@@ -2,6 +2,7 @@ package com.tuofan.student.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tuofan.report.vo.ChargeReportV;
 import com.tuofan.student.entity.StudentCharge;
 import com.tuofan.student.mapper.StudentChargeMapper;
 import com.tuofan.student.service.IStudentChargeService;
@@ -40,6 +41,16 @@ public class StudentChargeServiceImpl extends ServiceImpl<StudentChargeMapper, S
     @Override
     public List reportMonthTotal(QueryWrapper queryWrapper) {
         return baseMapper.reportMonthTotal(queryWrapper);
+    }
+
+    @Override
+    public List<ChargeReportV> reportChargeType(QueryWrapper queryWrapper) {
+        return baseMapper.reportChargeType(queryWrapper);
+    }
+
+    @Override
+    public List<ChargeReportV> reportChargeTypeTotal(QueryWrapper queryWrapper) {
+        return baseMapper.reportChargeTypeTotal(queryWrapper);
     }
 
     @Override

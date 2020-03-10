@@ -3,7 +3,7 @@ package com.tuofan.report.vo;
 import lombok.Data;
 
 @Data
-public class YearHeaderV {
+public class HeaderV {
 
     private String myLabel;
 

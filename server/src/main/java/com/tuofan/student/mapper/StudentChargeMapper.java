@@ -64,4 +64,22 @@ public interface StudentChargeMapper extends BaseMapper<StudentCharge> {
             "from student_charge studentCharge\n" +
             "left join sys_charge SysCharge on studentCharge.charge_id= SysCharge.id ${ew.customSqlSegment}")
     List<StudentChargeV> listStudentChargeV(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+    @Select("select type.name charge_type,school.name school_name,sum(charge.amount) sum\n" +
+            "from student_charge charge\n" +
+            "join student_main student on charge.student_id = student.id\n" +
+            "join ding_dept school on school.id = student.school_id\n" +
+            "join sys_charge type on type.id = charge.charge_id\n" +
+            "${ew.customSqlSegment}\n" +
+            "group by school.name,charge_type")
+    List<ChargeReportV> reportChargeType(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+    @Select("select type.name charge_type,school.name school_name,sum(charge.amount) sum\n" +
+            "from student_charge charge\n" +
+            "join student_main student on charge.student_id = student.id\n" +
+            "join ding_dept school on school.id = student.school_id\n" +
+            "join sys_charge type on type.id = charge.charge_id\n" +
+            "${ew.customSqlSegment}\n" +
+            "group by charge_type")
+    List<ChargeReportV> reportChargeTypeTotal(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }

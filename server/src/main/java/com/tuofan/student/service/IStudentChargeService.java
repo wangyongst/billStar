@@ -25,7 +25,11 @@ public interface IStudentChargeService extends IService<StudentCharge> {
 
     List<ChargeReportV> reportMonth(QueryWrapper queryWrapper);
 
-    List<ChargeReportV>  reportMonthTotal(QueryWrapper queryWrapper);
+    List<ChargeReportV> reportMonthTotal(QueryWrapper queryWrapper);
+
+    List<ChargeReportV> reportChargeType(QueryWrapper queryWrapper);
+
+    List<ChargeReportV> reportChargeTypeTotal(QueryWrapper queryWrapper);
 
     List<StudentChargeV> listStudentChargeV(QueryWrapper queryWrapper);
 
