@@ -72,8 +72,9 @@ public class ReportController {
         propertyMap.put("schoolName", Class.forName("java.lang.String"));
         propertyMap.put("type", Class.forName("java.lang.String"));
         for (String s : createMonthBetween(begin, new Date()).stream().collect(Collectors.toSet())) {
-            propertyMap.put(s.replace("-","_"), Class.forName("java.lang.String"));
+            propertyMap.put(s.replace("-", "_"), Class.forName("java.lang.String"));
         }
+        propertyMap.put("total", Class.forName("java.lang.String"));
         DynamicBean bean = new DynamicBean(propertyMap);
         return bean;
     }
@@ -99,7 +100,7 @@ public class ReportController {
     public void makeBeanValue(List<DynamicBean> beanList, ChargeReportV crv) {
         for (DynamicBean bean : beanList) {
             if (bean.getValue("schoolName").equals(crv.getSchoolName())) {
-                bean.setValue(crv.getMonth().replace("-","_"), crv.getSum().toString());
+                bean.setValue(crv.getMonth().replace("-", "_"), crv.getSum().toString());
             }
         }
     }
@@ -107,7 +108,7 @@ public class ReportController {
     public void makeBeanValueTotal(List<DynamicBean> beanList, ChargeReportV crv) {
         for (DynamicBean bean : beanList) {
             if (bean.getValue("schoolName").equals("总计")) {
-                bean.setValue(crv.getMonth().replace("-","_"), crv.getSum().toString());
+                bean.setValue(crv.getMonth().replace("-", "_"), crv.getSum().toString());
             }
         }
     }
@@ -118,8 +119,27 @@ public class ReportController {
         headerList.add(makeHeader("校区", "schoolName"));
         headerList.add(makeHeader("类型", "type"));
         val begin = DateTimeUtils.getFormatDate(iSysConfigsService.findByName("app.reportSchoolYearBeginTime").getValue());
-        createMonthBetween(begin, new Date()).stream().forEach(e -> headerList.add(makeHeader(e, e)));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, 11);
+        createMonthBetween(begin, calendar.getTime()).stream().forEach(e -> headerList.add(makeHeader(e, e)));
+        headerList.add(makeHeader("总计", "total"));
         return headerList;
+    }
+
+    //6
+    public void makeBeanValueTotal(List<DynamicBean> beanList) {
+        val begin = DateTimeUtils.getFormatDate(iSysConfigsService.findByName("app.reportSchoolYearBeginTime").getValue());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, 11);
+        List<String> between = createMonthBetween(begin, calendar.getTime());
+        for (DynamicBean bean : beanList) {
+            Float total = 0f;
+            for (String prop : between) {
+                prop = prop.replace("-","_");
+                if (bean.getValue(prop) != null) total += Float.valueOf(bean.getValue(prop).toString());
+            }
+            bean.setValue("total", total.toString());
+        }
     }
 
     private static List<String> createMonthBetween(Date begin, Date end) {
@@ -152,13 +172,14 @@ public class ReportController {
         for (val rmt : iStudentChargeService.reportMonthTotal(queryWrapper)) {
             makeBeanValueTotal(beanList, rmt);
         }
+        makeBeanValueTotal(beanList);
         return beanList.stream().map(e -> e.getObject()).collect(Collectors.toList());
     }
 
     public YearHeaderV makeHeader(String label, String prop) {
         YearHeaderV y = new YearHeaderV();
         y.setMyLabel(label);
-        y.setMyProp(prop.replace("-","_"));
+        y.setMyProp(prop.replace("-", "_"));
         return y;
     }
 }

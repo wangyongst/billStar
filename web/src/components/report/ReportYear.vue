@@ -23,7 +23,7 @@
     <el-container style="width: 100%">
       <el-table stripe v-loading="loading" :data="page.records" Charge="bill-table">
         <template v-for="(item) in page.header">
-          <el-table-column :prop="item.myProp" :label="item.myLabel" :key="item.myProp"></el-table-column>
+          <el-table-column :prop="item.myProp" :label="item.myLabel" :key="item.myProp" :formatter="setZero"></el-table-column>
         </template>
       </el-table>
     </el-container>
@@ -51,7 +51,7 @@
         loading: false
       }
     },
-    mounted:function(){
+    mounted: function () {
       const _this = this;
       _this.listReport();
     },
@@ -69,6 +69,10 @@
       schoolChange(val) {
         console.log(val);
         this.query.schoolIds = val;
+      },
+      setZero(row, col, val) {
+        if (!val) return 0;
+        else return val;
       },
       operateFail(r) {
         const _this = this;

@@ -32,12 +32,6 @@
           <el-table-column label="欠费金额" width="150" align="left" prop="arrears">
           </el-table-column>
 
-          <el-table-column label="到期时间" width="150" align="left" prop="expireTime" :formatter="baseTableFormatDate">
-          </el-table-column>
-
-          <el-table-column label="课程" width="300" align="left" prop="courseTime" :formatter="baseFormatCourse">
-          </el-table-column>
-
           <el-table-column label="教师" width="100" align="left" prop="teacherName">
           </el-table-column>
 
