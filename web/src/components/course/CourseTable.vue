@@ -10,7 +10,6 @@
           <SchoolSelect></SchoolSelect>
           <SubjectSelect></SubjectSelect>
           <ClassSelect></ClassSelect>
-          <TeacherSelect></TeacherSelect>
           <SemesterSelect></SemesterSelect>
         </el-form>
       </el-col>
@@ -27,7 +26,7 @@
                 <div class="grid-content bg-purple">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary"><p>121212</p>总人数</el-button>
+                      <el-button type="primary"><p>{{page.studentTotal}}</p>总人数</el-button>
                     </div>
                   </el-card>
                 </div>
@@ -36,7 +35,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary"><p>121212</p>总科目</el-button>
+                      <el-button type="primary"><p>{{page.courseTotal}}</p>总科次</el-button>
                     </div>
                   </el-card>
                 </div>
@@ -45,7 +44,7 @@
                 <div class="grid-content bg-purple"></div>
                 <el-card class="box-card">
                   <div>
-                    <el-button type="primary"><p>121212</p>美术</el-button>
+                    <el-button type="primary"><p>{{page.meishuTotal}}</p>美术</el-button>
                   </div>
                 </el-card>
               </el-col>
@@ -53,7 +52,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary"><p>121212</p>书法</el-button>
+                      <el-button type="primary"><p>{{page.shufaTotal}}</p>书法</el-button>
                     </div>
                   </el-card>
                 </div>
@@ -62,7 +61,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary"><p>121212</p>满科次</el-button>
+                      <el-button type="primary"><p>{{page.mankeTotal}}</p>满科次</el-button>
                     </div>
                   </el-card>
                 </div>
@@ -71,7 +70,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary"><p>121212</p>满班率</el-button>
+                      <el-button type="primary"><p>{{page.manbanlv}}</p>满班率</el-button>
                     </div>
                   </el-card>
                 </div>
@@ -91,7 +90,7 @@
         <el-table-column prop="teacherName" label="教师"></el-table-column>
         <el-table-column prop="studentNum" label="现有人数"></el-table-column>
         <el-table-column prop="classNum" label="核定人数"></el-table-column>
-        <el-table-column prop="" label="满班率"></el-table-column>
+        <el-table-column label="满班率" :formatter="formatterBan"></el-table-column>
         <el-table-column prop="schoolName" label="校区"></el-table-column>
       </el-table>
     </el-row>
@@ -114,6 +113,12 @@
       return {
         updateId: null,
         page: {
+          studentTotal: 0,
+          courseTotal: 0,
+          meishuTotal: 0,
+          shufaTotal: 0,
+          mankeTotal: 0,
+          manbanlv: 0,
           records: [],
         },
         query: {
@@ -130,10 +135,26 @@
 
     mounted: function () {
       const _this = this;
+      _this.listCourseCount();
       _this.listCourse();
     },
 
     methods: {
+      listCourseCount() {
+        const _this = this;
+        _this.loading = true;
+        _this.httpUtils.appGet('/course/main/count').then(function (res) {
+          _this.loading = false;
+          _this.page.studentTotal = res.studentTotal;
+          _this.page.courseTotal = res.courseTotal;
+          _this.page.meishuTotal = res.meishuTotal;
+          _this.page.shufaTotal = res.shufaTotal;
+          _this.page.mankeTotal = res.mankeTotal;
+          _this.page.records = res;
+          _this.page.manbanlv = res.manbanlv;
+          _this.loading = false;
+        }, _this.operateFail);
+      },
       schoolChange(val) {
         this.query.schoolIds = val;
       },
@@ -149,6 +170,9 @@
           return "-"
         }
         return val.substring(0, val.length - 3);
+      },
+      formatterBan(row, col, val) {
+        return row["studentNum"] / row["classNum"] * 100 + "%";
       },
       subjectChange(val) {
         this.query.subjectIds = val;

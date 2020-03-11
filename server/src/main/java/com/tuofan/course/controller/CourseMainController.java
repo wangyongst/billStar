@@ -11,18 +11,26 @@ import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.entity.CourseTime;
 import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.service.ICourseTimeService;
+import com.tuofan.course.vo.CourseCount;
 import com.tuofan.course.vo.CourseP;
 import com.tuofan.course.vo.CourseQ;
 import com.tuofan.orgination.service.IDingUserService;
+import com.tuofan.setting.entity.SysClass;
+import com.tuofan.setting.entity.SysSubject;
 import com.tuofan.setting.service.ISysClassNoService;
 import com.tuofan.setting.service.ISysClassRoomService;
 import com.tuofan.setting.service.ISysClassService;
+import com.tuofan.setting.service.ISysSubjectService;
+import com.tuofan.student.entity.StudentCourse;
 import com.tuofan.student.service.IStudentCourseService;
+import com.tuofan.student.service.IStudentMainService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.Subject;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -63,6 +71,50 @@ public class CourseMainController {
     @Autowired
     private IStudentCourseService iStudentCourseService;
 
+    @Autowired
+    private IStudentMainService iStudentMainService;
+
+    @Autowired
+    private ISysSubjectService iSysSubjectService;
+
+
+    @GetMapping("count")
+    public Result count() {
+        CourseCount courseCount = new CourseCount();
+        QueryWrapper query = new QueryWrapper();
+        query.eq("type", 0);
+        courseCount.setStudentTotal(iStudentMainService.count(query));
+        List<StudentCourse> studentCourseList = iStudentCourseService.list();
+        List<CourseMain> courseMainList = iCourseMainService.list();
+        courseCount.setCourseTotal(studentCourseList.size());
+        List<SysSubject> subjectList = iSysSubjectService.list();
+        List<SysClass> classList = iSysClassService.list();
+        courseCount.setMeishuTotal(countNumber(subjectList, classList, courseMainList, studentCourseList, "美术"));
+        courseCount.setShufaTotal(countNumber(subjectList, classList, courseMainList, studentCourseList, "书法"));
+        courseCount.setMankeTotal(countManke(courseMainList, studentCourseList));
+        courseCount.setManbanlv(manbanlv(courseMainList));
+        return Result.ok(courseCount);
+    }
+
+    public long countNumber(List<SysSubject> subjectList, List<SysClass> classList, List<CourseMain> courseMainList, List<StudentCourse> studentCourseList, String name) {
+        List<Integer> subjectIds = subjectList.stream().filter(e -> e.getName().equals(name)).map(e -> e.getId()).collect(Collectors.toList());
+        List<Integer> classIds = classList.stream().filter(e -> subjectIds.contains(e.getSubjectId())).map(e -> e.getId()).collect(Collectors.toList());
+        List<Integer> courseIds = courseMainList.stream().filter(e -> classIds.contains(e.getClassId())).map(e -> e.getId()).collect(Collectors.toList());
+        return studentCourseList.stream().filter(e -> courseIds.contains(e.getCourseId())).count();
+    }
+
+    public long countManke(List<CourseMain> courseMainList, List<StudentCourse> studentCourseList) {
+        List<Integer> courseIds = courseMainList.stream().filter(e -> e.getStudentNum() != null && e.getStudentNum() >= e.getClassNum()).map(e -> e.getId()).collect(Collectors.toList());
+        return studentCourseList.stream().filter(e -> courseIds.contains(e.getCourseId())).count();
+    }
+
+    public String manbanlv(List<CourseMain> courseMainList) {
+        int studentNum = courseMainList.stream().mapToInt(CourseMain::getStudentNum).sum();
+        int classNum = courseMainList.stream().mapToInt(CourseMain::getClassNum).sum();
+        DecimalFormat df=new DecimalFormat("0.00");//设置保留位数
+        return String.valueOf(df.format((float)studentNum*100/classNum)+"%");
+    }
+
     @PostMapping("list")
     public Result list(@RequestBody CourseQ courseQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -99,7 +151,7 @@ public class CourseMainController {
         result = checkClassNoNotMe(courseP);
         if (result.getCode() == 0) return result;
         courseP = makeCourseTime(courseP);
-        if(CollectionUtils.isEmpty(courseP.getDayList()))  return Result.error("上课时间是必填项");
+        if (CollectionUtils.isEmpty(courseP.getDayList())) return Result.error("上课时间是必填项");
         result = checkTeacherAndTime(courseP);
         if (result.getCode() == 0) return result;
         result = checkClassNoAndTime(courseP);
@@ -117,7 +169,7 @@ public class CourseMainController {
         result = checkClassNoNotMe(courseP);
         if (result.getCode() == 0) return result;
         courseP = makeCourseTime(courseP);
-        if(CollectionUtils.isEmpty(courseP.getDayList()))  return Result.error("上课时间是必填项");
+        if (CollectionUtils.isEmpty(courseP.getDayList())) return Result.error("上课时间是必填项");
         result = checkTeacherAndTime(courseP);
         if (result.getCode() == 0) return result;
         result = checkClassNoAndTime(courseP);
