@@ -11,11 +11,21 @@
           <SubjectSelect @dataChange="subjectChange"></SubjectSelect>
           <ClassSelect v-bind:subjectIds="query.subjectIds" @dataChange="classChange"></ClassSelect>
           <SemesterSelect @dataChange="semesterChange"></SemesterSelect>
-          <el-row>
-            <el-col :span="6" :offset="16">
-              <el-button @click="listCourse" type="primary" style="width: 100px;" size="mini" plain round>查询</el-button>
-            </el-col>
-          </el-row>
+          <el-form-item label="开票区间：" size="mini">
+            <el-radio-group v-model="query.day">
+              <el-radio size="mini" label="周一">周一</el-radio>
+              <el-radio size="mini" label="周二">周二</el-radio>
+              <el-radio size="mini" label="周三">周三</el-radio>
+              <el-radio size="mini" label="周四">周四</el-radio>
+              <el-radio size="mini" label="周五">周五</el-radio>
+              <el-radio size="mini" label="周六">周六</el-radio>
+              <el-radio size="mini" label="周日">周日</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="教师姓名：">
+            <el-input size="mini" style="width: 120px" v-model="query.teacherNameLike" placeholder="教师姓名"></el-input>
+            <el-button class="btn-search" @click="listCourse" size="mini" plain round>查询</el-button>
+          </el-form-item>
         </el-form>
       </el-col>
     </el-row>
@@ -131,7 +141,7 @@
           subjectIds: [],
           semesterIds: [],
           classIds: [],
-          teacherName: null,
+          teacherNameLike: null,
           day: null,
         },
         loading: false

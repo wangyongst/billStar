@@ -147,7 +147,6 @@ public class CourseMainController {
         return Result.ok();
     }
 
-
     @PostMapping("create")
     public Result create(@RequestBody CourseP courseP) {
         Result result = checkCourseNot(courseP);
@@ -286,7 +285,6 @@ public class CourseMainController {
         return iCourseMainService.list(queryWrapper).stream().filter(e -> e.getId() != courseP.getId()).collect(Collectors.toList());
     }
 
-
     public List<CourseTime> checkTimeDuplicateNotMe(CourseP courseP) {
         List<CourseTime> courseTimes = Lists.newArrayList();
         for (CourseTime t : courseP.getDayList()) {
@@ -303,7 +301,6 @@ public class CourseMainController {
         }
         return courseTimes;
     }
-
 
     public List<CourseMain> listTeacherDuplicateNotMe(CourseP courseP) {
         QueryWrapper<CourseMain> queryWrapper = new QueryWrapper();
