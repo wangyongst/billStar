@@ -8,9 +8,12 @@ import com.tuofan.core.LoginConstants;
 import com.tuofan.core.Result;
 import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.service.ICourseMainService;
+import com.tuofan.course.vo.CourseQ;
 import com.tuofan.setting.entity.SysClass;
 import com.tuofan.setting.service.ISysClassService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -36,6 +39,13 @@ public class SysClassController {
     @GetMapping("list")
     public Result list() {
         return Result.ok(iSysClassService.listV());
+    }
+
+    @PostMapping("listBySubject")
+    public Result listBySubject(@RequestBody CourseQ courseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (!CollectionUtils.isEmpty(courseQ.getSubjectIds())) queryWrapper.in("subject_id", courseQ.getSubjectIds());
+        return Result.ok(iSysClassService.list(queryWrapper));
     }
 
 

@@ -7,10 +7,15 @@
       <!--查询表单-->
       <el-col :span="24">
         <el-form label-width="100px" class="search-form" size="mini">
-          <SchoolSelect></SchoolSelect>
-          <SubjectSelect></SubjectSelect>
-          <ClassSelect></ClassSelect>
-          <SemesterSelect></SemesterSelect>
+          <SchoolSelect @dataChange="schoolChange"></SchoolSelect>
+          <SubjectSelect @dataChange="subjectChange"></SubjectSelect>
+          <ClassSelect v-bind:subjectIds="query.subjectIds" @dataChange="classChange"></ClassSelect>
+          <SemesterSelect @dataChange="semesterChange"></SemesterSelect>
+          <el-row>
+            <el-col :span="6" :offset="16">
+              <el-button @click="listCourse" type="primary" style="width: 100px;" size="mini" plain round>查询</el-button>
+            </el-col>
+          </el-row>
         </el-form>
       </el-col>
     </el-row>
@@ -103,15 +108,13 @@
   import SchoolSelect from "../select/SchoolSelect";
   import SubjectSelect from "../select/SubjectSelect";
   import BackToWork from "../back/BackToWork";
-  import TeacherSelect from "../select/TeacherSelect";
   import SemesterSelect from "../select/SemesterSelect";
 
   export default {
     name: 'CourseTable',
-    components: {SemesterSelect, TeacherSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
+    components: {SemesterSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {
-        updateId: null,
         page: {
           studentTotal: 0,
           courseTotal: 0,
@@ -128,16 +131,18 @@
           subjectIds: [],
           semesterIds: [],
           classIds: [],
+          teacherName: null,
+          day: null,
         },
         loading: false
       }
     },
-
     mounted: function () {
       const _this = this;
       _this.listCourseCount();
       _this.listCourse();
-    },
+    }
+    ,
 
     methods: {
       listCourseCount() {
@@ -154,32 +159,52 @@
           _this.page.manbanlv = res.manbanlv;
           _this.loading = false;
         }, _this.operateFail);
-      },
+      }
+      ,
       schoolChange(val) {
         this.query.schoolIds = val;
-      },
+      }
+      ,
+      subjectChange(val) {
+        this.query.subjectIds = val;
+      }
+      ,
+      semesterChange(val) {
+        this.query.semesterIds = val;
+      }
+      ,
+      classChange(val) {
+        this.query.classIds = val;
+      }
+      ,
       courseFormatter(row, col, val) {
         return row["className"] + "+" + row["classNo"]
-      },
+      }
+      ,
       courseTimeFormatter(row, col, val) {
         const _this = this;
         return _this.formatterTime(row["begin"]) + "-" + _this.formatterTime(row["end"])
-      },
+      }
+      ,
       formatterTime(val) {
         if (!val) {
           return "-"
         }
         return val.substring(0, val.length - 3);
-      },
+      }
+      ,
       formatterBan(row, col, val) {
         return row["studentNum"] / row["classNum"] * 100 + "%";
-      },
+      }
+      ,
       subjectChange(val) {
         this.query.subjectIds = val;
-      },
+      }
+      ,
       semesterChange(val) {
         this.query.semesterIds = val;
-      },
+      }
+      ,
       listCourse() {
         const _this = this;
         _this.loading = true;
@@ -187,7 +212,8 @@
           _this.loading = false;
           _this.page.records = res;
         }, _this.operateFail);
-      },
+      }
+      ,
       operateFail(r) {
         const _this = this;
         _this.baseErrorNotify(r);

@@ -35,7 +35,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-card class="box-card">
                     <div>
-                      <el-button type="primary" @click="toPage('courses')">课程表</el-button>
+                      <el-button type="primary" @click="toPage('course/table')">课程表</el-button>
                     </div>
                   </el-card>
                 </div>

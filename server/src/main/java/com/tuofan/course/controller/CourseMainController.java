@@ -111,15 +111,19 @@ public class CourseMainController {
     public String manbanlv(List<CourseMain> courseMainList) {
         int studentNum = courseMainList.stream().mapToInt(CourseMain::getStudentNum).sum();
         int classNum = courseMainList.stream().mapToInt(CourseMain::getClassNum).sum();
-        DecimalFormat df=new DecimalFormat("0.00");//设置保留位数
-        return String.valueOf(df.format((float)studentNum*100/classNum)+"%");
+        DecimalFormat df = new DecimalFormat("0.00");//设置保留位数
+        return String.valueOf(df.format((float) studentNum * 100 / classNum) + "%");
     }
 
     @PostMapping("list")
     public Result list(@RequestBody CourseQ courseQ) {
-        QueryWrapper queryWrapper = new QueryWrapper();
-        if (!CollectionUtils.isEmpty(courseQ.getSemesterIds())) queryWrapper.eq("semester.id", courseQ.getSemesterId());
-        if (!CollectionUtils.isEmpty(courseQ.getSubjectIds())) queryWrapper.eq("school.id", courseQ.getSchoolId());
+        QueryWrapper<CourseMain> queryWrapper = new QueryWrapper();
+        if (!CollectionUtils.isEmpty(courseQ.getSemesterIds())) queryWrapper.in("semester.id", courseQ.getSemesterIds());
+        if (!CollectionUtils.isEmpty(courseQ.getSubjectIds())) queryWrapper.in("subject.id", courseQ.getSubjectIds());
+        if (!CollectionUtils.isEmpty(courseQ.getSchoolIds())) queryWrapper.in("school.id", courseQ.getSchoolIds());
+        if (!CollectionUtils.isEmpty(courseQ.getClassIds())) queryWrapper.in("class.id", courseQ.getClassIds());
+        if (StringUtils.isNotBlank(courseQ.getTeacherNameLike())) queryWrapper.like("teacher.name", courseQ.getTeacherNameLike());
+        if (StringUtils.isNotBlank(courseQ.getDay())) queryWrapper.and(e -> e.eq("courseTime.day", courseQ.getDay()).or().eq("courseTime.type", 1));
         return Result.ok(iCourseMainService.listV(queryWrapper));
     }
 

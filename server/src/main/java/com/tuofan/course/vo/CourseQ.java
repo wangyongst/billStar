@@ -13,10 +13,16 @@ public class CourseQ extends PageQ {
 
     private List<Integer> subjectIds;
 
+    private List<Integer> classIds;
+
     private List<Integer> semesterIds;
 
     private Integer semesterId;
 
     private Integer schoolId;
+
+    private String teacherNameLike;
+
+    private String day;
 
 }

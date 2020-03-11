@@ -22,8 +22,9 @@
     props: {
       deptQueryUrl: {
         required: false,
-        default: '/sys/class/list'
-      }
+        default: '/sys/class/listBySubject'
+      },
+      subjectIds: null
     },
     data() {
       const _this = this;
@@ -35,15 +36,35 @@
       };
     },
 
+    computed: {
+      newSubjectIds() {
+        return this.subjectIds;
+      }
+    },
+
     watch: {
       deptSchoolIds(val) {
         this.$emit("dataChange", val);
-      }
+      },
+      newSubjectIds(val) {
+        const _this = this;
+        const cmd = {subjectIds: val};
+        _this.httpUtils.appPost(_this.deptQueryUrl, cmd).then(function (res) {
+          _this.deptSchoolForSelect = res;
+          _this.processCheckAll();
+          _this.$emit("deptSchoolIdInitFinish")
+        }, _this.operateFail);
+      },
+      operateFail(r) {
+        const _this = this;
+        _this.baseErrorNotify(r);
+        _this.loading = false;
+      },
     },
 
     mounted() {
       const _this = this;
-      _this.listDeptSchoolForSelect();
+      console.log(_this.subjectIds);
     },
 
     methods: {
@@ -65,20 +86,6 @@
             return ele.id
           });
         }
-      },
-
-      listDeptSchoolForSelect() {
-        const _this = this;
-        _this.httpUtils.appGet(_this.deptQueryUrl).then(function (res) {
-            _this.deptSchoolForSelect = res;
-            _this.processCheckAll();
-            _this.$emit("deptSchoolIdInitFinish")
-        }, _this.operateFail);
-      },
-      operateFail(r) {
-        const _this = this;
-        _this.baseErrorNotify(r);
-        _this.loading = false;
       },
     }
   }
