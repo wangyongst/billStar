@@ -59,5 +59,6 @@ public class CourseMain implements Serializable {
 
     private String courseTime;
 
+    private Integer studentNum;
 
 }

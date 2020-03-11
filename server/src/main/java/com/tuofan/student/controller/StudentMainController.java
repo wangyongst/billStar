@@ -9,6 +9,8 @@ import com.tuofan.core.CheckUtils;
 import com.tuofan.core.LoginConstants;
 import com.tuofan.core.PageAndObject;
 import com.tuofan.core.Result;
+import com.tuofan.course.entity.CourseMain;
+import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.service.ICourseTimeService;
 import com.tuofan.orgination.service.IDingUserService;
 import com.tuofan.setting.service.ISysClassService;
@@ -22,6 +24,7 @@ import com.tuofan.student.service.IStudentCourseService;
 import com.tuofan.student.service.IStudentMainService;
 import com.tuofan.student.vo.StudentMainQ;
 import com.tuofan.student.vo.StudentP;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -58,7 +61,7 @@ public class StudentMainController {
     private IStudentChargeService iStudentChargeService;
 
     @Autowired
-    private ISysClassService iSysClassService;
+    private ICourseMainService iCourseMainService;
 
     @Autowired
     private ICourseTimeService iCourseTimeService;
@@ -90,8 +93,26 @@ public class StudentMainController {
                 studentCourse.add(sc);
             }
         }
-        if (!CollectionUtils.isEmpty(studentCourse)) iStudentCourseService.saveBatch(studentCourse);
+        if (!CollectionUtils.isEmpty(studentCourse)) {
+            for (val sc : studentCourse) {
+                CourseMain courseMain = iCourseMainService.getById(sc.getCourseId());
+                addStudentNum(courseMain);
+            }
+            iStudentCourseService.saveBatch(studentCourse);
+        }
         return Result.ok("保存成功");
+    }
+
+    public void addStudentNum(CourseMain courseMain) {
+        if (CheckUtils.isZero(courseMain.getStudentNum())) courseMain.setStudentNum(1);
+        else courseMain.setStudentNum(courseMain.getStudentNum() + 1);
+        iCourseMainService.save(courseMain);
+    }
+
+    public void reduceStudentNum(CourseMain courseMain) {
+        if (CheckUtils.isZero(courseMain.getStudentNum())) courseMain.setStudentNum(0);
+        else courseMain.setStudentNum(courseMain.getStudentNum() - 1);
+        iCourseMainService.save(courseMain);
     }
 
     @PostMapping("pageArrear")
@@ -145,6 +166,14 @@ public class StudentMainController {
         studentMain.setType(2);
         studentMain.setLostTime(new Date());
         iStudentMainService.updateById(studentMain);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("student_id", studentMain.getId());
+        List<StudentCourse> studentCourses = iStudentCourseService.list(queryWrapper);
+        for (val sc : studentCourses) {
+            CourseMain courseMain = iCourseMainService.getById(sc.getCourseId());
+            reduceStudentNum(courseMain);
+        }
+        iStudentCourseService.remove(queryWrapper);
         return Result.ok();
     }
 
