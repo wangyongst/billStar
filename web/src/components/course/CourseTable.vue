@@ -11,16 +11,16 @@
           <SubjectSelect @dataChange="subjectChange"></SubjectSelect>
           <ClassSelect v-bind:subjectIds="query.subjectIds" @dataChange="classChange"></ClassSelect>
           <SemesterSelect @dataChange="semesterChange"></SemesterSelect>
-          <el-form-item label="开票区间：" size="mini">
-            <el-radio-group v-model="query.day">
-              <el-radio size="mini" label="周一">周一</el-radio>
-              <el-radio size="mini" label="周二">周二</el-radio>
-              <el-radio size="mini" label="周三">周三</el-radio>
-              <el-radio size="mini" label="周四">周四</el-radio>
-              <el-radio size="mini" label="周五">周五</el-radio>
-              <el-radio size="mini" label="周六">周六</el-radio>
-              <el-radio size="mini" label="周日">周日</el-radio>
-            </el-radio-group>
+          <el-form-item label="上课时间：" size="mini">
+            <el-chebox-group v-model="query.days">
+              <el-checkbox size="mini" label="周一">周一</el-checkbox>
+              <el-checkbox size="mini" label="周二">周二</el-checkbox>
+              <el-checkbox size="mini" label="周三">周三</el-checkbox>
+              <el-checkbox size="mini" label="周四">周四</el-checkbox>
+              <el-checkbox size="mini" label="周五">周五</el-checkbox>
+              <el-checkbox size="mini" label="周六">周六</el-checkbox>
+              <el-checkbox size="mini" label="周日">周日</el-checkbox>
+            </el-chebox-group>
           </el-form-item>
           <el-form-item label="教师姓名：">
             <el-input size="mini" style="width: 120px" v-model="query.teacherNameLike" placeholder="教师姓名"></el-input>

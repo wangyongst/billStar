@@ -124,6 +124,7 @@ public class CourseMainController {
         if (!CollectionUtils.isEmpty(courseQ.getClassIds())) queryWrapper.in("class.id", courseQ.getClassIds());
         if (StringUtils.isNotBlank(courseQ.getTeacherNameLike())) queryWrapper.like("teacher.name", courseQ.getTeacherNameLike());
         if (StringUtils.isNotBlank(courseQ.getDay())) queryWrapper.and(e -> e.eq("courseTime.day", courseQ.getDay()).or().eq("courseTime.type", 1));
+        queryWrapper.orderByAsc("school.id","course.classRoom");
         return Result.ok(iCourseMainService.listV(queryWrapper));
     }
 
