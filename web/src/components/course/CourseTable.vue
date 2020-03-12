@@ -114,7 +114,7 @@
         this.query.days = val;
       },
       courseFormatter(row, col, val) {
-        return row["className"] + "+" + row["classNo"]
+        return row["subjectName"] + row["className"] + "+" + row["classNo"]
       },
       courseTimeFormatter(row, col, val) {
         const _this = this;
