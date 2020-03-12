@@ -22,19 +22,19 @@
 
     <el-row :gutter="2">
       <el-col :span="2">
-        <el-button type="primary" size="medium "><p>{{page.courseCount.studentTotal}}</p>总人数</el-button>
+        <el-button type="primary" size="medium " style="font-size:medium"><p>{{page.courseCount.studentTotal}}</p>总人数</el-button>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" size="medium "><p>{{page.courseCount.courseTotal}}</p>总科次</el-button>
+        <el-button type="primary" size="medium " style="font-size:medium"><p>{{page.courseCount.courseTotal}}</p>总科次</el-button>
       </el-col>
       <el-col :span="2"  v-for="item in page.courseCount.subjectCounts">
-        <el-button type="primary" size="medium "><p>{{item.total}}</p>{{item.name}}</el-button>
+        <el-button type="danger" size="medium " style="font-size:medium"><p>{{item.total}}</p>{{item.name}}</el-button>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" size="medium "><p>{{page.courseCount.mankeTotal}}</p>满科次</el-button>
+        <el-button type="primary" size="medium " style="font-size:medium"><p>{{page.courseCount.mankeTotal}}</p>满科次</el-button>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" size="medium "><p>{{page.courseCount.manbanlv}}</p>满班率</el-button>
+        <el-button type="primary" size="medium " style="font-size:medium"><p>{{page.courseCount.manbanlv}}</p>满班率</el-button>
       </el-col>
     </el-row>
 
