@@ -292,7 +292,7 @@
         const cmd = {subjectId: _this.student.subjectId, semesterId: _this.student.semesterId};
         _this.courseLoading = true;
         _this.httpUtils.appPost('/course/main/list', cmd).then(function (res) {
-          _this.courseSelect = res;
+          _this.courseSelect = res.list;
           _this.courseLoading = false;
         }, _this.operateFail);
       },

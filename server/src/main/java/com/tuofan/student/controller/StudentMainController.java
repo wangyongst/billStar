@@ -92,11 +92,11 @@ public class StudentMainController {
             }
         }
         if (!CollectionUtils.isEmpty(studentCourse)) {
+            iStudentCourseService.saveBatch(studentCourse);
             for (val sc : studentCourse) {
                 CourseMain courseMain = iCourseMainService.getById(sc.getCourseId());
                 addStudentNum(courseMain);
             }
-            iStudentCourseService.saveBatch(studentCourse);
         }
         return Result.ok("保存成功");
     }

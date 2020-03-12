@@ -76,44 +76,8 @@ public class CourseMainController {
     @Autowired
     private ISysSubjectService iSysSubjectService;
 
-
-//    @GetMapping("count")
-//    public Result count() {
-//        CourseCount courseCount = new CourseCount();
-//        QueryWrapper query = new QueryWrapper();
-//        query.eq("type", 0);
-//        courseCount.setStudentTotal(iStudentMainService.count(query));
-//        List<StudentCourse> studentCourseList = iStudentCourseService.list();
-//        List<CourseMain> courseMainList = iCourseMainService.list();
-//        courseCount.setCourseTotal(studentCourseList.size());
-//        List<SysSubject> subjectList = iSysSubjectService.list();
-//        List<SysClass> classList = iSysClassService.list();
-//        courseCount.setMankeTotal(countManke(courseMainList, studentCourseList));
-//        courseCount.setManbanlv(manbanlv(courseMainList));
-//        return Result.ok(courseCount);
-//    }
-//
-//    public long countNumber(List<SysSubject> subjectList, List<SysClass> classList, List<CourseMain> courseMainList, List<StudentCourse> studentCourseList, String name) {
-//        List<Integer> subjectIds = subjectList.stream().filter(e -> e.getName().equals(name)).map(e -> e.getId()).collect(Collectors.toList());
-//        List<Integer> classIds = classList.stream().filter(e -> subjectIds.contains(e.getSubjectId())).map(e -> e.getId()).collect(Collectors.toList());
-//        List<Integer> courseIds = courseMainList.stream().filter(e -> classIds.contains(e.getClassId())).map(e -> e.getId()).collect(Collectors.toList());
-//        return studentCourseList.stream().filter(e -> courseIds.contains(e.getCourseId())).count();
-//    }
-//
-//    public long countManke(List<CourseMain> courseMainList, List<StudentCourse> studentCourseList) {
-//        List<Integer> courseIds = courseMainList.stream().filter(e -> e.getStudentNum() != null && e.getStudentNum() >= e.getClassNum()).map(e -> e.getId()).collect(Collectors.toList());
-//        return studentCourseList.stream().filter(e -> courseIds.contains(e.getCourseId())).count();
-//    }
-//
-//    public String manbanlv(List<CourseMain> courseMainList) {
-//        int studentNum = courseMainList.stream().mapToInt(CourseMain::getStudentNum).sum();
-//        int classNum = courseMainList.stream().mapToInt(CourseMain::getClassNum).sum();
-//        DecimalFormat df = new DecimalFormat("0.00");//设置保留位数
-//        return String.valueOf(df.format((float) studentNum * 100 / classNum) + "%");
-//    }
-
     @PostMapping("list")
-    public Result list(@RequestBody CourseQ courseQ) {
+    public Result listMulte(@RequestBody CourseQ courseQ) {
         QueryWrapper<CourseMain> queryWrapper = new QueryWrapper();
         if (!CollectionUtils.isEmpty(courseQ.getSemesterIds())) queryWrapper.in("semester.id", courseQ.getSemesterIds());
         if (!CollectionUtils.isEmpty(courseQ.getSubjectIds())) queryWrapper.in("subject.id", courseQ.getSubjectIds());
@@ -124,9 +88,11 @@ public class CourseMainController {
         queryWrapper.orderByAsc("school.id", "course.class_room", "courseTime.day", "teacher.name");
         List<CourseV> list = iCourseMainService.listV(queryWrapper);
         CourseCount courseCount = new CourseCount();
-        QueryWrapper<StudentCourse> q2 = new QueryWrapper();
-        queryWrapper.in("course_id", list.stream().map(CourseV::getId).collect(Collectors.toList()));
-        courseCount.setStudentTotal(iStudentCourseService.list(q2).stream().map(StudentCourse::getStudentId).collect(Collectors.toSet()).stream().count());
+        List<Integer> courseIds = list.stream().map(CourseV::getId).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(courseIds)) courseCount.setStudentTotal(0);
+        else {
+            courseCount.setStudentTotal(iStudentCourseService.list(new QueryWrapper<StudentCourse>().in("course_id", courseIds)).stream().map(StudentCourse::getStudentId).collect(Collectors.toSet()).size());
+        }
         courseCount.setCourseTotal(list.stream().filter(e -> e.getStudentNum() != null).mapToInt(CourseV::getStudentNum).sum());
         courseCount.setSubjectCounts(Lists.newArrayList());
         for (String subject : list.stream().map(CourseV::getSubjectName).collect(Collectors.toSet())) {
