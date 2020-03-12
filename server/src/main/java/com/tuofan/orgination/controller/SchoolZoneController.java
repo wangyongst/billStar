@@ -30,6 +30,7 @@ public class SchoolZoneController {
     public Result listSchoolZone() {
         QueryWrapper query = new QueryWrapper();
         query.eq("is_school_zone", 1);
+        query.orderByAsc("id");
         return Result.ok(iDingDeptService.list(query));
     }
 

@@ -2,18 +2,16 @@ package com.tuofan.student.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.tuofan.core.CheckUtils;
 import com.tuofan.core.LoginConstants;
-import com.tuofan.core.PageAndObject;
+import com.tuofan.core.MultiResult;
 import com.tuofan.core.Result;
 import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.service.ICourseTimeService;
 import com.tuofan.orgination.service.IDingUserService;
-import com.tuofan.setting.service.ISysClassService;
 import com.tuofan.setting.service.ISysMyClassService;
 import com.tuofan.setting.service.ISysMySchoolService;
 import com.tuofan.student.entity.StudentCharge;
@@ -120,7 +118,7 @@ public class StudentMainController {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("student.type", 1);
         if (!CollectionUtils.isEmpty(studentMainQ.getSchoolIds())) queryWrapper.in("school.id", studentMainQ.getSchoolIds());
-        return Result.ok(new PageAndObject(iStudentMainService.pageArrear(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper), iStudentMainService.sumArrear()));
+        return Result.ok(new MultiResult(iStudentMainService.pageArrear(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper), iStudentMainService.sumArrear()));
     }
 
     @GetMapping("arrears")

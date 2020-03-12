@@ -5,15 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.tuofan.core.CheckUtils;
+import com.tuofan.core.MultiResult;
 import com.tuofan.core.Result;
 import com.tuofan.core.utils.DateTimeUtils;
 import com.tuofan.course.entity.CourseMain;
 import com.tuofan.course.entity.CourseTime;
 import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.course.service.ICourseTimeService;
-import com.tuofan.course.vo.CourseCount;
-import com.tuofan.course.vo.CourseP;
-import com.tuofan.course.vo.CourseQ;
+import com.tuofan.course.vo.*;
 import com.tuofan.orgination.service.IDingUserService;
 import com.tuofan.setting.entity.SysClass;
 import com.tuofan.setting.entity.SysSubject;
@@ -78,42 +77,40 @@ public class CourseMainController {
     private ISysSubjectService iSysSubjectService;
 
 
-    @GetMapping("count")
-    public Result count() {
-        CourseCount courseCount = new CourseCount();
-        QueryWrapper query = new QueryWrapper();
-        query.eq("type", 0);
-        courseCount.setStudentTotal(iStudentMainService.count(query));
-        List<StudentCourse> studentCourseList = iStudentCourseService.list();
-        List<CourseMain> courseMainList = iCourseMainService.list();
-        courseCount.setCourseTotal(studentCourseList.size());
-        List<SysSubject> subjectList = iSysSubjectService.list();
-        List<SysClass> classList = iSysClassService.list();
-        courseCount.setMeishuTotal(countNumber(subjectList, classList, courseMainList, studentCourseList, "美术"));
-        courseCount.setShufaTotal(countNumber(subjectList, classList, courseMainList, studentCourseList, "书法"));
-        courseCount.setMankeTotal(countManke(courseMainList, studentCourseList));
-        courseCount.setManbanlv(manbanlv(courseMainList));
-        return Result.ok(courseCount);
-    }
-
-    public long countNumber(List<SysSubject> subjectList, List<SysClass> classList, List<CourseMain> courseMainList, List<StudentCourse> studentCourseList, String name) {
-        List<Integer> subjectIds = subjectList.stream().filter(e -> e.getName().equals(name)).map(e -> e.getId()).collect(Collectors.toList());
-        List<Integer> classIds = classList.stream().filter(e -> subjectIds.contains(e.getSubjectId())).map(e -> e.getId()).collect(Collectors.toList());
-        List<Integer> courseIds = courseMainList.stream().filter(e -> classIds.contains(e.getClassId())).map(e -> e.getId()).collect(Collectors.toList());
-        return studentCourseList.stream().filter(e -> courseIds.contains(e.getCourseId())).count();
-    }
-
-    public long countManke(List<CourseMain> courseMainList, List<StudentCourse> studentCourseList) {
-        List<Integer> courseIds = courseMainList.stream().filter(e -> e.getStudentNum() != null && e.getStudentNum() >= e.getClassNum()).map(e -> e.getId()).collect(Collectors.toList());
-        return studentCourseList.stream().filter(e -> courseIds.contains(e.getCourseId())).count();
-    }
-
-    public String manbanlv(List<CourseMain> courseMainList) {
-        int studentNum = courseMainList.stream().mapToInt(CourseMain::getStudentNum).sum();
-        int classNum = courseMainList.stream().mapToInt(CourseMain::getClassNum).sum();
-        DecimalFormat df = new DecimalFormat("0.00");//设置保留位数
-        return String.valueOf(df.format((float) studentNum * 100 / classNum) + "%");
-    }
+//    @GetMapping("count")
+//    public Result count() {
+//        CourseCount courseCount = new CourseCount();
+//        QueryWrapper query = new QueryWrapper();
+//        query.eq("type", 0);
+//        courseCount.setStudentTotal(iStudentMainService.count(query));
+//        List<StudentCourse> studentCourseList = iStudentCourseService.list();
+//        List<CourseMain> courseMainList = iCourseMainService.list();
+//        courseCount.setCourseTotal(studentCourseList.size());
+//        List<SysSubject> subjectList = iSysSubjectService.list();
+//        List<SysClass> classList = iSysClassService.list();
+//        courseCount.setMankeTotal(countManke(courseMainList, studentCourseList));
+//        courseCount.setManbanlv(manbanlv(courseMainList));
+//        return Result.ok(courseCount);
+//    }
+//
+//    public long countNumber(List<SysSubject> subjectList, List<SysClass> classList, List<CourseMain> courseMainList, List<StudentCourse> studentCourseList, String name) {
+//        List<Integer> subjectIds = subjectList.stream().filter(e -> e.getName().equals(name)).map(e -> e.getId()).collect(Collectors.toList());
+//        List<Integer> classIds = classList.stream().filter(e -> subjectIds.contains(e.getSubjectId())).map(e -> e.getId()).collect(Collectors.toList());
+//        List<Integer> courseIds = courseMainList.stream().filter(e -> classIds.contains(e.getClassId())).map(e -> e.getId()).collect(Collectors.toList());
+//        return studentCourseList.stream().filter(e -> courseIds.contains(e.getCourseId())).count();
+//    }
+//
+//    public long countManke(List<CourseMain> courseMainList, List<StudentCourse> studentCourseList) {
+//        List<Integer> courseIds = courseMainList.stream().filter(e -> e.getStudentNum() != null && e.getStudentNum() >= e.getClassNum()).map(e -> e.getId()).collect(Collectors.toList());
+//        return studentCourseList.stream().filter(e -> courseIds.contains(e.getCourseId())).count();
+//    }
+//
+//    public String manbanlv(List<CourseMain> courseMainList) {
+//        int studentNum = courseMainList.stream().mapToInt(CourseMain::getStudentNum).sum();
+//        int classNum = courseMainList.stream().mapToInt(CourseMain::getClassNum).sum();
+//        DecimalFormat df = new DecimalFormat("0.00");//设置保留位数
+//        return String.valueOf(df.format((float) studentNum * 100 / classNum) + "%");
+//    }
 
     @PostMapping("list")
     public Result list(@RequestBody CourseQ courseQ) {
@@ -123,9 +120,27 @@ public class CourseMainController {
         if (!CollectionUtils.isEmpty(courseQ.getSchoolIds())) queryWrapper.in("school.id", courseQ.getSchoolIds());
         if (!CollectionUtils.isEmpty(courseQ.getClassIds())) queryWrapper.in("class.id", courseQ.getClassIds());
         if (StringUtils.isNotBlank(courseQ.getTeacherNameLike())) queryWrapper.like("teacher.name", courseQ.getTeacherNameLike());
-        if (StringUtils.isNotBlank(courseQ.getDay())) queryWrapper.and(e -> e.eq("courseTime.day", courseQ.getDay()).or().eq("courseTime.type", 1));
-        queryWrapper.orderByAsc("school.id","course.classRoom");
-        return Result.ok(iCourseMainService.listV(queryWrapper));
+        if (!CollectionUtils.isEmpty(courseQ.getDays())) queryWrapper.and(e -> e.in("courseTime.day", courseQ.getDays()).or().eq("courseTime.type", 1));
+        queryWrapper.orderByAsc("school.id", "course.class_room", "courseTime.day", "teacher.name");
+        List<CourseV> list = iCourseMainService.listV(queryWrapper);
+        CourseCount courseCount = new CourseCount();
+        QueryWrapper<StudentCourse> q2 = new QueryWrapper();
+        queryWrapper.in("course_id", list.stream().map(CourseV::getId).collect(Collectors.toList()));
+        courseCount.setStudentTotal(iStudentCourseService.list(q2).stream().map(StudentCourse::getStudentId).collect(Collectors.toSet()).stream().count());
+        courseCount.setCourseTotal(list.stream().filter(e -> e.getStudentNum() != null).mapToInt(CourseV::getStudentNum).sum());
+        courseCount.setSubjectCounts(Lists.newArrayList());
+        for (String subject : list.stream().map(CourseV::getSubjectName).collect(Collectors.toSet())) {
+            SubjectCount sc = new SubjectCount();
+            sc.setName(subject);
+            sc.setTotal(list.stream().filter(e -> e.getSubjectName().equals(subject)).mapToInt(CourseV::getStudentNum).sum());
+            courseCount.getSubjectCounts().add(sc);
+
+        }
+        courseCount.setMankeTotal(list.stream().filter(e -> e.getClassNum() != null).mapToInt(CourseV::getClassNum).sum());
+        DecimalFormat df = new DecimalFormat("0.00");//设置保留位数
+        if (CheckUtils.isNotZero(courseCount.getMankeTotal())) courseCount.setManbanlv(String.valueOf(df.format(courseCount.getCourseTotal() * 100 / courseCount.getMankeTotal()) + "%"));
+        else courseCount.setManbanlv("0.00%");
+        return Result.ok(new MultiResult(list, courseCount));
     }
 
     @PostMapping("page")

@@ -2,16 +2,16 @@ package com.tuofan.course.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CourseCount {
 
-    private int studentTotal;
+    private long studentTotal;
 
-    private int courseTotal;
+    private long courseTotal;
 
-    private long meishuTotal;
-
-    private long shufaTotal;
+    private List<SubjectCount> subjectCounts;
 
     private long mankeTotal;
 

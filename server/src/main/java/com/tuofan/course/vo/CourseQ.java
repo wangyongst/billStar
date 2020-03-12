@@ -23,6 +23,6 @@ public class CourseQ extends PageQ {
 
     private String teacherNameLike;
 
-    private String day;
+    private List<String> days;
 
 }

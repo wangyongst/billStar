@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-02-28
  */
 @RestController
-@RequestMapping("/bill//course/time")
+@RequestMapping("/bill/course/time")
 public class CourseTimeController {
-
 }
 
