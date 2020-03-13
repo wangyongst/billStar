@@ -54,4 +54,8 @@ public class StudentCourse implements Serializable {
      */
     private Date expireTime;
 
+
+    // 0在学，1记录
+    private Integer type;
+
 }

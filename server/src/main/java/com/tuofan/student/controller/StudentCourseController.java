@@ -3,9 +3,13 @@ package com.tuofan.student.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tuofan.core.CheckUtils;
 import com.tuofan.core.Result;
 import com.tuofan.core.SearchQ;
+import com.tuofan.course.entity.CourseMain;
+import com.tuofan.course.service.ICourseMainService;
 import com.tuofan.orgination.vo.TeacherQ;
+import com.tuofan.student.entity.StudentCourse;
 import com.tuofan.student.service.IStudentCourseService;
 import com.tuofan.student.vo.StudentCourseQ;
 import com.tuofan.student.vo.StudentMainQ;
@@ -31,6 +35,9 @@ public class StudentCourseController {
 
     @Autowired
     private IStudentCourseService iStudentCourseService;
+
+    @Autowired
+    private ICourseMainService iCourseMainService;
 
     //到期
     @PostMapping("pageExpire")
@@ -96,6 +103,36 @@ public class StudentCourseController {
         return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
     }
 
+    //转班
+    @PostMapping("pageBan")
+    public Result pageBan(@RequestBody StudentCourseQ studentCourseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (StringUtils.isNotBlank(studentCourseQ.getStudentNameLike())) queryWrapper.like("student.name", studentCourseQ.getStudentNameLike());
+        if (!CollectionUtils.isEmpty(studentCourseQ.getSchoolIds())) queryWrapper.in("school.id", studentCourseQ.getSchoolIds());
+        queryWrapper.eq("student.type", 0);
+        queryWrapper.eq("studentCourse.type", 0);
+        return Result.ok(iStudentCourseService.pageV(new Page(studentCourseQ.getCurrent(), studentCourseQ.getSize()), queryWrapper));
+    }
+
+    //转班
+    @PostMapping("ban")
+    public Result ban(@RequestBody StudentCourseQ studentCourseQ) {
+        if (CheckUtils.isZero(studentCourseQ.getStudentId()) || CheckUtils.isZero(studentCourseQ.getCourseId()) || CheckUtils.isZero(studentCourseQ.getNewId())) return Result.error("失败");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("student_id", studentCourseQ.getStudentId());
+        queryWrapper.eq("course_id", studentCourseQ.getCourseId());
+        queryWrapper.eq("type", 0);
+        StudentCourse sc = (StudentCourse) iStudentCourseService.list(queryWrapper).get(0);
+        sc.setType(1);
+        iStudentCourseService.updateById(sc);
+        iCourseMainService.reduceStudentNum(iCourseMainService.getById(sc.getCourseId()));
+        sc.setId(null);
+        sc.setCourseId(studentCourseQ.getNewId());
+        sc.setType(0);
+        iStudentCourseService.save(sc);
+        iCourseMainService.addStudentNum(iCourseMainService.getById(sc.getCourseId()));
+        return Result.ok();
+    }
 
     //前几月开始
     private Date lastMonth(int before) {

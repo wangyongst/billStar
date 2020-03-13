@@ -166,6 +166,16 @@ public class CourseMainController {
         return Result.ok("修改成功");
     }
 
+    @PostMapping("get")
+    public Result get(@RequestBody CourseQ courseQ) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("class_id", courseQ.getClassId());
+        queryWrapper.eq("class_no_id", courseQ.getClassNoId());
+        List list = iCourseMainService.list(queryWrapper);
+        if (CollectionUtils.isEmpty(list)) return Result.error("没有课程");
+        return Result.ok(list.get(0));
+    }
+
     public CourseP makeCourseTime(CourseP courseP) {
         List<CourseTime> courseTimeList = Lists.newArrayList();
         if (courseP.getType() == 1 && courseP.getDay() != null && courseP.getDay().getBegin() != null && courseP.getDay().getEnd() != null) {

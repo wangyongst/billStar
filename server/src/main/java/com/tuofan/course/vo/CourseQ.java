@@ -25,4 +25,8 @@ public class CourseQ extends PageQ {
 
     private List<String> days;
 
+    private Integer classId;
+
+    private Integer classNoId;
+
 }

@@ -22,4 +22,12 @@ public class StudentCourseQ extends SearchQ {
     private Integer radio;
 
     private Integer month;
+
+    private String studentNameLike;
+
+    private Integer courseId;
+
+    private Integer studentId;
+
+    private Integer newId;
 }

@@ -20,4 +20,8 @@ public interface ICourseMainService extends IService<CourseMain> {
     IPage pageV(IPage page, QueryWrapper queryWrapper);
 
     List listV(QueryWrapper queryWrapper);
+
+    void reduceStudentNum(CourseMain courseMain);
+
+    void addStudentNum(CourseMain courseMain);
 }

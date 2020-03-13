@@ -17,9 +17,6 @@
 <script>
   export default {
     name: 'BackToWork',
-    props: {},
-    created: {},
-    data: {},
     methods: {
       backToWork() {
         const _this = this;

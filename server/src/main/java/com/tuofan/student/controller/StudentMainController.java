@@ -95,24 +95,13 @@ public class StudentMainController {
             iStudentCourseService.saveBatch(studentCourse);
             for (val sc : studentCourse) {
                 CourseMain courseMain = iCourseMainService.getById(sc.getCourseId());
-                addStudentNum(courseMain);
+                iCourseMainService.addStudentNum(courseMain);
             }
         }
         return Result.ok("保存成功");
     }
 
-    public void addStudentNum(CourseMain courseMain) {
-        if (CheckUtils.isZero(courseMain.getStudentNum())) courseMain.setStudentNum(1);
-        else courseMain.setStudentNum(courseMain.getStudentNum() + 1);
-        iCourseMainService.save(courseMain);
-    }
-
-    public void reduceStudentNum(CourseMain courseMain) {
-        if (CheckUtils.isZero(courseMain.getStudentNum())) courseMain.setStudentNum(0);
-        else courseMain.setStudentNum(courseMain.getStudentNum() - 1);
-        iCourseMainService.save(courseMain);
-    }
-
+    //欠费
     @PostMapping("pageArrear")
     public Result pageArrear(@RequestBody StudentMainQ studentMainQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -121,6 +110,7 @@ public class StudentMainController {
         return Result.ok(new MultiResult(iStudentMainService.pageArrear(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper), iStudentMainService.sumArrear()));
     }
 
+    //设为欠费
     @GetMapping("arrears")
     public Result arrears(Integer studentId) {
         StudentMain studentMain = iStudentMainService.getById(studentId);
@@ -129,6 +119,7 @@ public class StudentMainController {
         return Result.ok();
     }
 
+    //欠费金额
     @PostMapping("updateArrears")
     public Result updateArrears(@RequestBody StudentP studentP) {
         StudentMain studentMain = iStudentMainService.getById(studentP.getId());
@@ -137,6 +128,7 @@ public class StudentMainController {
         return Result.ok("修改成功");
     }
 
+    //补费
     @PostMapping("buCharge")
     public Result charge(@RequestHeader(LoginConstants.USER_ID) String userId, @RequestBody StudentP studentP) {
         StudentMain studentMain = iStudentMainService.getById(studentP.getStudentId());
@@ -158,6 +150,7 @@ public class StudentMainController {
         return Result.ok("补费成功");
     }
 
+    //流失
     @GetMapping("lose")
     public Result lose(Integer studentId) {
         StudentMain studentMain = iStudentMainService.getById(studentId);
@@ -169,7 +162,7 @@ public class StudentMainController {
         List<StudentCourse> studentCourses = iStudentCourseService.list(queryWrapper);
         for (val sc : studentCourses) {
             CourseMain courseMain = iCourseMainService.getById(sc.getCourseId());
-            reduceStudentNum(courseMain);
+            iCourseMainService.reduceStudentNum(courseMain);
         }
         iStudentCourseService.remove(queryWrapper);
         return Result.ok();
@@ -181,11 +174,12 @@ public class StudentMainController {
         if (!CollectionUtils.isEmpty(studentMainQ.getSchoolIds())) queryWrapper.in("school.id", studentMainQ.getSchoolIds());
         if (StringUtils.isNotBlank(studentMainQ.getNameLike())) queryWrapper.like("student.name", studentMainQ.getNameLike());
         if (StringUtils.isNotBlank(studentMainQ.getMobileLike())) queryWrapper.like("student.mobile", studentMainQ.getMobileLike());
-        if (studentMainQ.getIsArrears() != null && studentMainQ.getIsArrears() == 1) queryWrapper.eq("student.type", 1);
+        if (studentMainQ.getIsArrears() != null && studentMainQ.getIsArrears() == 1) queryWrapper.eq("student.type", 0);
         if (studentMainQ.getIsArrears() != null && studentMainQ.getIsArrears() == 0) queryWrapper.ne("student.type", 1);
         return Result.ok(iStudentMainService.pageV(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper));
     }
 
+    //续费
     @PostMapping("pageXiu")
     public Result pageXiu(@RequestBody StudentMainQ studentMainQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -195,6 +189,7 @@ public class StudentMainController {
         return Result.ok(iStudentMainService.pageV(new Page(studentMainQ.getCurrent(), studentMainQ.getSize()), queryWrapper));
     }
 
+    //复学
     @PostMapping("pageFu")
     public Result pageFu(@RequestBody StudentMainQ studentMainQ) {
         QueryWrapper queryWrapper = new QueryWrapper();
