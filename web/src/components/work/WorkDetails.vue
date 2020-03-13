@@ -61,6 +61,12 @@
           <el-table-column label="开票时间" width="180" align="left" prop="createTime" :formatter="baseTableFormatTime">
           </el-table-column>
 
+          <el-table-column fixed="right" label="操作" align="left" width="300">
+            <template slot-scope="scope">
+              <el-button type="text" size="mini" @click="updateArrears(scope.row.id)">打印</el-button>
+            </template>
+          </el-table-column>
+
         </el-table>
       </el-col>
 
@@ -139,9 +145,9 @@
         _this.listStudentCharge();
       },
       typeFomatter(row, col, val) {
-        if(val == 1) return "新生";
-        if(val == 2) return "续费";
-        if(val == 3) return "补费";
+        if (val == 1) return "新生";
+        if (val == 2) return "续费";
+        if (val == 3) return "补费";
       },
       operateFail(r) {
         const _this = this;
