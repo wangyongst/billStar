@@ -27,7 +27,7 @@
       <el-col :span="2">
         <el-button type="primary" size="medium " style="font-size:medium"><p>{{page.courseCount.courseTotal}}</p>总科次</el-button>
       </el-col>
-      <el-col :span="2"  v-for="item in page.courseCount.subjectCounts">
+      <el-col :span="2" v-for="item in page.courseCount.subjectCounts">
         <el-button type="danger" size="medium " style="font-size:medium"><p>{{item.total}}</p>{{item.name}}</el-button>
       </el-col>
       <el-col :span="2">
@@ -114,7 +114,7 @@
         this.query.days = val;
       },
       courseFormatter(row, col, val) {
-        return row["subjectName"] + row["className"] + "+" + row["classNo"]
+        return row["subjectName"] + "+" + row["className"] + "+" + row["classNo"]
       },
       courseTimeFormatter(row, col, val) {
         const _this = this;
