@@ -3,11 +3,19 @@ package com.tuofan.student.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tuofan.configs.service.ISysConfigsService;
 import com.tuofan.core.Result;
 import com.tuofan.core.SearchQ;
+import com.tuofan.core.utils.DateTimeUtils;
+import com.tuofan.core.utils.MoneyToChineseUtils;
+import com.tuofan.orgination.entity.DingDept;
+import com.tuofan.orgination.service.IDingDeptService;
 import com.tuofan.student.entity.StudentCharge;
 import com.tuofan.student.entity.StudentMain;
 import com.tuofan.student.service.IStudentChargeService;
+import com.tuofan.student.service.IStudentCourseService;
+import com.tuofan.student.service.IStudentMainService;
+import com.tuofan.student.vo.BillV;
 import com.tuofan.student.vo.StudentChargeQ;
 import com.tuofan.student.vo.StudentCourseQ;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,6 +41,15 @@ public class StudentChargeController {
 
     @Autowired
     private IStudentChargeService iStudentChargeService;
+
+    @Autowired
+    private IDingDeptService iDingDeptService;
+
+    @Autowired
+    private ISysConfigsService iSysConfigsService;
+
+    @Autowired
+    private IStudentCourseService iStudentCourseService;
 
     @PostMapping("pageV")
     public Result pageV(@RequestBody StudentChargeQ studentChargeQ) {
@@ -52,6 +70,23 @@ public class StudentChargeController {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("studentCharge.student_id", studentId);
         return Result.ok(iStudentChargeService.listStudentChargeV(queryWrapper));
+    }
+
+    @GetMapping("get/{id}")
+    public Result getChargeId(@PathVariable Integer id) {
+        BillV billV = iStudentChargeService.getByChargeId(id);
+        billV.setBillTime(DateTimeUtils.formatDateTime(billV.getCreateTime(), DateTimeUtils.DATE_FORMAT_DAY));
+        billV.setMainSchool("分界线美术学校");
+        DingDept dd = iDingDeptService.getById(billV.getSchoolId());
+        billV.setSchoolMobile(dd.getPhone());
+        billV.setSchoolName(dd.getName());
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        billV.setBigAmount(MoneyToChineseUtils.convert(decimalFormat.format(billV.getAmount())));
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("studentCourse.student_id", billV.getStudentId());
+        billV.setCourseList(iStudentCourseService.listStudentCourseV(queryWrapper));
+        billV.setRemarks(iSysConfigsService.findByName("app.schoolCommonRemark").getValue());
+        return Result.ok(billV);
     }
 
     //当天开始

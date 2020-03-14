@@ -7,6 +7,7 @@ import com.tuofan.student.entity.StudentCharge;
 import com.tuofan.student.mapper.StudentChargeMapper;
 import com.tuofan.student.service.IStudentChargeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tuofan.student.vo.BillV;
 import com.tuofan.student.vo.StudentChargeV;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,8 @@ public class StudentChargeServiceImpl extends ServiceImpl<StudentChargeMapper, S
     }
 
     @Override
-    public IPage reportV(IPage page, QueryWrapper queryWrapper) {
-        return baseMapper.reportV(page, queryWrapper);
+    public BillV getByChargeId(Integer id) {
+        return baseMapper.getByChargeId(id);
     }
 
     @Override

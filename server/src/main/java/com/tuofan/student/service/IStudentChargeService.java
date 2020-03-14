@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tuofan.report.vo.ChargeReportV;
 import com.tuofan.student.entity.StudentCharge;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tuofan.student.vo.BillV;
 import com.tuofan.student.vo.StudentChargeV;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface IStudentChargeService extends IService<StudentCharge> {
 
     IPage pageV(IPage page, QueryWrapper queryWrapper);
 
-    IPage reportV(IPage page, QueryWrapper queryWrapper);
+    BillV getByChargeId(Integer id);
 
     List<ChargeReportV> reportMonth(QueryWrapper queryWrapper);
 

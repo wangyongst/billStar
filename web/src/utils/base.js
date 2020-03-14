@@ -64,6 +64,7 @@ exports.install = function (Vue, options) {
     let Y = date.getFullYear() + '-';
     let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
     let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+    console.log(Y+M+D)
     return Y + M + D;
   };
 
