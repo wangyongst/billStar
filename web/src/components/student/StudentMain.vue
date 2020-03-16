@@ -10,10 +10,9 @@
             <el-form-item label="姓名：" class="inlineFormItem">
               <el-autocomplete
                 class="inline-input"
-                v-model="student.id"
+                v-model="student.searchString"
                 :fetch-suggestions="querySearch"
                 placeholder="姓名"
-                :trigger-on-focus="false"
                 @select="handleSelect"
               ></el-autocomplete>
             </el-form-item>
@@ -99,10 +98,11 @@
     data() {
       return {
         page: {
-          studentList:null,
-          courseList: null,
-          courseHistoryList: null,
-          chargeList: null
+          studentList: [],
+          timeout: null,
+          courseList: [],
+          courseHistoryList: [],
+          chargeList: []
         },
         query: {
           current: 1,
@@ -110,6 +110,7 @@
           studentNameLike: null
         },
         student: {
+          searchString: null,
           id: null,
           mobile: null,
           createTime: null,
@@ -123,14 +124,17 @@
 
     methods: {
       querySearch(queryString, cb) {
+        if (!queryString) return null;
         const _this = this;
-        _this.httpUtils.appGet('/student/main/listByNameLike/'+ queryString).then(function (res) {
-          _this.page.studentList = res;
-          console.log(_this.page.studentList);
+        _this.httpUtils.appGet('/student/main/listByNameLike/' + queryString).then(function (res) {
+          clearTimeout(_this.page.timeout);
+          _this.page.timeout = setTimeout(() => {
+            cb(res);
+          }, 3000 * Math.random());
         }, _this.operateFail);
       },
       handleSelect(item) {
-        // console.log(item);
+        console.log(item);
       },
       listCourseHistory() {
         const _this = this;
@@ -147,7 +151,7 @@
       },
       getOneStudent() {
         const _this = this;
-        _this.httpUtils.appGet('/student/main/get/' + _this.student.id,).then(function (res) {
+        _this.httpUtils.appGet('/student/main/searchString/' + _this.student.searchString,).then(function (res) {
           _this.student = res;
         }, _this.operateFail);
       },

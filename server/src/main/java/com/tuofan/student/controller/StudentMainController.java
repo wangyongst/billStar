@@ -21,6 +21,7 @@ import com.tuofan.student.service.IStudentChargeService;
 import com.tuofan.student.service.IStudentCourseService;
 import com.tuofan.student.service.IStudentMainService;
 import com.tuofan.student.vo.StudentMainQ;
+import com.tuofan.student.vo.StudentMainV;
 import com.tuofan.student.vo.StudentP;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
@@ -106,7 +107,14 @@ public class StudentMainController {
     public Result list(@PathVariable String nameLike) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.like("name", nameLike);
-        return Result.ok(iStudentMainService.list(queryWrapper));
+        List<StudentMain> ls = iStudentMainService.list(queryWrapper);
+        List<StudentMainV> lsm = Lists.newArrayList();
+        ls.forEach(e -> {
+            StudentMainV smv = new StudentMainV();
+            smv.setValue(e.getName() + "+" + e.getMobile());
+            lsm.add(smv);
+        });
+        return Result.ok(lsm);
     }
 
 

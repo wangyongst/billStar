@@ -12,4 +12,5 @@ public class StudentMainV extends StudentMain {
 
     private String createName;
 
+    private String value;
 }
