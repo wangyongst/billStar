@@ -53,6 +53,9 @@
         <i class="el-icon-menu"></i>
         <span slot="title">学生管理</span>
       </template>
+      <el-menu-item class="normalHide" @click="toPage('student/main')">
+        <span slot="title">学生档案</span>
+      </el-menu-item>
       <el-menu-item class="normalHide" @click="toPage('student/ban')">
         <span slot="title">转班</span>
       </el-menu-item>

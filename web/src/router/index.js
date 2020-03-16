@@ -29,6 +29,7 @@ import StudentQi from "../components/student/StudentQi";
 import StudentBan from "../components/student/StudentBan";
 import SettingMyShcool from "../components/setting/SettingMyShcool";
 import SettingMyClass from "../components/setting/SettingMyClass";
+import StudentMain from "../components/student/StudentMain";
 
 Vue.use(Router);
 
@@ -120,6 +121,14 @@ export default new Router({
       component: SearchBackfee,
       meta: {
         title: '退费'
+      }
+    },
+    {
+      path: '/student/main',
+      name: '学生档案',
+      component: StudentMain,
+      meta: {
+        title: '学生档案'
       }
     },
     {

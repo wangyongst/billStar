@@ -101,6 +101,15 @@ public class StudentMainController {
         return Result.ok("保存成功");
     }
 
+    //nameLike
+    @GetMapping("listByNameLike/{nameLike}")
+    public Result list(@PathVariable String nameLike) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.like("name", nameLike);
+        return Result.ok(iStudentMainService.list(queryWrapper));
+    }
+
+
     //欠费
     @PostMapping("pageArrear")
     public Result pageArrear(@RequestBody StudentMainQ studentMainQ) {
