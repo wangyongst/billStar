@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.tuofan.report.vo.ChargeReportV;
 import com.tuofan.student.entity.StudentCharge;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tuofan.student.vo.BillV;
 import com.tuofan.student.vo.ChargeV;
 import com.tuofan.student.vo.StudentChargeV;
 import com.tuofan.student.vo.StudentCourseV;
@@ -59,6 +60,13 @@ public interface StudentChargeMapper extends BaseMapper<StudentCharge> {
             "${ew.customSqlSegment}\n" +
             "group by month")
     List<ChargeReportV> reportMonthTotal(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+
+    @Select("select studentCharge.*,student.name student_name,student.mobile mobile,student.school_id\n" +
+            "from student_charge studentCharge\n" +
+            "left join student_main student on studentCharge.student_id = student.id\n" +
+            "where studentCharge.id = #{id}")
+    BillV getByChargeId(Integer id);
 
     @Select("select studentCharge.*,SysCharge.*,SysCharge.name charge_name\n" +
             "from student_charge studentCharge\n" +

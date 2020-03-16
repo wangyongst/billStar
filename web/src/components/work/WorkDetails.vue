@@ -63,7 +63,7 @@
 
           <el-table-column fixed="right" label="操作" align="left" width="300">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="updateArrears(scope.row.id)">打印</el-button>
+              <el-button type="text" size="mini" @click="printCharge(scope.row.id)">打印</el-button>
             </template>
           </el-table-column>
 
@@ -84,6 +84,7 @@
         ></el-pagination>
       </el-col>
     </el-row>
+    <PrintChargeDialog></PrintChargeDialog>
   </div>
 </template>
 
@@ -93,10 +94,11 @@
   import SubjectSelect from "../select/SubjectSelect";
   import BackToWork from "../back/BackToWork";
   import StudentTypeSelect from "../select/StudentTypeSelect";
+  import PrintChargeDialog from "../dialog/PrintChargeDialog";
 
   export default {
     name: 'WorkDetails',
-    components: {StudentTypeSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
+    components: {PrintChargeDialog, StudentTypeSelect, BackToWork, ClassSelect, SchoolSelect, SubjectSelect},
     data() {
       return {
         page: {
@@ -133,6 +135,13 @@
           _this.page.total = res.total;
         }, _this.operateFail);
       },
+
+      printCharge(val) {
+        const _this = this;
+        console.log(val);
+        eventBus.$emit("printCharge", val);
+      },
+
       schoolChange(val) {
         this.query.schoolIds = val;
       },
