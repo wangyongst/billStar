@@ -15,7 +15,7 @@
     "element-ui": "^2.11.1",
     "html2canvas": "^1.0.0-rc.3",
     "jquery": "^1.9.1",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.5.1",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "vue": "^2.6.10",
